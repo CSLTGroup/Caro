@@ -1,0 +1,53 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\Code\\Caro\\project\\Caro\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{147E1718-D540-4B4F-A0A1-757A4E0A3AF0}|Caro\\Caro.vcxproj|D:\\Code\\Caro\\project\\Caro\\Caro\\button\\button.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{147E1718-D540-4B4F-A0A1-757A4E0A3AF0}|Caro\\Caro.vcxproj|solutionrelative:Caro\\button\\button.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{147E1718-D540-4B4F-A0A1-757A4E0A3AF0}|Caro\\Caro.vcxproj|D:\\Code\\Caro\\project\\Caro\\Caro\\caro.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{147E1718-D540-4B4F-A0A1-757A4E0A3AF0}|Caro\\Caro.vcxproj|solutionrelative:Caro\\caro.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "button.cpp",
+              "DocumentMoniker": "D:\\Code\\Caro\\project\\Caro\\Caro\\button\\button.cpp",
+              "RelativeDocumentMoniker": "Caro\\button\\button.cpp",
+              "ToolTip": "D:\\Code\\Caro\\project\\Caro\\Caro\\button\\button.cpp",
+              "RelativeToolTip": "Caro\\button\\button.cpp",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAADYAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2025-10-28T09:59:40.773Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "caro.cpp",
+              "DocumentMoniker": "D:\\Code\\Caro\\project\\Caro\\Caro\\caro.cpp",
+              "RelativeDocumentMoniker": "Caro\\caro.cpp",
+              "ToolTip": "D:\\Code\\Caro\\project\\Caro\\Caro\\caro.cpp",
+              "RelativeToolTip": "Caro\\caro.cpp",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAA0AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2025-10-28T09:54:33.142Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
