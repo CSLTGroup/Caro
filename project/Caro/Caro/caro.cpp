@@ -30,7 +30,6 @@ int main()
     while (window.isOpen())
     {   
 
-        window.clear();
         Event event;
         while (firstTime || window.pollEvent(event))
         {
@@ -38,6 +37,7 @@ int main()
                 window.close();
             else if (firstTime || event.type == Event::KeyPressed || event.type == Event::KeyReleased){
 
+                window.clear();
 
                 keyBoard.setState(window); // update keyboard state
 				menuGUI.handleUI(window); // update menu & smaller GUI state

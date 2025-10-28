@@ -51,4 +51,3 @@ void Button::draw(RenderWindow& window) {
     );
     window.draw(text);
 }
-

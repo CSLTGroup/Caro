@@ -1,1 +1,5 @@
-D:\Code\Caro\project\Caro\Caro\Caro.cpp;D:\Code\Caro\project\Caro\Caro\x64\Release\Caro.obj
+D:\Code\Caro\project\Caro\Caro\boardgame\boardgame.cpp;D:\Code\Caro\project\Caro\Caro\x64\Release\boardgame.obj
+D:\Code\Caro\project\Caro\Caro\button\button.cpp;D:\Code\Caro\project\Caro\Caro\x64\Release\button.obj
+D:\Code\Caro\project\Caro\Caro\caro.cpp;D:\Code\Caro\project\Caro\Caro\x64\Release\caro.obj
+D:\Code\Caro\project\Caro\Caro\keyboard\keyboard.cpp;D:\Code\Caro\project\Caro\Caro\x64\Release\keyboard.obj
+D:\Code\Caro\project\Caro\Caro\menu\menu.cpp;D:\Code\Caro\project\Caro\Caro\x64\Release\menu.obj
