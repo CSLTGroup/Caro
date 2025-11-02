@@ -3,12 +3,20 @@
   "WorkspaceRootPath": "D:\\Code\\Caro\\project\\Caro\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{147E1718-D540-4B4F-A0A1-757A4E0A3AF0}|Caro\\Caro.vcxproj|D:\\Code\\Caro\\project\\Caro\\Caro\\button\\button.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{147E1718-D540-4B4F-A0A1-757A4E0A3AF0}|Caro\\Caro.vcxproj|solutionrelative:Caro\\button\\button.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{147E1718-D540-4B4F-A0A1-757A4E0A3AF0}|Caro\\Caro.vcxproj|D:\\Code\\Caro\\project\\Caro\\Caro\\caro.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{147E1718-D540-4B4F-A0A1-757A4E0A3AF0}|Caro\\Caro.vcxproj|solutionrelative:Caro\\caro.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{147E1718-D540-4B4F-A0A1-757A4E0A3AF0}|Caro\\Caro.vcxproj|D:\\Code\\Caro\\project\\Caro\\Caro\\boardgame\\boardgame.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{147E1718-D540-4B4F-A0A1-757A4E0A3AF0}|Caro\\Caro.vcxproj|solutionrelative:Caro\\boardgame\\boardgame.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{147E1718-D540-4B4F-A0A1-757A4E0A3AF0}|Caro\\Caro.vcxproj|D:\\Code\\Caro\\project\\Caro\\Caro\\boardgame\\boardgame.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{147E1718-D540-4B4F-A0A1-757A4E0A3AF0}|Caro\\Caro.vcxproj|solutionrelative:Caro\\boardgame\\boardgame.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{147E1718-D540-4B4F-A0A1-757A4E0A3AF0}|Caro\\Caro.vcxproj|D:\\Code\\Caro\\project\\Caro\\Caro\\button\\button.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{147E1718-D540-4B4F-A0A1-757A4E0A3AF0}|Caro\\Caro.vcxproj|solutionrelative:Caro\\button\\button.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     }
   ],
   "DocumentGroupContainers": [
@@ -18,11 +26,37 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 3,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
+              "Title": "boardgame.h",
+              "DocumentMoniker": "D:\\Code\\Caro\\project\\Caro\\Caro\\boardgame\\boardgame.h",
+              "RelativeDocumentMoniker": "Caro\\boardgame\\boardgame.h",
+              "ToolTip": "D:\\Code\\Caro\\project\\Caro\\Caro\\boardgame\\boardgame.h",
+              "RelativeToolTip": "Caro\\boardgame\\boardgame.h",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAMAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2025-11-02T02:58:51.79Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "boardgame.cpp",
+              "DocumentMoniker": "D:\\Code\\Caro\\project\\Caro\\Caro\\boardgame\\boardgame.cpp",
+              "RelativeDocumentMoniker": "Caro\\boardgame\\boardgame.cpp",
+              "ToolTip": "D:\\Code\\Caro\\project\\Caro\\Caro\\boardgame\\boardgame.cpp",
+              "RelativeToolTip": "Caro\\boardgame\\boardgame.cpp",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2025-11-02T02:50:04.149Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
               "Title": "button.cpp",
               "DocumentMoniker": "D:\\Code\\Caro\\project\\Caro\\Caro\\button\\button.cpp",
               "RelativeDocumentMoniker": "Caro\\button\\button.cpp",
@@ -35,15 +69,16 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "caro.cpp",
               "DocumentMoniker": "D:\\Code\\Caro\\project\\Caro\\Caro\\caro.cpp",
               "RelativeDocumentMoniker": "Caro\\caro.cpp",
               "ToolTip": "D:\\Code\\Caro\\project\\Caro\\Caro\\caro.cpp",
               "RelativeToolTip": "Caro\\caro.cpp",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAA0AAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAZAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2025-10-28T09:54:33.142Z"
+              "WhenOpened": "2025-10-28T09:54:33.142Z",
+              "EditorCaption": ""
             }
           ]
         }

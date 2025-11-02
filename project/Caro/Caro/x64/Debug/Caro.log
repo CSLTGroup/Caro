@@ -1,4 +1,10 @@
-﻿  button.cpp
+﻿  boardgame.cpp
+D:\Code\Caro\project\Caro\Caro\boardgame\boardgame.cpp(51,20): warning C4244: 'initializing': conversion from '_Ty' to 'int', possible loss of data
+D:\Code\Caro\project\Caro\Caro\boardgame\boardgame.cpp(51,20): warning C4244:         with
+D:\Code\Caro\project\Caro\Caro\boardgame\boardgame.cpp(51,20): warning C4244:         [
+D:\Code\Caro\project\Caro\Caro\boardgame\boardgame.cpp(51,20): warning C4244:             _Ty=float
+D:\Code\Caro\project\Caro\Caro\boardgame\boardgame.cpp(51,20): warning C4244:         ]
+  button.cpp
 D:\Code\Caro\project\Caro\Caro\button\button.cpp(13,63): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
 D:\Code\Caro\project\Caro\Caro\button\button.cpp(13,63): warning C4244:         with
 D:\Code\Caro\project\Caro\Caro\button\button.cpp(13,63): warning C4244:         [
@@ -22,5 +28,10 @@ D:\Code\Caro\project\Caro\Caro\button\button.cpp(14,36): warning C4244:         
   caro.cpp
 D:\Code\Caro\project\Caro\Caro\caro.cpp(17,45): warning C4244: 'argument': conversion from 'const float' to 'unsigned int', possible loss of data
 D:\Code\Caro\project\Caro\Caro\caro.cpp(17,35): warning C4244: 'argument': conversion from 'const float' to 'unsigned int', possible loss of data
+  keyboard.cpp
+  menu.cpp
+D:\Code\Caro\project\Caro\Caro\menu\menu.cpp(27,24): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+D:\Code\Caro\project\Caro\Caro\menu\menu.cpp(58,56): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
   Generating Code...
+  LINK : D:\Code\Caro\project\Caro\x64\Debug\Caro.exe not found or not built by the last incremental link; performing full link
   Caro.vcxproj -> D:\Code\Caro\project\Caro\x64\Debug\Caro.exe
