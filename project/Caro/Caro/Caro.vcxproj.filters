@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Source Files\keyboard">
+      <UniqueIdentifier>{b5731f55-dc3f-4127-bef8-8457dfa2b192}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\button">
+      <UniqueIdentifier>{5d486b9d-d31a-44fd-a5f8-ea234b7516c9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\boardgame">
+      <UniqueIdentifier>{81085048-8d0d-46c4-992a-2f24358687ee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\menu">
+      <UniqueIdentifier>{899a0517-7c84-4ec3-abd7-1fc17c203469}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="caro.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="keyboard\keyboard.cpp">
+      <Filter>Source Files\keyboard</Filter>
+    </ClCompile>
+    <ClCompile Include="button\button.cpp">
+      <Filter>Source Files\button</Filter>
+    </ClCompile>
+    <ClCompile Include="menu\menu.cpp">
+      <Filter>Source Files\menu</Filter>
+    </ClCompile>
+    <ClCompile Include="boardgame\boardgame.cpp">
+      <Filter>Source Files\boardgame</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="keyboard\keyboard.h">
+      <Filter>Source Files\keyboard</Filter>
+    </ClInclude>
+    <ClInclude Include="button\button.h">
+      <Filter>Source Files\button</Filter>
+    </ClInclude>
+    <ClInclude Include="global.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="menu\menu.h">
+      <Filter>Source Files\menu</Filter>
+    </ClInclude>
+    <ClInclude Include="boardgame\boardgame.h">
+      <Filter>Source Files\boardgame</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
