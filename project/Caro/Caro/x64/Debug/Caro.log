@@ -1,7 +1,0 @@
-﻿  boardgame.cpp
-D:\LT\LT-Cơ sở lập trinh\git caro\Caro-master\Caro-master\project\Caro\Caro\boardgame\boardgame.cpp(79,20): warning C4244: 'initializing': conversion from '_Ty' to 'int', possible loss of data
-D:\LT\LT-Cơ sở lập trinh\git caro\Caro-master\Caro-master\project\Caro\Caro\boardgame\boardgame.cpp(79,20): warning C4244:         with
-D:\LT\LT-Cơ sở lập trinh\git caro\Caro-master\Caro-master\project\Caro\Caro\boardgame\boardgame.cpp(79,20): warning C4244:         [
-D:\LT\LT-Cơ sở lập trinh\git caro\Caro-master\Caro-master\project\Caro\Caro\boardgame\boardgame.cpp(79,20): warning C4244:             _Ty=float
-D:\LT\LT-Cơ sở lập trinh\git caro\Caro-master\Caro-master\project\Caro\Caro\boardgame\boardgame.cpp(79,20): warning C4244:         ]
-  Caro.vcxproj -> D:\LT\LT-Cơ sở lập trinh\git caro\Caro-master\Caro-master\project\Caro\x64\Debug\Caro.exe
