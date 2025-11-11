@@ -42,6 +42,12 @@
     <ClCompile Include="boardgame\boardgame.cpp">
       <Filter>Source Files\boardgame</Filter>
     </ClCompile>
+    <ClCompile Include="SFX\sfx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="setting\setting.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="keyboard\keyboard.h">
@@ -58,6 +64,12 @@
     </ClInclude>
     <ClInclude Include="boardgame\boardgame.h">
       <Filter>Source Files\boardgame</Filter>
+    </ClInclude>
+    <ClInclude Include="SFX\sfx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="setting\setting.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

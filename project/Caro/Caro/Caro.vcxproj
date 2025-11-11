@@ -134,6 +134,8 @@
     <ClCompile Include="caro.cpp" />
     <ClCompile Include="keyboard\keyboard.cpp" />
     <ClCompile Include="menu\menu.cpp" />
+    <ClCompile Include="setting\setting.cpp" />
+    <ClCompile Include="SFX\sfx.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="boardgame\boardgame.h" />
@@ -141,6 +143,8 @@
     <ClInclude Include="global.h" />
     <ClInclude Include="keyboard\keyboard.h" />
     <ClInclude Include="menu\menu.h" />
+    <ClInclude Include="setting\setting.h" />
+    <ClInclude Include="SFX\sfx.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
