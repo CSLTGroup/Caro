@@ -3,7 +3,7 @@
 
 using namespace sf;
 struct KeyBoardPressed {
-    short mask = 0;
+    short mask = 0; // 001010
     const short UP = 1 << 0;
     const short RIGHT = 1 << 1;
     const short LEFT = 1 << 2;

@@ -25,6 +25,21 @@
     <Filter Include="Source Files\menu">
       <UniqueIdentifier>{899a0517-7c84-4ec3-abd7-1fc17c203469}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\startgame">
+      <UniqueIdentifier>{9e76d48d-049d-48d1-93d2-7d98783b64a2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\assets">
+      <UniqueIdentifier>{b96df69c-60b2-49e0-bcd2-0ecc6656e2ed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\assets\font">
+      <UniqueIdentifier>{e7e43e16-02b6-4a90-a308-1c2a927d37b1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\assets\image">
+      <UniqueIdentifier>{d26461b7-0012-4725-b0fe-1f60c61d1625}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\loadingscreen">
+      <UniqueIdentifier>{04e131ce-dbd3-43d4-acf7-3e06b3b2c889}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="caro.cpp">
@@ -41,6 +56,12 @@
     </ClCompile>
     <ClCompile Include="boardgame\boardgame.cpp">
       <Filter>Source Files\boardgame</Filter>
+    </ClCompile>
+    <ClCompile Include="startgame\startgame.cpp">
+      <Filter>Source Files\startgame</Filter>
+    </ClCompile>
+    <ClCompile Include="loadingscreen\loadingscreen.cpp">
+      <Filter>Source Files\loadingscreen</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -59,5 +80,27 @@
     <ClInclude Include="boardgame\boardgame.h">
       <Filter>Source Files\boardgame</Filter>
     </ClInclude>
+    <ClInclude Include="startgame\startgame.h">
+      <Filter>Source Files\startgame</Filter>
+    </ClInclude>
+    <ClInclude Include="loadingscreen\loadingscreen.h">
+      <Filter>Source Files\loadingscreen</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="assets\font\arial.ttf">
+      <Filter>Source Files\assets\font</Filter>
+    </Font>
+    <Font Include="assets\font\RDLatinFontPoint.otf">
+      <Filter>Source Files\assets\font</Filter>
+    </Font>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="assets\image\background_img.png">
+      <Filter>Source Files\assets\image</Filter>
+    </Image>
+    <Image Include="assets\image\penguinGOGO.png">
+      <Filter>Source Files\assets\image</Filter>
+    </Image>
   </ItemGroup>
 </Project>

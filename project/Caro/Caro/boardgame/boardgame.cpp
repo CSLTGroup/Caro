@@ -72,7 +72,8 @@ void BoardGame::drawPosition(int x, int y, RenderWindow& window) {
     window.draw(text);
 }
 void BoardGame::setChoice(RenderWindow& window) {
-    if (board[curX][curY] >= 1 || resultGame) return;
+    if (board[curX][curY] >= 1 || resultGame) 
+        return;
     board[curX][curY] = curPlayer;
     drawPosition(curX, curY, window);
     curPlayer = 3 - curPlayer; //swap player

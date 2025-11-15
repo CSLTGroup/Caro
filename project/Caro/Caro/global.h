@@ -4,6 +4,8 @@
 #include "keyboard/keyboard.h"
 #include "boardgame/boardgame.h"
 #include "menu/menu.h"
+#include "startgame/startgame.h"
+#include "loadingscreen/loadingscreen.h"
 #include <vector>
 #include <iostream>
 
