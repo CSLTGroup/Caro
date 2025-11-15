@@ -1,11 +1,60 @@
-<<<<<<< Updated upstream
-﻿  Caro.vcxproj -> D:\Code\Caro\project\Caro\x64\Debug\Caro.exe
-=======
-﻿  loadingscreen.cpp
+﻿  boardgame.cpp
+D:\Code\Caro\project\Caro\Caro\loadingscreen\loadingscreen.h(1,13): warning C4081: expected 'newline'; found ';'
+  (compiling source file 'boardgame/boardgame.cpp')
+  
+D:\Code\Caro\project\Caro\Caro\boardgame\boardgame.cpp(51,20): warning C4244: 'initializing': conversion from '_Ty' to 'int', possible loss of data
+D:\Code\Caro\project\Caro\Caro\boardgame\boardgame.cpp(51,20): warning C4244:         with
+D:\Code\Caro\project\Caro\Caro\boardgame\boardgame.cpp(51,20): warning C4244:         [
+D:\Code\Caro\project\Caro\Caro\boardgame\boardgame.cpp(51,20): warning C4244:             _Ty=float
+D:\Code\Caro\project\Caro\Caro\boardgame\boardgame.cpp(51,20): warning C4244:         ]
+  button.cpp
+D:\Code\Caro\project\Caro\Caro\loadingscreen\loadingscreen.h(1,13): warning C4081: expected 'newline'; found ';'
+  (compiling source file 'button/button.cpp')
+  
+D:\Code\Caro\project\Caro\Caro\button\button.cpp(13,63): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+D:\Code\Caro\project\Caro\Caro\button\button.cpp(13,63): warning C4244:         with
+D:\Code\Caro\project\Caro\Caro\button\button.cpp(13,63): warning C4244:         [
+D:\Code\Caro\project\Caro\Caro\button\button.cpp(13,63): warning C4244:             T=float
+D:\Code\Caro\project\Caro\Caro\button\button.cpp(13,63): warning C4244:         ]
+D:\Code\Caro\project\Caro\Caro\button\button.cpp(13,56): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+D:\Code\Caro\project\Caro\Caro\button\button.cpp(13,56): warning C4244:         with
+D:\Code\Caro\project\Caro\Caro\button\button.cpp(13,56): warning C4244:         [
+D:\Code\Caro\project\Caro\Caro\button\button.cpp(13,56): warning C4244:             T=float
+D:\Code\Caro\project\Caro\Caro\button\button.cpp(13,56): warning C4244:         ]
+D:\Code\Caro\project\Caro\Caro\button\button.cpp(14,39): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+D:\Code\Caro\project\Caro\Caro\button\button.cpp(14,39): warning C4244:         with
+D:\Code\Caro\project\Caro\Caro\button\button.cpp(14,39): warning C4244:         [
+D:\Code\Caro\project\Caro\Caro\button\button.cpp(14,39): warning C4244:             T=float
+D:\Code\Caro\project\Caro\Caro\button\button.cpp(14,39): warning C4244:         ]
+D:\Code\Caro\project\Caro\Caro\button\button.cpp(14,36): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+D:\Code\Caro\project\Caro\Caro\button\button.cpp(14,36): warning C4244:         with
+D:\Code\Caro\project\Caro\Caro\button\button.cpp(14,36): warning C4244:         [
+D:\Code\Caro\project\Caro\Caro\button\button.cpp(14,36): warning C4244:             T=float
+D:\Code\Caro\project\Caro\Caro\button\button.cpp(14,36): warning C4244:         ]
+  caro.cpp
+D:\Code\Caro\project\Caro\Caro\loadingscreen\loadingscreen.h(1,13): warning C4081: expected 'newline'; found ';'
+  (compiling source file 'caro.cpp')
+  
+  keyboard.cpp
+D:\Code\Caro\project\Caro\Caro\loadingscreen\loadingscreen.h(1,13): warning C4081: expected 'newline'; found ';'
+  (compiling source file 'keyboard/keyboard.cpp')
+  
+  loadingscreen.cpp
 D:\Code\Caro\project\Caro\Caro\loadingscreen\loadingscreen.h(1,13): warning C4081: expected 'newline'; found ';'
   (compiling source file 'loadingscreen/loadingscreen.cpp')
   
 D:\Code\Caro\project\Caro\Caro\loadingscreen\loadingscreen.cpp(25,14): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
 D:\Code\Caro\project\Caro\Caro\loadingscreen\loadingscreen.cpp(48,16): warning C4244: 'initializing': conversion from 'sf::Int64' to 'int', possible loss of data
+  menu.cpp
+D:\Code\Caro\project\Caro\Caro\loadingscreen\loadingscreen.h(1,13): warning C4081: expected 'newline'; found ';'
+  (compiling source file 'menu/menu.cpp')
+  
+D:\Code\Caro\project\Caro\Caro\menu\menu.cpp(27,24): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+D:\Code\Caro\project\Caro\Caro\menu\menu.cpp(58,56): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+  startgame.cpp
+D:\Code\Caro\project\Caro\Caro\loadingscreen\loadingscreen.h(1,13): warning C4081: expected 'newline'; found ';'
+  (compiling source file 'startgame/startgame.cpp')
+  
+  Generating Code...
+  LINK : D:\Code\Caro\project\Caro\x64\Debug\Caro.exe not found or not built by the last incremental link; performing full link
   Caro.vcxproj -> D:\Code\Caro\project\Caro\x64\Debug\Caro.exe
->>>>>>> Stashed changes
