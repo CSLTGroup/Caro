@@ -1,1 +1,11 @@
+<<<<<<< Updated upstream
 ﻿  Caro.vcxproj -> D:\Code\Caro\project\Caro\x64\Debug\Caro.exe
+=======
+﻿  loadingscreen.cpp
+D:\Code\Caro\project\Caro\Caro\loadingscreen\loadingscreen.h(1,13): warning C4081: expected 'newline'; found ';'
+  (compiling source file 'loadingscreen/loadingscreen.cpp')
+  
+D:\Code\Caro\project\Caro\Caro\loadingscreen\loadingscreen.cpp(25,14): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+D:\Code\Caro\project\Caro\Caro\loadingscreen\loadingscreen.cpp(48,16): warning C4244: 'initializing': conversion from 'sf::Int64' to 'int', possible loss of data
+  Caro.vcxproj -> D:\Code\Caro\project\Caro\x64\Debug\Caro.exe
+>>>>>>> Stashed changes

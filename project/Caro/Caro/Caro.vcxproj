@@ -133,14 +133,26 @@
     <ClCompile Include="button\button.cpp" />
     <ClCompile Include="caro.cpp" />
     <ClCompile Include="keyboard\keyboard.cpp" />
+    <ClCompile Include="loadingscreen\loadingscreen.cpp" />
     <ClCompile Include="menu\menu.cpp" />
+    <ClCompile Include="startgame\startgame.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="boardgame\boardgame.h" />
     <ClInclude Include="button\button.h" />
     <ClInclude Include="global.h" />
     <ClInclude Include="keyboard\keyboard.h" />
+    <ClInclude Include="loadingscreen\loadingscreen.h" />
     <ClInclude Include="menu\menu.h" />
+    <ClInclude Include="startgame\startgame.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="assets\font\arial.ttf" />
+    <Font Include="assets\font\RDLatinFontPoint.otf" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="assets\image\background_img.png" />
+    <Image Include="assets\image\penguinGOGO.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
