@@ -8,6 +8,9 @@ struct BoardGame {
     vector<vector<int> > board;
     int curX = 0, curY = 0;
     int curPlayer = 1;
+    string player1Name = "Player 1";
+    string player2Name = "Player 2";
+    int gameMode = 0; // 0 = PvP, 1 = PVC (Player vs Computer)
 
     float spacingTop = 0;
     float spacingLeft = 0;
@@ -23,8 +26,12 @@ struct BoardGame {
     void reset();
     void drawTable(RenderWindow& window);
     void drawPosition(int x, int y, RenderWindow& window);
+    void drawPlayerNames(RenderWindow& window);
+    void drawWinnerMessage(RenderWindow& window);
     void setChoice(RenderWindow& window);
     void setMove(RenderWindow& window);
+    void makeComputerMove(RenderWindow& window);
+    pair<int, int> findBestMove();
     bool checkTheSame(vector<int> listCheck);
     int checkResult();
     int result();

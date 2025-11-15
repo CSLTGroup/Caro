@@ -11,8 +11,8 @@
       "RelativeMoniker": "D:0:0:{147E1718-D540-4B4F-A0A1-757A4E0A3AF0}|Caro\\Caro.vcxproj|solutionrelative:Caro\\setting\\setting.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{147E1718-D540-4B4F-A0A1-757A4E0A3AF0}|Caro\\Caro.vcxproj|C:\\Users\\Hwngmp\\Documents\\GitHub\\Caro\\project\\Caro\\Caro\\SFX\\sfx.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{147E1718-D540-4B4F-A0A1-757A4E0A3AF0}|Caro\\Caro.vcxproj|solutionrelative:Caro\\SFX\\sfx.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+      "AbsoluteMoniker": "D:0:0:{147E1718-D540-4B4F-A0A1-757A4E0A3AF0}|Caro\\Caro.vcxproj|C:\\Users\\Hwngmp\\Documents\\GitHub\\Caro\\project\\Caro\\Caro\\caro.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{147E1718-D540-4B4F-A0A1-757A4E0A3AF0}|Caro\\Caro.vcxproj|solutionrelative:Caro\\caro.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{147E1718-D540-4B4F-A0A1-757A4E0A3AF0}|Caro\\Caro.vcxproj|C:\\Users\\Hwngmp\\Documents\\GitHub\\Caro\\project\\Caro\\Caro\\SFX\\sfx.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
@@ -23,8 +23,8 @@
       "RelativeMoniker": "D:0:0:{147E1718-D540-4B4F-A0A1-757A4E0A3AF0}|Caro\\Caro.vcxproj|solutionrelative:Caro\\global.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{147E1718-D540-4B4F-A0A1-757A4E0A3AF0}|Caro\\Caro.vcxproj|C:\\Users\\Hwngmp\\Documents\\GitHub\\Caro\\project\\Caro\\Caro\\caro.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{147E1718-D540-4B4F-A0A1-757A4E0A3AF0}|Caro\\Caro.vcxproj|solutionrelative:Caro\\caro.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+      "AbsoluteMoniker": "D:0:0:{147E1718-D540-4B4F-A0A1-757A4E0A3AF0}|Caro\\Caro.vcxproj|C:\\Users\\Hwngmp\\Documents\\GitHub\\Caro\\project\\Caro\\Caro\\SFX\\sfx.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{147E1718-D540-4B4F-A0A1-757A4E0A3AF0}|Caro\\Caro.vcxproj|solutionrelative:Caro\\SFX\\sfx.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     }
   ],
   "DocumentGroupContainers": [
@@ -34,8 +34,12 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 1,
           "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
+            },
             {
               "$type": "Document",
               "DocumentIndex": 0,
@@ -64,16 +68,15 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 5,
               "Title": "sfx.h",
               "DocumentMoniker": "C:\\Users\\Hwngmp\\Documents\\GitHub\\Caro\\project\\Caro\\Caro\\SFX\\sfx.h",
               "RelativeDocumentMoniker": "Caro\\SFX\\sfx.h",
               "ToolTip": "C:\\Users\\Hwngmp\\Documents\\GitHub\\Caro\\project\\Caro\\Caro\\SFX\\sfx.h",
               "RelativeToolTip": "Caro\\SFX\\sfx.h",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2025-11-11T07:52:17.804Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-11-11T07:52:17.804Z"
             },
             {
               "$type": "Document",
@@ -83,22 +86,23 @@
               "RelativeDocumentMoniker": "Caro\\SFX\\sfx.cpp",
               "ToolTip": "C:\\Users\\Hwngmp\\Documents\\GitHub\\Caro\\project\\Caro\\Caro\\SFX\\sfx.cpp",
               "RelativeToolTip": "Caro\\SFX\\sfx.cpp",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAACIAAAAAAAAAAAAAAAUAAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2025-11-11T07:52:09.099Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 2,
               "Title": "caro.cpp",
               "DocumentMoniker": "C:\\Users\\Hwngmp\\Documents\\GitHub\\Caro\\project\\Caro\\Caro\\caro.cpp",
               "RelativeDocumentMoniker": "Caro\\caro.cpp",
               "ToolTip": "C:\\Users\\Hwngmp\\Documents\\GitHub\\Caro\\project\\Caro\\Caro\\caro.cpp",
               "RelativeToolTip": "Caro\\caro.cpp",
-              "ViewState": "AgIAABsAAAAAAAAAAAAAACUAAAAvAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAB8AAAAIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2025-10-28T15:13:23.213Z"
+              "WhenOpened": "2025-10-28T15:13:23.213Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -108,10 +112,9 @@
               "RelativeDocumentMoniker": "Caro\\global.h",
               "ToolTip": "C:\\Users\\Hwngmp\\Documents\\GitHub\\Caro\\project\\Caro\\Caro\\global.h",
               "RelativeToolTip": "Caro\\global.h",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAUAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2025-10-28T15:13:22.278Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-10-28T15:13:22.278Z"
             }
           ]
         }

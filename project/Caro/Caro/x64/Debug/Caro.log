@@ -1,1 +1,111 @@
-﻿  Caro.vcxproj -> D:\Code\Caro\project\Caro\x64\Debug\Caro.exe
+﻿  menu.cpp
+C:\Users\Hwngmp\Documents\GitHub\Caro\project\Caro\Caro\menu\menu.cpp(27,24): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Hwngmp\Documents\GitHub\Caro\project\Caro\Caro\menu\menu.cpp(61,56): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Hwngmp\Documents\GitHub\Caro\project\Caro\Caro\menu\menu.cpp(138,68): warning C4244: 'argument': conversion from 'T' to 'T', possible loss of data
+C:\Users\Hwngmp\Documents\GitHub\Caro\project\Caro\Caro\menu\menu.cpp(138,68): warning C4244:         with
+C:\Users\Hwngmp\Documents\GitHub\Caro\project\Caro\Caro\menu\menu.cpp(138,68): warning C4244:         [
+C:\Users\Hwngmp\Documents\GitHub\Caro\project\Caro\Caro\menu\menu.cpp(138,68): warning C4244:             T=unsigned int
+C:\Users\Hwngmp\Documents\GitHub\Caro\project\Caro\Caro\menu\menu.cpp(138,68): warning C4244:         ]
+C:\Users\Hwngmp\Documents\GitHub\Caro\project\Caro\Caro\menu\menu.cpp(138,68): warning C4244:         and
+C:\Users\Hwngmp\Documents\GitHub\Caro\project\Caro\Caro\menu\menu.cpp(138,68): warning C4244:         [
+C:\Users\Hwngmp\Documents\GitHub\Caro\project\Caro\Caro\menu\menu.cpp(138,68): warning C4244:             T=float
+C:\Users\Hwngmp\Documents\GitHub\Caro\project\Caro\Caro\menu\menu.cpp(138,68): warning C4244:         ]
+C:\Users\Hwngmp\Documents\GitHub\Caro\project\Caro\Caro\menu\menu.cpp(138,48): warning C4244: 'argument': conversion from 'T' to 'T', possible loss of data
+C:\Users\Hwngmp\Documents\GitHub\Caro\project\Caro\Caro\menu\menu.cpp(138,48): warning C4244:         with
+C:\Users\Hwngmp\Documents\GitHub\Caro\project\Caro\Caro\menu\menu.cpp(138,48): warning C4244:         [
+C:\Users\Hwngmp\Documents\GitHub\Caro\project\Caro\Caro\menu\menu.cpp(138,48): warning C4244:             T=unsigned int
+C:\Users\Hwngmp\Documents\GitHub\Caro\project\Caro\Caro\menu\menu.cpp(138,48): warning C4244:         ]
+C:\Users\Hwngmp\Documents\GitHub\Caro\project\Caro\Caro\menu\menu.cpp(138,48): warning C4244:         and
+C:\Users\Hwngmp\Documents\GitHub\Caro\project\Caro\Caro\menu\menu.cpp(138,48): warning C4244:         [
+C:\Users\Hwngmp\Documents\GitHub\Caro\project\Caro\Caro\menu\menu.cpp(138,48): warning C4244:             T=float
+C:\Users\Hwngmp\Documents\GitHub\Caro\project\Caro\Caro\menu\menu.cpp(138,48): warning C4244:         ]
+C:\Users\Hwngmp\Documents\GitHub\Caro\project\Caro\Caro\menu\menu.cpp(151,32): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
+C:\Users\Hwngmp\Documents\GitHub\Caro\project\Caro\Caro\menu\menu.cpp(151,32): warning C4244:         with
+C:\Users\Hwngmp\Documents\GitHub\Caro\project\Caro\Caro\menu\menu.cpp(151,32): warning C4244:         [
+C:\Users\Hwngmp\Documents\GitHub\Caro\project\Caro\Caro\menu\menu.cpp(151,32): warning C4244:             T=unsigned int
+C:\Users\Hwngmp\Documents\GitHub\Caro\project\Caro\Caro\menu\menu.cpp(151,32): warning C4244:         ]
+C:\Users\Hwngmp\Documents\GitHub\Caro\project\Caro\Caro\menu\menu.cpp(160,32): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
+C:\Users\Hwngmp\Documents\GitHub\Caro\project\Caro\Caro\menu\menu.cpp(160,32): warning C4244:         with
+C:\Users\Hwngmp\Documents\GitHub\Caro\project\Caro\Caro\menu\menu.cpp(160,32): warning C4244:         [
+C:\Users\Hwngmp\Documents\GitHub\Caro\project\Caro\Caro\menu\menu.cpp(160,32): warning C4244:             T=unsigned int
+C:\Users\Hwngmp\Documents\GitHub\Caro\project\Caro\Caro\menu\menu.cpp(160,32): warning C4244:         ]
+C:\Users\Hwngmp\Documents\GitHub\Caro\project\Caro\Caro\menu\menu.cpp(159,32): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
+C:\Users\Hwngmp\Documents\GitHub\Caro\project\Caro\Caro\menu\menu.cpp(159,32): warning C4244:         with
+C:\Users\Hwngmp\Documents\GitHub\Caro\project\Caro\Caro\menu\menu.cpp(159,32): warning C4244:         [
+C:\Users\Hwngmp\Documents\GitHub\Caro\project\Caro\Caro\menu\menu.cpp(159,32): warning C4244:             T=unsigned int
+C:\Users\Hwngmp\Documents\GitHub\Caro\project\Caro\Caro\menu\menu.cpp(159,32): warning C4244:         ]
+C:\Users\Hwngmp\Documents\GitHub\Caro\project\Caro\Caro\menu\menu.cpp(173,32): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
+C:\Users\Hwngmp\Documents\GitHub\Caro\project\Caro\Caro\menu\menu.cpp(173,32): warning C4244:         with
+C:\Users\Hwngmp\Documents\GitHub\Caro\project\Caro\Caro\menu\menu.cpp(173,32): warning C4244:         [
+C:\Users\Hwngmp\Documents\GitHub\Caro\project\Caro\Caro\menu\menu.cpp(173,32): warning C4244:             T=unsigned int
+C:\Users\Hwngmp\Documents\GitHub\Caro\project\Caro\Caro\menu\menu.cpp(173,32): warning C4244:         ]
+C:\Users\Hwngmp\Documents\GitHub\Caro\project\Caro\Caro\menu\menu.cpp(172,32): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
+C:\Users\Hwngmp\Documents\GitHub\Caro\project\Caro\Caro\menu\menu.cpp(172,32): warning C4244:         with
+C:\Users\Hwngmp\Documents\GitHub\Caro\project\Caro\Caro\menu\menu.cpp(172,32): warning C4244:         [
+C:\Users\Hwngmp\Documents\GitHub\Caro\project\Caro\Caro\menu\menu.cpp(172,32): warning C4244:             T=unsigned int
+C:\Users\Hwngmp\Documents\GitHub\Caro\project\Caro\Caro\menu\menu.cpp(172,32): warning C4244:         ]
+C:\Users\Hwngmp\Documents\GitHub\Caro\project\Caro\Caro\menu\menu.cpp(186,32): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
+C:\Users\Hwngmp\Documents\GitHub\Caro\project\Caro\Caro\menu\menu.cpp(186,32): warning C4244:         with
+C:\Users\Hwngmp\Documents\GitHub\Caro\project\Caro\Caro\menu\menu.cpp(186,32): warning C4244:         [
+C:\Users\Hwngmp\Documents\GitHub\Caro\project\Caro\Caro\menu\menu.cpp(186,32): warning C4244:             T=unsigned int
+C:\Users\Hwngmp\Documents\GitHub\Caro\project\Caro\Caro\menu\menu.cpp(186,32): warning C4244:         ]
+C:\Users\Hwngmp\Documents\GitHub\Caro\project\Caro\Caro\menu\menu.cpp(235,68): warning C4244: 'argument': conversion from 'T' to 'T', possible loss of data
+C:\Users\Hwngmp\Documents\GitHub\Caro\project\Caro\Caro\menu\menu.cpp(235,68): warning C4244:         with
+C:\Users\Hwngmp\Documents\GitHub\Caro\project\Caro\Caro\menu\menu.cpp(235,68): warning C4244:         [
+C:\Users\Hwngmp\Documents\GitHub\Caro\project\Caro\Caro\menu\menu.cpp(235,68): warning C4244:             T=unsigned int
+C:\Users\Hwngmp\Documents\GitHub\Caro\project\Caro\Caro\menu\menu.cpp(235,68): warning C4244:         ]
+C:\Users\Hwngmp\Documents\GitHub\Caro\project\Caro\Caro\menu\menu.cpp(235,68): warning C4244:         and
+C:\Users\Hwngmp\Documents\GitHub\Caro\project\Caro\Caro\menu\menu.cpp(235,68): warning C4244:         [
+C:\Users\Hwngmp\Documents\GitHub\Caro\project\Caro\Caro\menu\menu.cpp(235,68): warning C4244:             T=float
+C:\Users\Hwngmp\Documents\GitHub\Caro\project\Caro\Caro\menu\menu.cpp(235,68): warning C4244:         ]
+C:\Users\Hwngmp\Documents\GitHub\Caro\project\Caro\Caro\menu\menu.cpp(235,48): warning C4244: 'argument': conversion from 'T' to 'T', possible loss of data
+C:\Users\Hwngmp\Documents\GitHub\Caro\project\Caro\Caro\menu\menu.cpp(235,48): warning C4244:         with
+C:\Users\Hwngmp\Documents\GitHub\Caro\project\Caro\Caro\menu\menu.cpp(235,48): warning C4244:         [
+C:\Users\Hwngmp\Documents\GitHub\Caro\project\Caro\Caro\menu\menu.cpp(235,48): warning C4244:             T=unsigned int
+C:\Users\Hwngmp\Documents\GitHub\Caro\project\Caro\Caro\menu\menu.cpp(235,48): warning C4244:         ]
+C:\Users\Hwngmp\Documents\GitHub\Caro\project\Caro\Caro\menu\menu.cpp(235,48): warning C4244:         and
+C:\Users\Hwngmp\Documents\GitHub\Caro\project\Caro\Caro\menu\menu.cpp(235,48): warning C4244:         [
+C:\Users\Hwngmp\Documents\GitHub\Caro\project\Caro\Caro\menu\menu.cpp(235,48): warning C4244:             T=float
+C:\Users\Hwngmp\Documents\GitHub\Caro\project\Caro\Caro\menu\menu.cpp(235,48): warning C4244:         ]
+C:\Users\Hwngmp\Documents\GitHub\Caro\project\Caro\Caro\menu\menu.cpp(248,32): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
+C:\Users\Hwngmp\Documents\GitHub\Caro\project\Caro\Caro\menu\menu.cpp(248,32): warning C4244:         with
+C:\Users\Hwngmp\Documents\GitHub\Caro\project\Caro\Caro\menu\menu.cpp(248,32): warning C4244:         [
+C:\Users\Hwngmp\Documents\GitHub\Caro\project\Caro\Caro\menu\menu.cpp(248,32): warning C4244:             T=unsigned int
+C:\Users\Hwngmp\Documents\GitHub\Caro\project\Caro\Caro\menu\menu.cpp(248,32): warning C4244:         ]
+C:\Users\Hwngmp\Documents\GitHub\Caro\project\Caro\Caro\menu\menu.cpp(259,32): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
+C:\Users\Hwngmp\Documents\GitHub\Caro\project\Caro\Caro\menu\menu.cpp(259,32): warning C4244:         with
+C:\Users\Hwngmp\Documents\GitHub\Caro\project\Caro\Caro\menu\menu.cpp(259,32): warning C4244:         [
+C:\Users\Hwngmp\Documents\GitHub\Caro\project\Caro\Caro\menu\menu.cpp(259,32): warning C4244:             T=unsigned int
+C:\Users\Hwngmp\Documents\GitHub\Caro\project\Caro\Caro\menu\menu.cpp(259,32): warning C4244:         ]
+C:\Users\Hwngmp\Documents\GitHub\Caro\project\Caro\Caro\menu\menu.cpp(258,32): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
+C:\Users\Hwngmp\Documents\GitHub\Caro\project\Caro\Caro\menu\menu.cpp(258,32): warning C4244:         with
+C:\Users\Hwngmp\Documents\GitHub\Caro\project\Caro\Caro\menu\menu.cpp(258,32): warning C4244:         [
+C:\Users\Hwngmp\Documents\GitHub\Caro\project\Caro\Caro\menu\menu.cpp(258,32): warning C4244:             T=unsigned int
+C:\Users\Hwngmp\Documents\GitHub\Caro\project\Caro\Caro\menu\menu.cpp(258,32): warning C4244:         ]
+C:\Users\Hwngmp\Documents\GitHub\Caro\project\Caro\Caro\menu\menu.cpp(271,32): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
+C:\Users\Hwngmp\Documents\GitHub\Caro\project\Caro\Caro\menu\menu.cpp(271,32): warning C4244:         with
+C:\Users\Hwngmp\Documents\GitHub\Caro\project\Caro\Caro\menu\menu.cpp(271,32): warning C4244:         [
+C:\Users\Hwngmp\Documents\GitHub\Caro\project\Caro\Caro\menu\menu.cpp(271,32): warning C4244:             T=unsigned int
+C:\Users\Hwngmp\Documents\GitHub\Caro\project\Caro\Caro\menu\menu.cpp(271,32): warning C4244:         ]
+C:\Users\Hwngmp\Documents\GitHub\Caro\project\Caro\Caro\menu\menu.cpp(282,32): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
+C:\Users\Hwngmp\Documents\GitHub\Caro\project\Caro\Caro\menu\menu.cpp(282,32): warning C4244:         with
+C:\Users\Hwngmp\Documents\GitHub\Caro\project\Caro\Caro\menu\menu.cpp(282,32): warning C4244:         [
+C:\Users\Hwngmp\Documents\GitHub\Caro\project\Caro\Caro\menu\menu.cpp(282,32): warning C4244:             T=unsigned int
+C:\Users\Hwngmp\Documents\GitHub\Caro\project\Caro\Caro\menu\menu.cpp(282,32): warning C4244:         ]
+C:\Users\Hwngmp\Documents\GitHub\Caro\project\Caro\Caro\menu\menu.cpp(281,32): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
+C:\Users\Hwngmp\Documents\GitHub\Caro\project\Caro\Caro\menu\menu.cpp(281,32): warning C4244:         with
+C:\Users\Hwngmp\Documents\GitHub\Caro\project\Caro\Caro\menu\menu.cpp(281,32): warning C4244:         [
+C:\Users\Hwngmp\Documents\GitHub\Caro\project\Caro\Caro\menu\menu.cpp(281,32): warning C4244:             T=unsigned int
+C:\Users\Hwngmp\Documents\GitHub\Caro\project\Caro\Caro\menu\menu.cpp(281,32): warning C4244:         ]
+C:\Users\Hwngmp\Documents\GitHub\Caro\project\Caro\Caro\menu\menu.cpp(294,32): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
+C:\Users\Hwngmp\Documents\GitHub\Caro\project\Caro\Caro\menu\menu.cpp(294,32): warning C4244:         with
+C:\Users\Hwngmp\Documents\GitHub\Caro\project\Caro\Caro\menu\menu.cpp(294,32): warning C4244:         [
+C:\Users\Hwngmp\Documents\GitHub\Caro\project\Caro\Caro\menu\menu.cpp(294,32): warning C4244:             T=unsigned int
+C:\Users\Hwngmp\Documents\GitHub\Caro\project\Caro\Caro\menu\menu.cpp(294,32): warning C4244:         ]
+C:\Users\Hwngmp\Documents\GitHub\Caro\project\Caro\Caro\menu\menu.cpp(307,32): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
+C:\Users\Hwngmp\Documents\GitHub\Caro\project\Caro\Caro\menu\menu.cpp(307,32): warning C4244:         with
+C:\Users\Hwngmp\Documents\GitHub\Caro\project\Caro\Caro\menu\menu.cpp(307,32): warning C4244:         [
+C:\Users\Hwngmp\Documents\GitHub\Caro\project\Caro\Caro\menu\menu.cpp(307,32): warning C4244:             T=unsigned int
+C:\Users\Hwngmp\Documents\GitHub\Caro\project\Caro\Caro\menu\menu.cpp(307,32): warning C4244:         ]
+  Caro.vcxproj -> C:\Users\Hwngmp\Documents\GitHub\Caro\project\Caro\x64\Debug\Caro.exe
+          1 file(s) copied.

@@ -14,4 +14,6 @@ struct Menu {
     void handleNewGame(RenderWindow& window);
     void handleLoadGame(RenderWindow& window);
     void handleSettings(RenderWindow& window);
+    void handlePlayerNameInput(RenderWindow& window, int playerNum);
+    void handleModeSelection(RenderWindow& window);
 };
