@@ -8,6 +8,7 @@
 #include "loadingscreen/loadingscreen.h"
 #include <vector>
 #include <iostream>
+#include <string>
 
 using namespace sf;
 
