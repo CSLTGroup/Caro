@@ -8,6 +8,7 @@
 #include "startgame/startgame.h"
 #include "loadingscreen/loadingscreen.h"
 #include "sfx/sfx.h"
+#include "setting/setting.h"
 #include <vector>
 #include <iostream>
 #include <string>
