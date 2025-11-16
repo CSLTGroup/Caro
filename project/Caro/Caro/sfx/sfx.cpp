@@ -18,3 +18,19 @@ void BackGroundMusic(RenderWindow& window)
         backgroundMusic.play();
     }
 }
+void PlaySoundClick()
+{
+    static SoundBuffer clickBuffer;
+    static Sound clickSound;
+    static bool loaded = false;
+    
+    if (!loaded) {
+        if (!clickBuffer.loadFromFile("assets/Music&sfx/sfx/clicksound.mp3")) {
+            return;
+        }
+        clickSound.setBuffer(clickBuffer);
+        loaded = true;
+    }
+    
+    clickSound.play();
+}

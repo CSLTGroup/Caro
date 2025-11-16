@@ -64,6 +64,7 @@ void Menu::updateState(RenderWindow& window) {
             }
 
             listButton[selectedButton].selected = true;
+            PlaySoundClick(); // Play click sound when navigating menu
         }
         else if (keyBoard.Enter()) {
             state = listButton[selectedButton].ID;
