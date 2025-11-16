@@ -3,10 +3,10 @@
 
 #include "../global.h"
 
-void BackgroundMusic();
-void PlaySoundClick();
-void PlaySoundWin();
-void PlaySoundDraw();
+void BackGroundMusic(RenderWindow& window);
+//void PlaySoundClick();
+//void PlaySoundWin();
+//void PlaySoundDraw();
 
 
 #endif // _SFX_H_
