@@ -1,12 +1,20 @@
 #include "../global.h"
 
-void BackgroundMusic() {
-	static Music backgroundMusic;
-	if (!backgroundMusic.openFromFile("resources/sfx/background_music.ogg")) {
-		std::cerr << "Error loading background music!" << std::endl;
-		return;
-	}
-	backgroundMusic.setLoop(true);
-	backgroundMusic.setVolume(50); // Set volume to 50%
-	backgroundMusic.play();
+void BackGroundMusic(RenderWindow& window)
+{
+    static Music backgroundMusic;
+    static bool loaded = false;
+
+    if (!loaded) {
+        if (!backgroundMusic.openFromFile("assets/Music&sfx/backgroundMusic/background.ogg")) {
+            return;
+        }
+        backgroundMusic.setLoop(true);
+        backgroundMusic.play(); // Start playing immediately after loading
+        loaded = true;
+    }
+
+    if (backgroundMusic.getStatus() == Music::Stopped) {
+        backgroundMusic.play();
+    }
 }
