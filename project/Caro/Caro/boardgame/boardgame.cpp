@@ -36,8 +36,13 @@ void BoardGame::drawTable(RenderWindow& window) {
     }
     
     // ve man hinh thang
-    if (resultGame) {
+    if (resultGame == 1 || resultGame == 2) {
         drawWinnerMessage(window);
+        PlaySoundWin();
+    }
+    else if (resultGame == 3) {
+        drawWinnerMessage(window);
+        PlaySoundDraw();
     }
 }
 void BoardGame::drawPosition(int x, int y, RenderWindow& window) {
