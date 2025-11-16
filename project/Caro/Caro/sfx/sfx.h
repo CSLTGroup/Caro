@@ -4,7 +4,7 @@
 #include "../global.h"
 
 void BackGroundMusic(RenderWindow& window);
-//void PlaySoundClick();
+void PlaySoundClick();
 //void PlaySoundWin();
 //void PlaySoundDraw();
 

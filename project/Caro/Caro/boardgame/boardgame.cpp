@@ -94,14 +94,22 @@ void BoardGame::setMove(RenderWindow& window) {
         return;
     }
     
-    if (keyBoard.Up() && curY > 0)
+    if (keyBoard.Up() && curY > 0) {
         --curY;
-    if (keyBoard.Down() && curY < size - 1)
+        PlaySoundClick(); // Play click sound when moving up
+    }
+    if (keyBoard.Down() && curY < size - 1) {
         ++curY;
-    if (keyBoard.Left() && curX > 0)
+        PlaySoundClick(); // Play click sound when moving down
+    }
+    if (keyBoard.Left() && curX > 0) {
         --curX;
-    if (keyBoard.Right() && curX < size - 1)
+        PlaySoundClick(); // Play click sound when moving left
+    }
+    if (keyBoard.Right() && curX < size - 1) {
         ++curX;
+        PlaySoundClick(); // Play click sound when moving right
+    }
     if (keyBoard.Enter())
         setChoice(window);
     else if (keyBoard.Esc()) {
