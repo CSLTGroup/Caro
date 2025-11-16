@@ -135,6 +135,7 @@
     <ClCompile Include="keyboard\keyboard.cpp" />
     <ClCompile Include="loadingscreen\loadingscreen.cpp" />
     <ClCompile Include="menu\menu.cpp" />
+    <ClCompile Include="sfx\sfx.cpp" />
     <ClCompile Include="startgame\startgame.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -144,6 +145,7 @@
     <ClInclude Include="keyboard\keyboard.h" />
     <ClInclude Include="loadingscreen\loadingscreen.h" />
     <ClInclude Include="menu\menu.h" />
+    <ClInclude Include="sfx\sfx.h" />
     <ClInclude Include="startgame\startgame.h" />
   </ItemGroup>
   <ItemGroup>
