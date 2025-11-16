@@ -28,4 +28,5 @@ struct BoardGame {
     bool checkTheSame(vector<int> listCheck);
     int checkResult();
     int result();
+    void drawWinnerMessage(RenderWindow& window);
 };

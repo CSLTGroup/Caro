@@ -34,6 +34,11 @@ void BoardGame::drawTable(RenderWindow& window) {
             drawPosition(i, j, window);
         }
     }
+    
+    // ve man hinh thang
+    if (resultGame) {
+        drawWinnerMessage(window);
+    }
 }
 void BoardGame::drawPosition(int x, int y, RenderWindow& window) {
 
@@ -75,10 +80,20 @@ void BoardGame::setChoice(RenderWindow& window) {
     if (board[curX][curY] >= 1 || resultGame) 
         return;
     board[curX][curY] = curPlayer;
-    drawPosition(curX, curY, window);
     curPlayer = 3 - curPlayer; //swap player
+    // ktra
+    result();
 }
 void BoardGame::setMove(RenderWindow& window) {
+    if (resultGame) {
+        // het game only esx de thoat
+        if (keyBoard.Esc()) {
+            reset();
+            state = 0;
+        }
+        return;
+    }
+    
     if (keyBoard.Up() && curY > 0)
         --curY;
     if (keyBoard.Down() && curY < size - 1)
@@ -144,6 +159,80 @@ int BoardGame::checkResult() {
     // draw
     return resultGame = 3;
 }
+
+void BoardGame::drawWinnerMessage(RenderWindow& window) {
+  
+    RectangleShape overlay(Vector2f(window.getSize().x, window.getSize().y));
+    overlay.setFillColor(Color(0, 0, 0, 180)); 
+    window.draw(overlay);
+    
+    // tao chu
+    Text winnerText;
+    winnerText.setFont(font);
+    winnerText.setCharacterSize(80);
+    
+  
+    std::string message = "";
+    Color textColor;
+    
+    if (resultGame == 1) {
+        message = "Player 1 Wins!";
+        textColor = Color::Blue;
+    }
+    else if (resultGame == 2) {
+        message = "Player 2 Wins!";
+        textColor = Color::Red;
+    }
+    else if (resultGame == 3) {
+        message = "It's a Draw!";
+        textColor = Color::Yellow;
+    }
+    else {
+        // ko ve
+        return;
+    }
+    
+    winnerText.setString(message);
+    winnerText.setFillColor(textColor);
+    
+    // can giua
+    FloatRect textBounds = winnerText.getLocalBounds();
+    winnerText.setOrigin(
+        textBounds.width / 2.f,
+        textBounds.height / 2.f
+    );
+    winnerText.setPosition(
+        window.getSize().x / 2.f,
+        window.getSize().y / 2.f - 50
+    );
+    
+    // Add outline for better visibility
+    winnerText.setOutlineColor(Color::White);
+    winnerText.setOutlineThickness(3);
+    
+    window.draw(winnerText);
+    
+    // Add instruction text
+    Text instructionText;
+    instructionText.setFont(font);
+    instructionText.setCharacterSize(30);
+    instructionText.setString("Press ESC to return to menu");
+    instructionText.setFillColor(Color::White);
+    
+    FloatRect instructionBounds = instructionText.getLocalBounds();
+    instructionText.setOrigin(
+        instructionBounds.width / 2.f,
+        instructionBounds.height / 2.f
+    );
+    instructionText.setPosition(
+        window.getSize().x / 2.f,
+        window.getSize().y / 2.f + 80
+    );
+    
+    window.draw(instructionText);
+}
+
+
 int BoardGame::result() {
     if (resultGame) return resultGame;
     return checkResult();
