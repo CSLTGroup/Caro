@@ -63,6 +63,9 @@
     <ClCompile Include="loadingscreen\loadingscreen.cpp">
       <Filter>Source Files\loadingscreen</Filter>
     </ClCompile>
+    <ClCompile Include="sfx\sfx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="keyboard\keyboard.h">
@@ -85,6 +88,9 @@
     </ClInclude>
     <ClInclude Include="loadingscreen\loadingscreen.h">
       <Filter>Source Files\loadingscreen</Filter>
+    </ClInclude>
+    <ClInclude Include="sfx\sfx.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
