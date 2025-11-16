@@ -40,6 +40,12 @@
     <Filter Include="Source Files\loadingscreen">
       <UniqueIdentifier>{04e131ce-dbd3-43d4-acf7-3e06b3b2c889}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\sfx">
+      <UniqueIdentifier>{6c19eb5a-5006-4678-9147-d5bfa241a3bc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\setting">
+      <UniqueIdentifier>{090e78df-729e-4623-bf71-39b150560f8f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="caro.cpp">
@@ -64,7 +70,10 @@
       <Filter>Source Files\loadingscreen</Filter>
     </ClCompile>
     <ClCompile Include="sfx\sfx.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\sfx</Filter>
+    </ClCompile>
+    <ClCompile Include="setting\setting.cpp">
+      <Filter>Source Files\setting</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -90,7 +99,10 @@
       <Filter>Source Files\loadingscreen</Filter>
     </ClInclude>
     <ClInclude Include="sfx\sfx.h">
-      <Filter>Header Files</Filter>
+      <Filter>Source Files\sfx</Filter>
+    </ClInclude>
+    <ClInclude Include="setting\setting.h">
+      <Filter>Source Files\setting</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
