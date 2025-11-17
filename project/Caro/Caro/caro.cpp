@@ -7,6 +7,7 @@ int state = 0;
 KeyBoardPressed keyBoard;
 Menu menuGUI;
 BoardGame boardGame;
+Settings setting;
 
 int main()
 {

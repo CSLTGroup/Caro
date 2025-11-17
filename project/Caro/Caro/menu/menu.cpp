@@ -84,5 +84,5 @@ void Menu::handleLoadGame(RenderWindow& window) {
 
 }
 void Menu::handleSettings(RenderWindow& window) {
-    /*BackGroundMusic(window);*/
+    setting.handleSettings(window);
 }
