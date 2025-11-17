@@ -8,5 +8,11 @@ void PlaySoundClick();
 void PlaySoundWin();
 void PlaySoundDraw();
 
+void SoundMute();
+void SetMusicVolume(float volume);
+float GetMusicVolume();
+void SetEffectVolume(float volume);
+float GetEffectVolume();
+
 
 #endif // _SFX_H_

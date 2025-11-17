@@ -1,28 +1,38 @@
 #include "../global.h"
 
+// Sound objects
+static sf::Music backgroundMusic;
+static sf::SoundBuffer clickBuffer;
+static sf::Sound clickSound;
+static sf::SoundBuffer winBuffer;
+static sf::Sound winSound;
+static sf::SoundBuffer drawBuffer;
+static sf::Sound drawSound;
+
+// initial settings
+bool soundMute = false;
+float musicVolume = 100.0f;
+float EffectVolume = 100.0f;
+
 void BackGroundMusic(RenderWindow& window)
 {
-    static Music backgroundMusic;
     static bool loaded = false;
-
     if (!loaded) {
         if (!backgroundMusic.openFromFile("assets/Music&sfx/backgroundMusic/background.ogg")) {
             return;
         }
         backgroundMusic.setLoop(true);
-		backgroundMusic.setVolume(50.f); // set volume to 50%
+        backgroundMusic.setVolume(musicVolume); // set volume initially to 100%
         backgroundMusic.play(); // Start playing immediately after loading
         loaded = true;
     }
-
+    
     if (backgroundMusic.getStatus() == Music::Stopped) {
         backgroundMusic.play();
     }
 }
 void PlaySoundClick()
 {
-    static SoundBuffer clickBuffer;
-    static Sound clickSound;
     static bool loaded = false;
     
     if (!loaded) {
@@ -33,12 +43,12 @@ void PlaySoundClick()
         loaded = true;
     }
     
+    // Set volume based on mute state
+    clickSound.setVolume(soundMute ? 0.0f : EffectVolume);
     clickSound.play();
 }
 void PlaySoundWin()
 {
-    static SoundBuffer winBuffer;
-    static Sound winSound;
     static bool loaded = false;
     
     if (!loaded) {
@@ -49,12 +59,10 @@ void PlaySoundWin()
         loaded = true;
     }
     
-    winSound.play();
+    winSound.play(); // Volume is managed by SoundMute() and SetEffectVolume()
 }
 void PlaySoundDraw()
 {
-    static SoundBuffer drawBuffer;
-    static Sound drawSound;
     static bool loaded = false;
 
     if (!loaded) {
@@ -65,5 +73,50 @@ void PlaySoundDraw()
         loaded = true;
     }
 
-    drawSound.play();
+    drawSound.play(); // Volume is managed by SoundMute() and SetEffectVolume()
+}
+
+// Ajust sound option
+// Mute/Unmute all features
+void SoundMute()
+{
+    soundMute = !soundMute;
+    if (soundMute) {
+        backgroundMusic.setVolume(0.0f);
+        winSound.setVolume(0.0f);
+        drawSound.setVolume(0.0f);
+    }
+    else {
+        backgroundMusic.setVolume(musicVolume);
+        winSound.setVolume(EffectVolume);
+        drawSound.setVolume(EffectVolume);
+    }
+}
+
+// Set volume_level of music
+void SetMusicVolume(float volume)
+{
+    musicVolume = max(0.0f, min(100.0f, volume));
+    if (!soundMute) {
+        backgroundMusic.setVolume(musicVolume);
+    }
+}
+float GetMusicVolume()
+{
+    return musicVolume;
+}
+
+// Set volume_level of effects
+void SetEffectVolume(float volume)
+{
+    EffectVolume = max(0.0f, min(100.0f, volume));
+    if (!soundMute) {
+        clickSound.setVolume(EffectVolume);
+        winSound.setVolume(EffectVolume);
+        drawSound.setVolume(EffectVolume);
+    }
+}
+float GetEffectVolume()
+{
+    return EffectVolume;
 }
