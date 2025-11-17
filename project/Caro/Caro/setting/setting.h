@@ -9,9 +9,7 @@ struct Settings {
 	void SettingButtons(RenderWindow& window);
 	void subSoundSettingBox(RenderWindow& window);
 
-    void handleSettingsOverlay(RenderWindow& window); // For overlay during gameplay
-	void settingBoxOverlay(RenderWindow& window);
-	void SettingButtonsOverlay(RenderWindow& window);
+    /*void handleSettingsOverlay(RenderWindow& window);*/ // For overlay during gameplay
 };
 
 
