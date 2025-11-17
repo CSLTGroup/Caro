@@ -67,10 +67,8 @@ void Settings::handleSettingsOverlay(RenderWindow &window) {
         inSoundSubmenuOverlay = true;
         sound = 0;
       } else if (SelectSettingsOverlay == 1) { // Save
-        // TODO: Implement save functionality
         // SaveGame();
       } else if (SelectSettingsOverlay == 2) { // Load
-        // TODO: Implement load functionality
         // LoadGame();
       } else if (SelectSettingsOverlay == 3) { // back to menu
         backToMenu = true;
