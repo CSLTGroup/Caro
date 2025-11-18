@@ -1,13 +1,16 @@
 #include "../global.h"
 
+// for expanding settings in the future (please add ID buttons down below AND a section for specific buttons' variables if needed)
+const int totalSetButtons = 3;
+string contextSetButtons[totalSetButtons] = { "Sound", "Back to Menu", "Exit Game"};
+
 // general settings variables
 static int SelectSettings = 0; // 0: Sound 1: Back to Menu 2: Exit Game
 static int SelectPage = 0; // 0: first 3 buttons; 1: next 3 buttons; ...
-const int totalSetButtons = 3;
+static int numSettingsCurPage = 3;
 const int totalPage = (totalSetButtons + 2 ) / 3;
 bool hoverSetButtons[totalSetButtons] = { false }; // hover button settings
 bool inSetButtons[totalSetButtons] = { false }; // check in button settings
-string contextSetButtons[totalSetButtons] = { "Sound", "Back to Menu", "Exit Game" };
 bool initialized = false;
 static bool inSettings = false;
 static bool inGeneralSettings = false; // to ignore first enter key
@@ -113,19 +116,37 @@ void Settings::handleSettings(RenderWindow& window)
 		// Action in settings board
 		// SelectSettings: 0 = Sound, 1 = Back to Menu, 2 = Exit Game
 		if (keyBoard.Up() ^ keyBoard.Down()) {
-			hoverSetButtons[SelectSettings] = false;
+			int preSelectSettings = SelectSettings;
 			if (keyBoard.Up()) {
 				--SelectSettings;
-				if (SelectSettings < 0)
-					SelectSettings = totalSetButtons - 1;
+				if (SelectSettings < SelectPage * 3)
+					SelectSettings += numSettingsCurPage;
 			}
 			else {
 				++SelectSettings;
-				if (SelectSettings == totalSetButtons)
-					SelectSettings = 0;
+				if (SelectSettings == SelectPage * 3 + numSettingsCurPage)
+					SelectSettings = SelectPage * 3;
 			}
-			hoverSetButtons[SelectSettings] = true;
-			PlaySoundClick();
+			if (preSelectSettings != SelectSettings) {
+				hoverSetButtons[preSelectSettings] = false;
+				hoverSetButtons[SelectSettings] = true;
+				PlaySoundClick();
+			}
+		}
+		// page change
+		if (keyBoard.Left() ^ keyBoard.Right()) {
+			int preSelectPage = SelectPage;
+			if (keyBoard.Left()) {
+				SelectPage = max(SelectPage - 1, 0);
+			}
+			else {
+				SelectPage = min(SelectPage + 1, totalPage - 1);
+			}
+			if (preSelectPage != SelectPage) {
+				PlaySoundClick();
+				SelectSettings = SelectPage * 3; // reset to first button of the page
+				numSettingsCurPage = min(3, totalSetButtons - SelectPage * 3);
+			}
 		}
 
 		// enter action in settings board
@@ -216,7 +237,6 @@ void Settings::settingBox(RenderWindow& window)
 
 void Settings::SettingButtons(RenderWindow& window)
 {
-
 	// window size
 	static float winWidth = window.getSize().x;
 	static float winHeight = window.getSize().y;
@@ -228,61 +248,82 @@ void Settings::SettingButtons(RenderWindow& window)
 	static float buttonSpacing = winHeight * 0.12f;
 	static float outlineThick = winHeight * 0.004f;
 	static float outlineThickSelected = winHeight * 0.006f;
+
+	// draw general settings buttons
 	if (inGeneralSettings || !inSettings) { // fix auto enter issue
-		for (int IDButton = SelectPage / 3, cntBut = 1; IDButton < totalSetButtons && cntBut <= 3; ++IDButton, ++cntBut) {
-			// Box for each button
-			RectangleShape buttonBox(Vector2f(buttonWidth, buttonHeight));
-			buttonBox.setFillColor(SelectSettings == IDButton ? Color(100, 150, 200) : Color(70, 70, 70));
-			buttonBox.setOutlineColor(SelectSettings == IDButton ? Color::Yellow : Color::White);
-			buttonBox.setOutlineThickness(SelectSettings == IDButton ? outlineThickSelected : outlineThick);
-			buttonBox.setPosition(
-				winWidth / 2 - boxWidth * 0.375f,
-				startY + buttonSpacing * IDButton
-			);
-
-			// Button text (centered)
-			Text buttonText;
-			buttonText.setFont(font);
-			buttonText.setString(contextSetButtons[IDButton]);
-			buttonText.setCharacterSize((int)(winHeight * 0.04f));
-			buttonText.setFillColor(SelectSettings == IDButton ? Color::Yellow : Color::White);
-			FloatRect buttonTextBounds = buttonText.getLocalBounds();
-			buttonText.setPosition(
-				winWidth / 2 - buttonTextBounds.width / 2,
-				startY + buttonSpacing * IDButton + buttonHeight / 2 - buttonTextBounds.height / 2 - winHeight * 0.01f
-			);
-
-			window.draw(buttonBox);
-			window.draw(buttonText);
-		}
-		// For specific buttons
-		if (SelectPage == 0) {// First Page contains Sound button
-			// Mute/Unmute indicator inside Sound box (always visible)
-			std::string muteStatus = isNotMuted ? "Unmute" : "Mute";
-			Text muteText;
-			muteText.setFont(font);
-			muteText.setString(muteStatus);
-			muteText.setCharacterSize((int)(winHeight * 0.03f));
-			if (inSoundSubmenu && IDSoundButtons == 0) {
-				muteText.setFillColor(Color::Yellow);
-			}
-			else {
-				muteText.setFillColor(isNotMuted ? Color(100, 200, 100) : Color(200, 100, 100));
-			}
-			FloatRect muteTextBounds = muteText.getLocalBounds();
-			float muteX = winWidth / 2 + boxWidth * 0.375f - muteTextBounds.width - winWidth * 0.005f;
-			muteText.setPosition(
-				muteX,
-				startY + buttonHeight / 2 - muteTextBounds.height / 2
-			);
-			window.draw(muteText);
+		for (int IDButton = SelectPage * 3, cntBut = 0; cntBut < numSettingsCurPage; ++IDButton, ++cntBut) {
+			generalSettingsBox(window, IDButton, cntBut);
 		}
 	}
-	else if (inSetButtons[IDSFX]) {
+	else  // draw specific settings
+	if (inSetButtons[IDSFX]) {
 		// draw sound setting
-
+		generalSettingsBox(window, IDSFX, 0); // highlight Sound button
 		subSoundSettingBox(window);
 	}
+
+	// others
+	// sound Mute/Unmute indicator
+	if (SelectPage == 0) {// First Page contains Sound button
+		// Mute/Unmute indicator inside Sound box (always visible)
+		std::string muteStatus = isNotMuted ? "Unmute" : "Mute";
+		Text muteText;
+		muteText.setFont(font);
+		muteText.setString(muteStatus);
+		muteText.setCharacterSize((int)(winHeight * 0.03f));
+		if (inSoundSubmenu && IDSoundButtons == 0) {
+			muteText.setFillColor(Color::Yellow);
+		}
+		else {
+			muteText.setFillColor(isNotMuted ? Color(100, 200, 100) : Color(200, 100, 100));
+		}
+		FloatRect muteTextBounds = muteText.getLocalBounds();
+		float muteX = winWidth / 2 + boxWidth * 0.375f - muteTextBounds.width - winWidth * 0.005f;
+		muteText.setPosition(
+			muteX,
+			startY + buttonHeight / 2 - muteTextBounds.height / 2
+		);
+		window.draw(muteText);
+	}
+}
+
+void Settings::generalSettingsBox(RenderWindow& window, int IDButton, int row) {
+	// window size
+	static float winWidth = window.getSize().x;
+	static float winHeight = window.getSize().y;
+
+	// fixed size and indentations
+	static float startY = winHeight / 2 - boxHeight / 2 + winHeight * 0.12f;
+	static float buttonHeight = winHeight * 0.06f;
+	static float buttonWidth = boxWidth * 0.75f;
+	static float buttonSpacing = winHeight * 0.12f;
+	static float outlineThick = winHeight * 0.004f;
+	static float outlineThickSelected = winHeight * 0.006f;
+
+	// Box for each button
+	RectangleShape buttonBox(Vector2f(buttonWidth, buttonHeight));
+	buttonBox.setFillColor(SelectSettings == IDButton ? Color(100, 150, 200) : Color(70, 70, 70));
+	buttonBox.setOutlineColor(SelectSettings == IDButton ? Color::Yellow : Color::White);
+	buttonBox.setOutlineThickness(SelectSettings == IDButton ? outlineThickSelected : outlineThick);
+	buttonBox.setPosition(
+		winWidth / 2 - boxWidth * 0.375f,
+		startY + buttonSpacing * row
+	);
+
+	// Button text (centered)
+	Text buttonText;
+	buttonText.setFont(font);
+	buttonText.setString(contextSetButtons[IDButton]);
+	buttonText.setCharacterSize((int)(winHeight * 0.04f));
+	buttonText.setFillColor(SelectSettings == IDButton ? Color::Yellow : Color::White);
+	FloatRect buttonTextBounds = buttonText.getLocalBounds();
+	buttonText.setPosition(
+		winWidth / 2 - buttonTextBounds.width / 2,
+		startY + buttonSpacing * row + buttonHeight / 2 - buttonTextBounds.height / 2 - winHeight * 0.01f
+	);
+
+	window.draw(buttonBox);
+	window.draw(buttonText);
 }
 
 void Settings::subSoundSettingBox(RenderWindow& window)
@@ -301,7 +342,7 @@ void Settings::subSoundSettingBox(RenderWindow& window)
 
 	// Music Volume Box
 	RectangleShape MusicSettingBox(Vector2f(volBoxwidth, volBoxHeight));
-	MusicSettingBox.setFillColor((IDSoundButtons == IDSFX) ? Color(100, 150, 200) : Color(70, 70, 70));
+	MusicSettingBox.setFillColor((IDSoundButtons == 1) ? Color(100, 150, 200) : Color(70, 70, 70));
 	MusicSettingBox.setOutlineColor((IDSoundButtons == 1) ? Color::Yellow : Color::White);
 	float outlineThick = winHeight * 0.003f; // line while not selected
 	float outlineThickSelected = winHeight * 0.005f; // line when selected
