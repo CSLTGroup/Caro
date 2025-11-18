@@ -1,78 +1,85 @@
 #include "../global.h"
 
-static int SelectSettings = 0;
-// 0: Sound 1: Back to Menu 2: Exit Game
+// general settings variables
+static int SelectSettings = 0; // 0: Sound 1: Back to Menu 2: Exit Game
+static int SelectPage = 0; // 0: first 3 buttons; 1: next 3 buttons; ...
+const int totalSetButtons = 3;
+const int totalPage = (totalSetButtons + 2 ) / 3;
+bool hoverSetButtons[totalSetButtons] = { false }; // hover button settings
+bool inSetButtons[totalSetButtons] = { false }; // check in button settings
+string contextSetButtons[totalSetButtons] = { "Sound", "Back to Menu", "Exit Game" };
+bool initialized = false;
+static bool inSettings = false;
+static bool inGeneralSettings = false; // to ignore first enter key
 
-// Shared variables (accessible from settingoverlay.cpp via extern)
-int sound = 0; // 0: mute/ unmute sound 1: adjust music volume 2: adjust effect volume
-bool SoundSettings = true; // true: on, false: off
+// id buttons in settings
+const int IDSFX = 0;
+const int IDBACKTOMENU = 1;
+const int IDEXITGAME = 2;
+
+// sound settings variables
+int IDSoundButtons = 0; // 0: mute/ unmute sound 1: adjust music volume 2: adjust effect volume
+bool isNotMuted = true; // true: on, false: off
 int MusicVolumeLevel = 20; // from 0 to 20 step 5% in 100% (0-100%)
 int EffectVolumeLevel = 20; // from 0 to 20 step 5% in 100% (0-100%)
-bool backToMenu = false; // check back to menu
-// Initialize VolumeLevel to match current volume
-bool initialized = false;
-bool ExitGame = false; // check exit game
-
-// Private to setting.cpp only
 static bool inSoundSubmenu = false; // track if we're in the sound settings submenu
-static bool justEnteredSettings = false; // track if we just entered settings menu
 
-
-// box size functions 
-inline float GetBoxWidth(RenderWindow& window) { return window.getSize().x * 0.4f; }
-inline float GetBoxHeight(RenderWindow& window) { return window.getSize().y * 0.5f; }
+// UI handle
+static float boxWidth = 0.0f; // window.getSize().x * 0.4f;
+static float boxHeight = 0.0f; // window.getSize().y * 0.5f;
 
 void Settings::sfx() {
 	if (keyBoard.Up() ^ keyBoard.Down()) {
 		if (keyBoard.Up()) {
-			--sound;
-			if (sound < 0)
-				sound = 2;
+			--IDSoundButtons;
+			if (IDSoundButtons < 0)
+				IDSoundButtons = 2;
 		}
 		else {
-			++sound;
-			if (sound > 2)
-				sound = 0;
+			++IDSoundButtons;
+			if (IDSoundButtons == 3)
+				IDSoundButtons = 0;
 		}
 		PlaySoundClick();
 	}
-	if (keyBoard.Enter())
+	if (IDSoundButtons == 0) // Adjust mute/unmute
 	{
-		PlaySoundClick();
-		if (sound == 0)
+		if (keyBoard.Enter())
 		{
-			SoundSettings = !SoundSettings;
+			PlaySoundClick();
+			isNotMuted = !isNotMuted;
 			SoundMute();
 		}
 	}
-	// Adjust music volume (sound == 1)
-	if (sound == 1) {
-		if (keyBoard.Left() && MusicVolumeLevel > 0) {
-			MusicVolumeLevel--;
-			float newVolume = MusicVolumeLevel * 5.0f;
-			PlaySoundClick();
-			SetMusicVolume(newVolume);
-		}
-		else if (keyBoard.Right() && MusicVolumeLevel < 20) {
-			MusicVolumeLevel++;
-			float newVolume = MusicVolumeLevel * 5.0f;
-			PlaySoundClick();
-			SetMusicVolume(newVolume);
+	else if (IDSoundButtons == 1) { // Adjust music volume (sound == 1)
+		if (keyBoard.Left() ^ keyBoard.Right()) {
+			float preMusicVolumeLevel = MusicVolumeLevel;
+
+			if (keyBoard.Left())
+				MusicVolumeLevel = max(MusicVolumeLevel - 1, 0);
+			else MusicVolumeLevel = min(MusicVolumeLevel + 1, 20);
+
+			if (preMusicVolumeLevel != MusicVolumeLevel) {
+				float newVolume = MusicVolumeLevel * 5.0f;
+				PlaySoundClick();
+				SetMusicVolume(newVolume);
+			} // else do nothing
 		}
 	}
 	// Adjust effect volume (sound == 2)
-	if (sound == 2) {
-		if (keyBoard.Left() && EffectVolumeLevel > 0) {
-			EffectVolumeLevel--;
-			float newVolume = EffectVolumeLevel * 5.0f;
-			PlaySoundClick();
-			SetEffectVolume(newVolume);
-		}
-		else if (keyBoard.Right() && EffectVolumeLevel < 20) {
-			EffectVolumeLevel++;
-			float newVolume = EffectVolumeLevel * 5.0f;
-			PlaySoundClick();
-			SetEffectVolume(newVolume);
+	else if (IDSoundButtons == 2) {
+		if (keyBoard.Left() ^ keyBoard.Right()) {
+			float preEffectVolumeLevel = EffectVolumeLevel;
+
+			if (keyBoard.Left())
+				EffectVolumeLevel = max(EffectVolumeLevel - 1, 0);
+			else EffectVolumeLevel = min(EffectVolumeLevel + 1, 20);
+
+			if (EffectVolumeLevel != preEffectVolumeLevel) {
+				float newVolume = EffectVolumeLevel * 5.0f;
+				PlaySoundClick();
+				SetEffectVolume(newVolume);
+			}
 		}
 	}
 }
@@ -80,237 +87,206 @@ void Settings::sfx() {
 void Settings::handleSettings(RenderWindow& window)
 {
 	if (!initialized) {
+
+		// music part
 		MusicVolumeLevel = (int)(GetMusicVolume() / 5.0f);
 		EffectVolumeLevel = (int)(GetEffectVolume() / 5.0f);
+
+		// UI part
+		boxWidth = window.getSize().x * 0.4f;
+		boxHeight = window.getSize().y * 0.5f;
+
 		initialized = true;
 	}
 	
-	// Check if we just entered settings (first frame)
-	static bool wasInSettings = false;
-	if (!wasInSettings) {
-		justEnteredSettings = true;
-		wasInSettings = true;
-		SelectSettings = 0; // Reset to Sound button
-	}
-	
     settingBox(window);
-	// Handle sound submenu navigation
-	if (inSoundSubmenu) {
+	if (!inSettings) { // avoid first enter key issue
+
+		// initialize settings part
+		SelectSettings = IDSFX; // Reset to Sound button - first Button
+		SelectPage = 0;
+		inSettings = true;
+		inGeneralSettings = true;
+	}
+	else if (inGeneralSettings) {
+
+		// Action in settings board
+		// SelectSettings: 0 = Sound, 1 = Back to Menu, 2 = Exit Game
+		if (keyBoard.Up() ^ keyBoard.Down()) {
+			hoverSetButtons[SelectSettings] = false;
+			if (keyBoard.Up()) {
+				--SelectSettings;
+				if (SelectSettings < 0)
+					SelectSettings = totalSetButtons - 1;
+			}
+			else {
+				++SelectSettings;
+				if (SelectSettings == totalSetButtons)
+					SelectSettings = 0;
+			}
+			hoverSetButtons[SelectSettings] = true;
+			PlaySoundClick();
+		}
+
+		// enter action in settings board
+		if (keyBoard.Enter() || keyBoard.Esc()) {
+			inGeneralSettings = false;
+			if (SelectSettings == IDBACKTOMENU || keyBoard.Esc()) { // back to menu
+				SelectSettings = 0;
+				inSettings = false; // Reset flag when leaving
+				stateMenu = 0; // return to main menu
+				return;
+			}
+
+			// other buttons
+			inSetButtons[SelectSettings] = true;
+			if (SelectSettings == IDSFX) { // sound settings submenu
+				IDSoundButtons = 0;
+			}
+			else if (SelectSettings == IDEXITGAME) { // exit game
+				window.close();
+			}
+			PlaySoundClick();
+		}
+	}
+	else // for specific submenu handling
+	if (inSetButtons[IDSFX]) { // Handle sound submenu navigation
 		sfx();
 		// Exit sound submenu on Esc
 		if (keyBoard.Esc()) {
 			PlaySoundClick();
-			inSoundSubmenu = false;
-			sound = 0;
-		}
-	}
-	else {
-		// Action in settings board
-		// SelectSettings: 0 = Sound, 1 = Back to Menu, 2 = Exit Game
-		if (keyBoard.Up() ^ keyBoard.Down()) {
-			if (keyBoard.Up()) {
-				--SelectSettings;
-				if (SelectSettings < 0)
-					SelectSettings = 2;
-			}
-			else {
-				++SelectSettings;
-				if (SelectSettings > 2)
-					SelectSettings = 0;
-			}
-			PlaySoundClick();
-			justEnteredSettings = false; // Clear flag on navigation
-		}
-
-		// Enter key action 
-		if (keyBoard.Enter() && !justEnteredSettings) {
-			PlaySoundClick();
-			if (SelectSettings == 0) {
-				// Enter sound settings submenu
-				inSoundSubmenu = true;
-				sound = 0;
-			}
-			else if (SelectSettings == 1) { // back to menu
-				backToMenu = true;
-				SelectSettings = 0;
-				wasInSettings = false; // Reset flag when leaving
-				state = 0;
-			}
-			else if (SelectSettings == 2) { // exit game
-				ExitGame = true;
-				window.close();
-			}
-		}
-		else if (keyBoard.Enter() && justEnteredSettings) {
-			// check if we enter the settings for the first time (ignore the enter key)
-			justEnteredSettings = false;
-		}
-
-		// exit settings on Esc key
-		if (keyBoard.Esc()) {
-			PlaySoundClick();
-			inSoundSubmenu = false;
-			SelectSettings = 0;
-			wasInSettings = false; // Reset flag when leaving
-			state = 0; // assuming state 0 is the main menu
+			inSetButtons[IDSFX] = false;
+			IDSoundButtons = 0; // reset to mute/unmute
+			inGeneralSettings = true; // back to general settings
 		}
 	}
 }
 
 void Settings::settingBox(RenderWindow& window)
 {
+	// pre set up
+	const float winWidth = window.getSize().x;
+	const float winHeight = window.getSize().y;
+
 	// Draw settings menu
-	RectangleShape bg(Vector2f(window.getSize().x, window.getSize().y));
+	RectangleShape bg(Vector2f(winWidth, winHeight));
 	bg.setFillColor(Color(30, 30, 30));
 	window.draw(bg); // thich them background gi thi tu them vao
-
-	float boxWidth = GetBoxWidth(window);
-	float boxHeight = GetBoxHeight(window);
 
 	RectangleShape settingsBox(Vector2f(boxWidth, boxHeight));
 	settingsBox.setFillColor(Color(50, 50, 50, 240));
 	settingsBox.setOutlineColor(Color::White);
-	settingsBox.setOutlineThickness(window.getSize().y * 0.003f); 
+	settingsBox.setOutlineThickness(winHeight * 0.003f);
 	settingsBox.setPosition(
-		window.getSize().x / 2 - boxWidth / 2,
-		window.getSize().y / 2 - boxHeight / 2
+		winWidth / 2 - boxWidth / 2,
+		winHeight / 2 - boxHeight / 2
 	);
 	window.draw(settingsBox);
 	Text titleText;
 	titleText.setFont(font);
 	titleText.setString("Settings");
-	titleText.setCharacterSize((int)(window.getSize().y * 0.05f)); 
+	titleText.setCharacterSize((int)(winHeight * 0.05f));
 	titleText.setFillColor(Color::Yellow);
 	FloatRect titleBounds = titleText.getLocalBounds();
 	titleText.setPosition(
 		window.getSize().x / 2 - titleBounds.width / 2,
-		window.getSize().y / 2 - boxHeight / 2 + window.getSize().y * 0.03f 
+		winHeight / 2 - boxHeight / 2 + winHeight * 0.03f
 	);
 	window.draw(titleText);
 
+	// draw page
+	Text pageText;
+	pageText.setFont(font);
+	pageText.setString("Page " + to_string(SelectPage + 1) + "/" + to_string(totalPage));
+	pageText.setCharacterSize((int)(winHeight * 0.03f));
+	pageText.setStyle(Text::Italic);
+	pageText.setFillColor(Color(120, 158, 158));
+	FloatRect pageBounds = pageText.getLocalBounds();
+	pageText.setOrigin(pageBounds.width / 2, pageBounds.height / 2);
+	pageText.setPosition(
+		winWidth / 2 + boxWidth / 2 - boxWidth * 0.125 ,
+		winHeight / 2 + boxHeight / 2 - boxHeight * 0.07f
+	);
+	window.draw(pageText);
+
+
+	// draw buttons
 	SettingButtons(window);
 }
 
 void Settings::SettingButtons(RenderWindow& window)
 {
-	// Use same dimensions as settings box
-	float boxWidth = GetBoxWidth(window);
-	float boxHeight = GetBoxHeight(window);
 
 	// window size
-	float winWidth = window.getSize().x;
-	float winHeight = window.getSize().y;
+	static float winWidth = window.getSize().x;
+	static float winHeight = window.getSize().y;
 
-	float startY = window.getSize().y / 2 - boxHeight / 2 + winHeight * 0.12f; 
-	float buttonHeight = winHeight * 0.06f; 
-	float buttonSpacing = winHeight * 0.12f; 
-	float outlineThick = winHeight * 0.004f; 
-	float outlineThickSelected = winHeight * 0.006f; 
-    
-	// Sound button
-	RectangleShape soundBox(Vector2f(boxWidth * 0.75f, buttonHeight));
-	soundBox.setFillColor(SelectSettings == 0 ? Color(100, 150, 200) : Color(70, 70, 70));
-	soundBox.setOutlineColor(SelectSettings == 0 ? Color::Yellow : Color::White);
-	soundBox.setOutlineThickness(SelectSettings == 0 ? outlineThickSelected : outlineThick);
-	soundBox.setPosition(
-		window.getSize().x / 2 - boxWidth * 0.375f,
-		startY 
-	);
-	window.draw(soundBox);
+	// fixed size and indentations
+	static float startY = winHeight / 2 - boxHeight / 2 + winHeight * 0.12f;
+	static float buttonHeight = winHeight * 0.06f;
+	static float buttonWidth = boxWidth * 0.75f;
+	static float buttonSpacing = winHeight * 0.12f;
+	static float outlineThick = winHeight * 0.004f;
+	static float outlineThickSelected = winHeight * 0.006f;
+	if (inGeneralSettings || !inSettings) { // fix auto enter issue
+		for (int IDButton = SelectPage / 3, cntBut = 1; IDButton < totalSetButtons && cntBut <= 3; ++IDButton, ++cntBut) {
+			// Box for each button
+			RectangleShape buttonBox(Vector2f(buttonWidth, buttonHeight));
+			buttonBox.setFillColor(SelectSettings == IDButton ? Color(100, 150, 200) : Color(70, 70, 70));
+			buttonBox.setOutlineColor(SelectSettings == IDButton ? Color::Yellow : Color::White);
+			buttonBox.setOutlineThickness(SelectSettings == IDButton ? outlineThickSelected : outlineThick);
+			buttonBox.setPosition(
+				winWidth / 2 - boxWidth * 0.375f,
+				startY + buttonSpacing * IDButton
+			);
 
-	// Sound button text (centered)
-	Text soundText;
-	soundText.setFont(font);
-	soundText.setString("Sound");
-	soundText.setCharacterSize((int)(winHeight * 0.04f)); 
-	soundText.setFillColor(SelectSettings == 0 ? Color::Yellow : Color::White);
-	FloatRect soundTextBounds = soundText.getLocalBounds();
-	soundText.setPosition(
-		window.getSize().x / 2 - soundTextBounds.width / 2,
-		startY + buttonHeight / 2 - soundTextBounds.height / 2 - winHeight*0.01f
-	);
-	window.draw(soundText);
+			// Button text (centered)
+			Text buttonText;
+			buttonText.setFont(font);
+			buttonText.setString(contextSetButtons[IDButton]);
+			buttonText.setCharacterSize((int)(winHeight * 0.04f));
+			buttonText.setFillColor(SelectSettings == IDButton ? Color::Yellow : Color::White);
+			FloatRect buttonTextBounds = buttonText.getLocalBounds();
+			buttonText.setPosition(
+				winWidth / 2 - buttonTextBounds.width / 2,
+				startY + buttonSpacing * IDButton + buttonHeight / 2 - buttonTextBounds.height / 2 - winHeight * 0.01f
+			);
 
-	// Mute/Unmute indicator inside Sound box (always visible)
-	std::string muteStatus = SoundSettings ? "Unmute" : "Mute"; 
-	Text muteText;
-	muteText.setFont(font);
-	muteText.setString(muteStatus);
-	muteText.setCharacterSize((int)(winHeight * 0.03f)); 
-	if (inSoundSubmenu && sound == 0) {
-		muteText.setFillColor(Color::Yellow);
+			window.draw(buttonBox);
+			window.draw(buttonText);
+		}
+		// For specific buttons
+		if (SelectPage == 0) {// First Page contains Sound button
+			// Mute/Unmute indicator inside Sound box (always visible)
+			std::string muteStatus = isNotMuted ? "Unmute" : "Mute";
+			Text muteText;
+			muteText.setFont(font);
+			muteText.setString(muteStatus);
+			muteText.setCharacterSize((int)(winHeight * 0.03f));
+			if (inSoundSubmenu && IDSoundButtons == 0) {
+				muteText.setFillColor(Color::Yellow);
+			}
+			else {
+				muteText.setFillColor(isNotMuted ? Color(100, 200, 100) : Color(200, 100, 100));
+			}
+			FloatRect muteTextBounds = muteText.getLocalBounds();
+			float muteX = winWidth / 2 + boxWidth * 0.375f - muteTextBounds.width - winWidth * 0.005f;
+			muteText.setPosition(
+				muteX,
+				startY + buttonHeight / 2 - muteTextBounds.height / 2
+			);
+			window.draw(muteText);
+		}
 	}
-	else {
-		muteText.setFillColor(SoundSettings ? Color(100, 200, 100) : Color(200, 100, 100));
-	}
-	FloatRect muteTextBounds = muteText.getLocalBounds();
-	float muteX = window.getSize().x / 2 + boxWidth * 0.375f - muteTextBounds.width - winWidth * 0.005f;
-	muteText.setPosition(
-		muteX,
-		startY + buttonHeight / 2 - muteTextBounds.height / 2 
-	);
-	window.draw(muteText);
-	
-	// Show main settings buttons when NOT in sound submenu
-	if (!inSoundSubmenu) {
-		// Back to Menu button
-		RectangleShape backBox(Vector2f(boxWidth * 0.75f, buttonHeight));
-		backBox.setFillColor(SelectSettings == 1 ? Color(100, 150, 200) : Color(70, 70, 70));
-		backBox.setOutlineColor(SelectSettings == 1 ? Color::Yellow : Color::White);
-		backBox.setOutlineThickness(SelectSettings == 1 ? outlineThickSelected : outlineThick);
-		backBox.setPosition(
-			window.getSize().x / 2 - boxWidth * 0.375f,
-			startY + buttonSpacing 
-		);
-		window.draw(backBox);
-		
-		// Back to Menu button text
-		Text backText;
-		backText.setFont(font);
-		backText.setString("Back to Menu");
-		backText.setCharacterSize((int)(winHeight * 0.04f)); 
-		backText.setFillColor(SelectSettings == 1 ? Color::Yellow : Color::White);
-		FloatRect backTextBounds = backText.getLocalBounds();
-		backText.setPosition(
-			window.getSize().x / 2 - backTextBounds.width / 2,
-			startY + buttonSpacing + buttonHeight / 2 - backTextBounds.height / 2 - winHeight * 0.01f
-		);
-		window.draw(backText);
+	else if (inSetButtons[IDSFX]) {
+		// draw sound setting
 
-		// Exit Game button
-		RectangleShape exitBox(Vector2f(boxWidth * 0.75f, buttonHeight));
-		exitBox.setFillColor(SelectSettings == 2 ? Color(100, 150, 200) : Color(70, 70, 70));
-		exitBox.setOutlineColor(SelectSettings == 2 ? Color::Yellow : Color::White);
-		exitBox.setOutlineThickness(SelectSettings == 2 ? outlineThickSelected : outlineThick);
-		exitBox.setPosition(
-			window.getSize().x / 2 - boxWidth * 0.375f,
-			startY + buttonSpacing * 2
-		);
-		window.draw(exitBox);
-		
-		// Exit Game button text
-		Text exitText;
-		exitText.setFont(font);
-		exitText.setString("Exit Game");
-		exitText.setCharacterSize((int)(winHeight * 0.04f)); // 3.7% of height
-		exitText.setFillColor(SelectSettings == 2 ? Color::Yellow : Color::White);
-		FloatRect exitTextBounds = exitText.getLocalBounds();
-		exitText.setPosition(
-			window.getSize().x / 2 - exitTextBounds.width / 2,
-			startY + buttonSpacing * 2 + buttonHeight / 2 - exitTextBounds.height / 2 - winHeight * 0.01f
-		);
-		window.draw(exitText);
-	}
-	else {
-		// Show sound submenu when in sound submenu
 		subSoundSettingBox(window);
 	}
 }
 
 void Settings::subSoundSettingBox(RenderWindow& window)
 {
-	float boxWidth = GetBoxWidth(window);
-	float boxHeight = GetBoxHeight(window);
 	float winHeight = window.getSize().y;
 	float winWidth = window.getSize().x;
 
@@ -325,11 +301,11 @@ void Settings::subSoundSettingBox(RenderWindow& window)
 
 	// Music Volume Box
 	RectangleShape MusicSettingBox(Vector2f(volBoxwidth, volBoxHeight));
-	MusicSettingBox.setFillColor((sound == 1) ? Color(100, 150, 200) : Color(70, 70, 70));
-	MusicSettingBox.setOutlineColor((sound == 1) ? Color::Yellow : Color::White);
+	MusicSettingBox.setFillColor((IDSoundButtons == IDSFX) ? Color(100, 150, 200) : Color(70, 70, 70));
+	MusicSettingBox.setOutlineColor((IDSoundButtons == 1) ? Color::Yellow : Color::White);
 	float outlineThick = winHeight * 0.003f; // line while not selected
 	float outlineThickSelected = winHeight * 0.005f; // line when selected
-	MusicSettingBox.setOutlineThickness((sound == 1) ? outlineThickSelected : outlineThick);
+	MusicSettingBox.setOutlineThickness((IDSoundButtons == 1) ? outlineThickSelected : outlineThick);
 	MusicSettingBox.setPosition(
 		window.getSize().x / 2 - boxWidth * 0.375f,
 		volBoxY
@@ -341,7 +317,7 @@ void Settings::subSoundSettingBox(RenderWindow& window)
 	musicText.setFont(font);
 	musicText.setString("Music Volume: " + std::to_string(MusicVolumeLevel * 5) + "%");
 	musicText.setCharacterSize((int)(winHeight * 0.02f));
-	musicText.setFillColor((sound == 1) ? Color::Yellow : Color::White);
+	musicText.setFillColor((IDSoundButtons == 1) ? Color::Yellow : Color::White);
 	FloatRect musicTextBounds = musicText.getLocalBounds();
 	musicText.setPosition(
 		window.getSize().x / 2 - musicTextBounds.width / 2,
@@ -365,16 +341,16 @@ void Settings::subSoundSettingBox(RenderWindow& window)
 	// Music Volume Bar Fill
 	float musicFillWidth = barWidth * (MusicVolumeLevel / 20.0f);
 	RectangleShape musicBarFill(Vector2f(musicFillWidth, barHeight));
-	musicBarFill.setFillColor((sound == 1) ? Color(100, 200, 100) : Color(50, 150, 50));
+	musicBarFill.setFillColor((IDSoundButtons == 1) ? Color(100, 200, 100) : Color(50, 150, 50));
 	musicBarFill.setPosition(barX, barY);
 	window.draw(musicBarFill);
 
 	// Effect Volume Box (right under Music Volume)
 	float effectBoxY = volBoxY + volBoxHeight + spacing;
 	RectangleShape EffectSettingBox(Vector2f(volBoxwidth, volBoxHeight));
-	EffectSettingBox.setFillColor((sound == 2) ? Color(100, 150, 200) : Color(70, 70, 70));
-	EffectSettingBox.setOutlineColor((sound == 2) ? Color::Yellow : Color::White);
-	EffectSettingBox.setOutlineThickness((sound == 2) ? outlineThickSelected : outlineThick);
+	EffectSettingBox.setFillColor((IDSoundButtons == 2) ? Color(100, 150, 200) : Color(70, 70, 70));
+	EffectSettingBox.setOutlineColor((IDSoundButtons == 2) ? Color::Yellow : Color::White);
+	EffectSettingBox.setOutlineThickness((IDSoundButtons == 2) ? outlineThickSelected : outlineThick);
 	EffectSettingBox.setPosition(
 		window.getSize().x / 2 - boxWidth * 0.375f,
 		effectBoxY
@@ -386,7 +362,7 @@ void Settings::subSoundSettingBox(RenderWindow& window)
 	effectText.setFont(font);
 	effectText.setString("Effect Volume: " + std::to_string(EffectVolumeLevel * 5) + "%");
 	effectText.setCharacterSize((int)(winHeight * 0.02f)); // 2.9% of height
-	effectText.setFillColor((sound == 2) ? Color::Yellow : Color::White);
+	effectText.setFillColor((IDSoundButtons == 2) ? Color::Yellow : Color::White);
 	FloatRect effectTextBounds = effectText.getLocalBounds();
 	effectText.setPosition(
 		window.getSize().x / 2 - effectTextBounds.width / 2,
@@ -405,7 +381,7 @@ void Settings::subSoundSettingBox(RenderWindow& window)
 	// Effect Volume Bar Fill
 	float effectFillWidth = barWidth * (EffectVolumeLevel / 20.0f);
 	RectangleShape effectBarFill(Vector2f(effectFillWidth, barHeight));
-	effectBarFill.setFillColor((sound == 2) ? Color(100, 200, 100) : Color(50, 150, 50));
+	effectBarFill.setFillColor((IDSoundButtons == 2) ? Color(100, 200, 100) : Color(50, 150, 50));
 	effectBarFill.setPosition(barX, effectBoxY + winHeight * 0.035f); 
 	window.draw(effectBarFill);
 
