@@ -8,6 +8,7 @@ struct Settings {
 	void settingBox(RenderWindow& window);
 	void SettingButtons(RenderWindow& window);
 	void subSoundSettingBox(RenderWindow& window);
+	void generalSettingsBox(RenderWindow& window, int IDButton, int row);
 
     /*void handleSettingsOverlay(RenderWindow& window);*/ // For overlay during gameplay
 };
