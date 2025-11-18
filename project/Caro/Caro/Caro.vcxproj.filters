@@ -75,6 +75,9 @@
     <ClCompile Include="setting\setting.cpp">
       <Filter>Source Files\setting</Filter>
     </ClCompile>
+    <ClCompile Include="setting\settingoverlay.cpp">
+      <Filter>Source Files\setting</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="keyboard\keyboard.h">

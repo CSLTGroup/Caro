@@ -136,6 +136,7 @@
     <ClCompile Include="loadingscreen\loadingscreen.cpp" />
     <ClCompile Include="menu\menu.cpp" />
     <ClCompile Include="setting\setting.cpp" />
+    <ClCompile Include="setting\settingoverlay.cpp" />
     <ClCompile Include="sfx\sfx.cpp" />
     <ClCompile Include="startgame\startgame.cpp" />
   </ItemGroup>
