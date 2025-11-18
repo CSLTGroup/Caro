@@ -94,7 +94,7 @@ void BoardGame::setMove(RenderWindow& window) {
         // het game only esx de thoat
         if (keyBoard.Esc()) {
             reset();
-            state = 0;
+            stateMenu = 0;
         }
         return;
     }
@@ -119,7 +119,7 @@ void BoardGame::setMove(RenderWindow& window) {
         setChoice(window);
     else if (keyBoard.Esc()) {
         reset();
-        state = 0;
+        stateMenu = 0;
     }
 }
 bool BoardGame::checkTheSame(vector<int> listCheck) {

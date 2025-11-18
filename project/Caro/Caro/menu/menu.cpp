@@ -13,7 +13,7 @@ void Menu::draw(RenderWindow& window) {
         listButton[settingID].ID = 3;
 
         listButton[newGameID].selected = true;
-        state = ID;
+        stateMenu = ID;
     }
 
     // size menu
@@ -40,15 +40,15 @@ void Menu::draw(RenderWindow& window) {
 }
 void Menu::handleUI(RenderWindow& window) {
     draw(window);
-    if (state == listButton[0].ID)
+    if (stateMenu == listButton[0].ID)
         handleNewGame(window);
-    else if (state == listButton[1].ID)
+    else if (stateMenu == listButton[1].ID)
         handleLoadGame(window);
-    else if (state == listButton[2].ID)
+    else if (stateMenu == listButton[2].ID)
         handleSettings(window);
 }
 void Menu::updateState(RenderWindow& window) {
-    if (state == ID) {
+    if (stateMenu == ID) {
         if (keyBoard.Up() ^ keyBoard.Down()) {
             listButton[selectedButton].selected = false;
 
@@ -67,13 +67,13 @@ void Menu::updateState(RenderWindow& window) {
             PlaySoundClick(); // Play click sound when navigating menu
         }
         else if (keyBoard.Enter()) {
-            state = listButton[selectedButton].ID;
+            stateMenu = listButton[selectedButton].ID;
         }
         else if (keyBoard.Esc()) {
             window.close();
         }
     }
-    else if (state == listButton[newGameID].ID) {
+    else if (stateMenu == listButton[newGameID].ID) {
         boardGame.setMove(window);
     }
 }

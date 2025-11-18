@@ -19,10 +19,10 @@ extern int state;
 
 // box size functions (shared)
 inline float GetBoxWidth(RenderWindow &window) {
-  return window.getSize().x * 0.4f;
+  return boxWidth;
 }
 inline float GetBoxHeight(RenderWindow &window) {
-  return window.getSize().y * 0.5f;
+  return boxHeight;
 }
 
 // Overlay Settings Functions

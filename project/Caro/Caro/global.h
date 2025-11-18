@@ -15,7 +15,7 @@
 
 using namespace sf;
 
-extern int state;
+extern int stateMenu;
 extern Font font;
 extern Menu menuGUI;
 extern KeyBoardPressed keyBoard;
