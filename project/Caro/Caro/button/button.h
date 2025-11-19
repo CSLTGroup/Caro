@@ -9,7 +9,9 @@ struct Button {
     int ID = 0;
     bool selected = false;
     string context = "";
+    bool menuColorScheme = false;
     Button() {}
     void setPosition(int posX, int posY, int widthX, int heightY);
+    void setMenuTheme(bool enable);
     void draw(RenderWindow& window);
 };

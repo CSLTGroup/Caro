@@ -130,6 +130,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="boardgame\boardgame.cpp" />
+    <ClCompile Include="bot_ai\bot_ai.cpp" />
     <ClCompile Include="button\button.cpp" />
     <ClCompile Include="caro.cpp" />
     <ClCompile Include="keyboard\keyboard.cpp" />
@@ -142,6 +143,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="boardgame\boardgame.h" />
+    <ClInclude Include="bot_ai\bot_ai.h" />
     <ClInclude Include="button\button.h" />
     <ClInclude Include="global.h" />
     <ClInclude Include="keyboard\keyboard.h" />
