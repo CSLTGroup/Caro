@@ -38,6 +38,9 @@ void loadingScreen(RenderWindow &window)
 	loadingText.setOrigin(bounds.width / 2, bounds.height / 2);
 	loadingText.setPosition(Vector2f(widthApp * 50.f/100, heightApp * 90.f/100));
 
+	// play loading music at the start
+	PlaySoundLoading();
+
 	// set up timer
 	Clock clock;
 	int durLoadScreen = 0;
@@ -75,5 +78,4 @@ void loadingScreen(RenderWindow &window)
 		}
 
 	} while (durLoadScreen <= LOADING_TIME);
-
 }

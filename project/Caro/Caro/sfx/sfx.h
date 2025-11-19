@@ -7,6 +7,7 @@ void BackGroundMusic(RenderWindow& window);
 void PlaySoundClick();
 void PlaySoundWin();
 void PlaySoundDraw();
+void PlaySoundLoading();
 
 void SoundMute();
 void SetMusicVolume(float volume);
