@@ -7,18 +7,23 @@ void Button::setPosition(int posX, int posY, int widthX, int heightY) {
     width = widthX;
     height = heightY;
 }
+void Button::setMenuTheme(bool enable) {
+    menuColorScheme = enable;
+}
 void Button::draw(RenderWindow& window) {
 
     //rectangle
     RectangleShape buttonGUI = RectangleShape(Vector2f(width, height)); // size
     buttonGUI.setPosition(Vector2f(x, y)); // position : top-left corner
+
+    bool useMenuColors = menuColorScheme || stateMenu == 0;
     if (selected) { // hover
-        if (stateMenu == 0) // menuID
+        if (useMenuColors) // menuID
             buttonGUI.setFillColor(Color::Green); // color
         else buttonGUI.setFillColor(Color(100, 100, 100));
     }
     else { // not hover
-        if (stateMenu == 0)
+        if (useMenuColors)
             buttonGUI.setFillColor(Color::Yellow);
         else buttonGUI.setFillColor(Color(158, 158, 158));
     }
@@ -34,13 +39,13 @@ void Button::draw(RenderWindow& window) {
     FloatRect textBounds = text.getLocalBounds(); // idk <(")
 
     if (selected) { // hover
-        if (stateMenu == 0) {
+        if (useMenuColors) {
             text.setFillColor(Color::White);
         }
         else text.setFillColor(Color(185, 185, 185));
     }
     else {
-        if (stateMenu == 0) {
+        if (useMenuColors) {
             text.setFillColor(Color(208, 95, 147));
         }
         else text.setFillColor(Color(130, 130, 130));
