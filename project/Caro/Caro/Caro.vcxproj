@@ -160,6 +160,8 @@
   <ItemGroup>
     <Image Include="assets\image\background_img.png" />
     <Image Include="assets\image\penguinGOGO.png" />
+    <Image Include="assets\image\player1_egg-egg-sheeran.gif" />
+    <Image Include="assets\image\player2_onepunchman.jpg" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

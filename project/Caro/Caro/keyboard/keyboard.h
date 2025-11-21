@@ -2,22 +2,26 @@
 #include "../global.h"
 
 using namespace sf;
-struct KeyBoardPressed {
-    short mask = 0; // 001010
-    const short UP = 1 << 0;
-    const short RIGHT = 1 << 1;
-    const short LEFT = 1 << 2;
-    const short DOWN = 1 << 3;
-    const short ENTER = 1 << 4;
-    const short ESC = 1 << 5;
-    const short ALL = (1 << 6) - 1;
 
+sf::Keyboard::Key charToKey(char c);
+
+struct KeyBoardPressed {
+    bool combineAlphabet[26] = { false };
+    int mask = 0;
+	// escape : 0, enter : 1, backspace : 2, shift : 3
+    static const int ESC = 1 << 0;
+    static const int ENTER = 1 << 1;
+	static const int BACKSPACE = 1 << 2;
+	static const int SHIFT = 1 << 3;
+
+    bool combineAlphabetCheck(char c, bool uppercase = false);
     bool Up();
     bool Right();
     bool Down();
     bool Left();
     bool Enter();
     bool Esc();
-    bool isAnyKeyPressed();
+	bool Backspace();
+	bool Shift();
     void setState(RenderWindow& window);
 };

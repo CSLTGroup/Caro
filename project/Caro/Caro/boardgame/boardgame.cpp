@@ -319,12 +319,12 @@ void BoardGame::makeBotMove() {
 
 void BoardGame::ensurePlayerAssets() {
     if (!player1PhotoLoaded) {
-        if (player1Photo.loadFromFile("assets/image/penguinGOGO.png")) {
+        if (player1Photo.loadFromFile("assets/image/player1_egg-egg-sheeran.gif")) {
             player1PhotoLoaded = true;
         }
     }
     if (!player2PhotoLoaded) {
-        if (player2Photo.loadFromFile("assets/image/penguinGOGO.png")) {
+        if (player2Photo.loadFromFile("assets/image/player2_onepunchman.jpg")) {
             player2PhotoLoaded = true;
         }
     }
@@ -404,6 +404,6 @@ void BoardGame::drawPlayerInfoPanel(RenderWindow& window) {
     float firstSectionTop = panelY + 120;
     float secondSectionTop = firstSectionTop + (panelHeight - 160) / 2.f + 40;
 
-    drawPlayerSection(1, firstSectionTop, player1Name, player1Score, curPlayer == 1, player1Photo, player1PhotoLoaded, Color(50, 150, 50));
-    drawPlayerSection(2, secondSectionTop, player2Name, player2Score, curPlayer == 2, player2Photo, player2PhotoLoaded, Color(200, 70, 70));
+    drawPlayerSection(1, firstSectionTop, player1Name = playerName[0], player1Score, curPlayer == 1, player1Photo, player1PhotoLoaded, Color(50, 150, 50));
+    drawPlayerSection(2, secondSectionTop, player2Name = (mode == GameMode::PVC ? "Computer" : playerName[1]), player2Score, curPlayer == 2, player2Photo, player2PhotoLoaded, Color(200, 70, 70));
 }

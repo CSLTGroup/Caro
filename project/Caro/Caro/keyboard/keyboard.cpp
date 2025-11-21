@@ -1,16 +1,23 @@
 #include "../global.h"
 
+sf::Keyboard::Key charToKey(char c) {
+    c = toupper(c);
+    if (c >= 'A' && c <= 'Z')
+        return static_cast<sf::Keyboard::Key>(sf::Keyboard::A + (c - 'A'));
+    return sf::Keyboard::Unknown;
+}
+
 bool KeyBoardPressed::Up() {
-    return mask & UP;
+	return combineAlphabet['W' - 'A'];
 }
 bool KeyBoardPressed::Right() {
-    return mask & RIGHT;
+	return combineAlphabet['D' - 'A'];
 }
 bool KeyBoardPressed::Down() {
-    return mask & DOWN;
+	return combineAlphabet['S' - 'A'];
 }
 bool KeyBoardPressed::Left() {
-    return mask & LEFT;
+	return combineAlphabet['A' - 'A'];
 }
 bool KeyBoardPressed::Enter() {
     return mask & ENTER;
@@ -18,39 +25,52 @@ bool KeyBoardPressed::Enter() {
 bool KeyBoardPressed::Esc() {
     return mask & ESC;
 }
-bool KeyBoardPressed::isAnyKeyPressed() {
-    return mask;
+bool KeyBoardPressed::Backspace() {
+    return mask & BACKSPACE;
+}
+bool KeyBoardPressed::Shift() {
+    return mask & SHIFT;
+}
+bool KeyBoardPressed::combineAlphabetCheck(char c, bool uppercase) {
+	return combineAlphabet[c - 'A'] && (!uppercase || Shift());
 }
 void KeyBoardPressed::setState(RenderWindow& window) {
-    short maskINP = 0;
-    if (Keyboard::isKeyPressed(Keyboard::Key::W))
-        maskINP |= UP;
-    if (Keyboard::isKeyPressed(Keyboard::Key::A))
-        maskINP |= LEFT;
-    if (Keyboard::isKeyPressed(Keyboard::Key::S))
-        maskINP |= DOWN;
-    if (Keyboard::isKeyPressed(Keyboard::Key::D))
-        maskINP |= RIGHT;
-    if (Keyboard::isKeyPressed(Keyboard::Key::Enter))
+    bool combineAlphabetNXT[26] = { false };
+    bool combineAlphabetpreNXT[26] = { false };
+    int maskINP = 0;
+    bool anyKeyPressed = false;
+    for (char c = 'A'; c <= 'Z'; c++) {
+        combineAlphabetNXT[c - 'A'] = Keyboard::isKeyPressed(charToKey(c));
+        if (combineAlphabetNXT[c - 'A'])
+			anyKeyPressed = true;
+	}
+    if (Keyboard::isKeyPressed(Keyboard::Escape))
+		maskINP |= ESC;
+    if (Keyboard::isKeyPressed(Keyboard::Enter))
         maskINP |= ENTER;
-    if (Keyboard::isKeyPressed(Keyboard::Key::Escape))
-        maskINP |= ESC;
+	if (Keyboard::isKeyPressed(Keyboard::Backspace))
+		maskINP |= BACKSPACE;
+	if (Keyboard::isKeyPressed(Keyboard::LShift) || Keyboard::isKeyPressed(Keyboard::RShift))
+		maskINP |= SHIFT;
+	mask = maskINP;
 
-    if (maskINP == 0) {
-        mask = 0;
+    if (mask) 
+        anyKeyPressed = true;
+
+    if (!anyKeyPressed) {
+		memset(combineAlphabet, 0, sizeof(combineAlphabet));
     }
     else {
-        short preMask = 0;
-        for (int i = 0; i < 6; i++)
-            if (!(mask & (1 << i)))
-                if (maskINP & (1 << i))
-                    preMask |= (1 << i);
+        for (int c = 0; c < 26; c++) {
+            if (!(combineAlphabet[c]))
+                if (combineAlphabetNXT[c])
+					combineAlphabetpreNXT[c] = true;
+        }
 
         // premask -> nxtmask
-        mask = preMask;
-        int nxtMask = maskINP;
+		memcpy(combineAlphabet, combineAlphabetpreNXT, sizeof(combineAlphabet));
         menuGUI.updateState(window);
-        mask = maskINP;
+		memcpy(combineAlphabet, combineAlphabetNXT, sizeof(combineAlphabet));
     }
 
 }

@@ -2,9 +2,9 @@
 
 // for expanding settings in the future (please add ID buttons down below AND a
 // section for specific buttons' variables if needed)
-const int totalSetButtons = 3;
+const int totalSetButtons = 4;
 string contextSetButtons[totalSetButtons] = {"Sound", "Back to Menu",
-                                             "Exit Game"};
+                                             "Exit Game", "Change your Name"};
 
 // general settings variables
 static int SelectSettings = 0; // 0: Sound 1: Back to Menu 2: Exit Game
@@ -21,15 +21,22 @@ static bool inGeneralSettings = false; // to ignore first enter key
 const int IDSFX = 0;
 const int IDBACKTOMENU = 1;
 const int IDEXITGAME = 2;
+const int IDCHANGENAME = 3;
 
 // sound settings variables
-int IDSoundButtons =
-    0; // 0: mute/ unmute sound 1: adjust music volume 2: adjust effect volume
+int IDSoundButtons = 0; // 0: mute/ unmute sound 1: adjust music volume 2: adjust effect volume
 bool isNotMuted = true;     // true: on, false: off
 int MusicVolumeLevel = 20;  // from 0 to 20 step 5% in 100% (0-100%)
 int EffectVolumeLevel = 20; // from 0 to 20 step 5% in 100% (0-100%)
-static bool inSoundSubmenu =
-    false; // track if we're in the sound settings submenu
+static bool inSoundSubmenu = false; // track if we're in the sound settings submenu
+
+// username variables
+string playerName[2] = { "Player 1", "Player 2" };
+static string tmp_name = "";
+static bool inNameSubmenu = false; // track if we're in the name changing submenu
+static bool isTypingName = false; // track if we're currently typing a name
+static int IDNameButtons = 0; // 0: change player 1 name, 1: change player 2 name
+static const int MAX_LENGTH_NAME = 14;
 
 // UI handle
 float boxWidth = 0.0f;  // window.getSize().x * 0.4f; (shared with overlay)
@@ -90,7 +97,7 @@ void Settings::sfx() {
   }
 }
 
-void Settings::handleSettings(RenderWindow &window) {
+void Settings::SettingsLogic(RenderWindow &window) {
   if (!initialized) {
 
     // music part
@@ -103,13 +110,13 @@ void Settings::handleSettings(RenderWindow &window) {
 
     initialized = true;
   }
-
-  settingBox(window);
+  //settingBox(window);
   if (!inSettings) { // avoid first enter key issue
 
     // initialize settings part
     SelectSettings = IDSFX; // Reset to Sound button - first Button
     SelectPage = 0;
+    numSettingsCurPage = min(3, totalSetButtons - SelectPage * 3);
     inSettings = true;
     inGeneralSettings = true;
   } else if (inGeneralSettings) {
@@ -153,6 +160,8 @@ void Settings::handleSettings(RenderWindow &window) {
       inGeneralSettings = false;
       if (SelectSettings == IDBACKTOMENU || keyBoard.Esc()) { // back to menu
         SelectSettings = 0;
+		numSettingsCurPage = min(3, totalSetButtons - SelectPage * 3);
+        SelectPage = 0;
         inSettings = false; // Reset flag when leaving
         stateMenu = 0;      // return to main menu
         return;
@@ -178,9 +187,55 @@ void Settings::handleSettings(RenderWindow &window) {
         inGeneralSettings = true; // back to general settings
       }
     }
+    else if (inSetButtons[IDCHANGENAME]) { // change name
+        if (!isTypingName) {
+            if (keyBoard.Esc()) {
+                PlaySoundClick();
+                inSetButtons[IDCHANGENAME] = false;
+                inGeneralSettings = true; // back to general settings
+            }
+            else if (keyBoard.Up() ^ keyBoard.Down()) {
+                IDNameButtons ^= 1;
+                PlaySoundClick();
+            }
+            else if (keyBoard.Enter()) {
+                PlaySoundClick();
+                isTypingName = true;
+                tmp_name = "";
+            }
+        }
+        else {
+            if (keyBoard.Backspace()) {
+                if (!tmp_name.empty())
+                    tmp_name.pop_back();
+            }
+            else if (keyBoard.Enter()) {
+                playerName[IDNameButtons] = tmp_name;
+                isTypingName = false;
+                tmp_name = "";
+            }
+            else if (keyBoard.Esc()) {
+                isTypingName = false;
+                tmp_name = "";
+            }
+            else {
+                if (keyBoard.Shift()) {
+                    for (char c = 'A'; c <= 'Z'; c++)
+                        if (tmp_name.length() < MAX_LENGTH_NAME && keyBoard.combineAlphabetCheck(c, true))
+                            tmp_name += c;
+                }
+                else {
+                    for (char c = 'A'; c <= 'Z'; c++)
+                        if (tmp_name.length() < MAX_LENGTH_NAME && keyBoard.combineAlphabetCheck(c))
+                            tmp_name += (char)(c - 'A' + 'a');
+                }
+            }
+            
+        }
+	}
 }
 
-void Settings::settingBox(RenderWindow &window) {
+void Settings::draw(RenderWindow &window) {
   // pre set up
   const float winWidth = window.getSize().x;
   const float winHeight = window.getSize().y;
@@ -250,6 +305,20 @@ void Settings::SettingButtons(RenderWindow &window) {
       generalSettingsBox(window, IDSFX, 0); // highlight Sound button
       subSoundSettingBox(window);
     }
+    else if (inSetButtons[IDCHANGENAME]) {
+        if (isTypingName) {
+            string display_name = tmp_name;
+            if (display_name.empty())
+                display_name = " ";
+            generalSettingsBox(window, IDCHANGENAME, 0, "Typing: " + display_name, 1);
+            generalSettingsBox(window, IDCHANGENAME, 1, "Press Enter to confirm", 0);
+			generalSettingsBox(window, IDCHANGENAME, 2, "Press Esc to cancel", 0);
+        }
+        else {
+            generalSettingsBox(window, IDCHANGENAME, 0, playerName[0], IDNameButtons == 0); // highlight Change Name button
+            generalSettingsBox(window, IDCHANGENAME, 1, playerName[1], IDNameButtons == 1); // highlight Change Name button
+        }
+    }
 
   // others
   // sound Mute/Unmute indicator
@@ -275,7 +344,10 @@ void Settings::SettingButtons(RenderWindow &window) {
   }
 }
 
-void Settings::generalSettingsBox(RenderWindow &window, int IDButton, int row) {
+void Settings::generalSettingsBox(RenderWindow &window, int IDButton, int row, string contextString, int selectedC) {
+  bool selected = false;
+  if ((selectedC != -1 && selectedC == 1) || (selectedC == -1 && SelectSettings == IDButton))
+      selected = true;
   // window size
   static float winWidth = window.getSize().x;
   static float winHeight = window.getSize().y;
@@ -290,22 +362,22 @@ void Settings::generalSettingsBox(RenderWindow &window, int IDButton, int row) {
 
   // Box for each button
   RectangleShape buttonBox(Vector2f(buttonWidth, buttonHeight));
-  buttonBox.setFillColor(SelectSettings == IDButton ? Color(100, 150, 200)
+  buttonBox.setFillColor(selected ? Color(100, 150, 200)
                                                     : Color(70, 70, 70));
-  buttonBox.setOutlineColor(SelectSettings == IDButton ? Color::Yellow
+  buttonBox.setOutlineColor(selected ? Color::Yellow
                                                        : Color::White);
   buttonBox.setOutlineThickness(
-      SelectSettings == IDButton ? outlineThickSelected : outlineThick);
+      selected ? outlineThickSelected : outlineThick);
   buttonBox.setPosition(winWidth / 2 - boxWidth * 0.375f,
                         startY + buttonSpacing * row);
 
   // Button text (centered)
   Text buttonText;
   buttonText.setFont(font);
-  buttonText.setString(contextSetButtons[IDButton]);
+  buttonText.setString(contextString.empty() ? contextSetButtons[IDButton] : contextString);
   buttonText.setCharacterSize((int)(winHeight * 0.04f));
-  buttonText.setFillColor(SelectSettings == IDButton ? Color::Yellow
-                                                     : Color::White);
+  buttonText.setFillColor(selected ? Color::Yellow : Color::White);
+
   FloatRect buttonTextBounds = buttonText.getLocalBounds();
   buttonText.setPosition(winWidth / 2 - buttonTextBounds.width / 2,
                          startY + buttonSpacing * row + buttonHeight / 2 -

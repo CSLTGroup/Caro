@@ -6,8 +6,8 @@ void startGame() {
 
 	// set up window
     VideoMode desktop = VideoMode::getDesktopMode();
-    const double widthApp = desktop.width * 1; // kich thuoc width 60% toan man hinh
-    const double heightApp = desktop.height * 1; // kich thuoc height 70% toan man hinh
+    const double widthApp = desktop.width; // kich thuoc width toan man hinh
+    const double heightApp = desktop.height; // kich thuoc height toan man hinh
     RenderWindow window(VideoMode(desktop.width, desktop.height), "Caro Game!", Style::Close);
 
 

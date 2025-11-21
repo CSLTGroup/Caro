@@ -129,5 +129,11 @@
     <Image Include="assets\image\penguinGOGO.png">
       <Filter>Source Files\assets\image</Filter>
     </Image>
+    <Image Include="assets\image\player1_egg-egg-sheeran.gif">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="assets\image\player2_onepunchman.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>
