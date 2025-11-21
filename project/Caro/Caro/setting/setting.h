@@ -3,12 +3,12 @@
 #include "../global.h"
 
 struct Settings {
-  void handleSettings(RenderWindow &window);
+  void SettingsLogic(RenderWindow &window);
   void sfx();
-  void settingBox(RenderWindow &window);
+  void draw(RenderWindow &window);
   void SettingButtons(RenderWindow &window);
   void subSoundSettingBox(RenderWindow &window);
-  void generalSettingsBox(RenderWindow &window, int IDButton, int row);
+  void generalSettingsBox(RenderWindow &window, int IDButton, int row, string contextString = "", int selectedC = -1);
 
   // For overlay during gameplay
   void handleSettingsOverlay(RenderWindow &window);

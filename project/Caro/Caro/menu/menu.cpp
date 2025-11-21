@@ -44,9 +44,10 @@ void Menu::draw(RenderWindow& window) {
     }
 }
 void Menu::handleUI(RenderWindow& window) {
-    draw(window);
+    if (stateMenu == 0)
+        draw(window);
     if (stateMenu == listButton[0].ID)
-        handleNewGame(window);
+        draw(window), handleNewGame(window);
     else if (stateMenu == listButton[1].ID)
         handleLoadGame(window);
     else if (stateMenu == listButton[2].ID)
@@ -80,6 +81,12 @@ void Menu::updateState(RenderWindow& window) {
                 initModeButtons(window);
                 boardGame.setMode(BoardGame::GameMode::None);
             }
+            else if (stateMenu == listButton[loadGameID].ID) {
+                // Load game functionality can be added here
+            }
+            else if (stateMenu == listButton[settingID].ID) {
+                setting.SettingsLogic(window);
+			}
         }
         else if (keyBoard.Esc()) {
             window.close();
@@ -91,6 +98,12 @@ void Menu::updateState(RenderWindow& window) {
         else
             boardGame.setMove(window);
     }
+    else if (stateMenu == listButton[loadGameID].ID) {
+        // Load game functionality can be added here
+    }
+    else if (stateMenu == listButton[settingID].ID) {
+        setting.SettingsLogic(window);
+	}
 }
 void Menu::handleNewGame(RenderWindow& window) {
     if (awaitingModeSelection)
@@ -99,10 +112,10 @@ void Menu::handleNewGame(RenderWindow& window) {
         boardGame.drawTable(window);
 }
 void Menu::handleLoadGame(RenderWindow& window) {
-
+    // draw load game here
 }
 void Menu::handleSettings(RenderWindow& window) {
-    setting.handleSettings(window);
+    setting.draw(window);
 }
 
 void Menu::initModeButtons(RenderWindow& window) {

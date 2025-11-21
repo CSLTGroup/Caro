@@ -2,6 +2,8 @@
 #include <vector>
 #include <algorithm>
 #include <limits>
+#include <iostream>
+
 
 using namespace std;
 
@@ -17,7 +19,7 @@ namespace {
     const long long SCORE_CLOSED_2 = 100;       // 2 ô bị chặn
 
     // 4 hướng: Ngang, Dọc, Chéo chính, Chéo phụ
-    const int directions[4][2] = { {1, 0}, {0, 1}, {1, 1}, {1, -1} };
+    const int directions[4][2] = { {1, 0}, {0, 1}, { 1, 1 }, {1, -1} };
 
     // Hàm kiểm tra biên
     bool isValid(int x, int y, int size) {
@@ -77,9 +79,9 @@ namespace {
 
         // --- TÍNH ĐIỂM DỰA TRÊN SỐ QUÂN VÀ SỐ ĐẦU BỊ CHẶN ---
 
-        if (block >= 2) return 0; // Bị chặn 2 đầu thì chuỗi này vô dụng (trừ khi đã đủ 5)
-
         if (count >= 5) return SCORE_WIN;
+
+        if (block >= 2) return 0; // Bị chặn 2 đầu thì chuỗi này vô dụng
 
         if (count == 4) {
             if (block == 0) return SCORE_OPEN_4; // .XXXX. -> Thắng chắc
@@ -138,6 +140,9 @@ pair<int, int> CalculateBotMove(const vector<vector<int>>& board, int aiPlayer) 
 
                 // 2. Điểm Phòng Thủ: Nếu Người đánh vào đây, Người được lợi gì? (Bot cần chặn)
                 long long defenseScore = evaluatePoint(board, humanPlayer, i, j);
+				cerr << "(" << i << ", " << j << "): " << attackScore << " ";
+				cerr << defenseScore << " ";
+                cerr << endl;
 
                 // Tổng hợp điểm
                 // Bot ưu tiên tấn công hơn một chút nếu ngang nhau, 
@@ -156,6 +161,6 @@ pair<int, int> CalculateBotMove(const vector<vector<int>>& board, int aiPlayer) 
             }
         }
     }
-
+	cerr << bestMove.first << ", " << bestMove.second << " with score " << maxScore << endl;
     return bestMove;
 }

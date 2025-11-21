@@ -21,3 +21,4 @@ extern Menu menuGUI;
 extern KeyBoardPressed keyBoard;
 extern BoardGame boardGame;
 extern Settings setting;
+extern string playerName[2];
