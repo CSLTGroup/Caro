@@ -29,7 +29,7 @@ const int IDEXITGAMEOVERLAY = 4;
 
 // External variables from setting.cpp
 extern int MusicVolumeLevel;
-extern int EffectVolumeLevel;
+extern int EffectVolumeLevel;  
 extern bool initialized;
 extern int IDSoundButtons; // shared with setting.cpp
 extern bool isNotMuted; // shared with setting.cpp
