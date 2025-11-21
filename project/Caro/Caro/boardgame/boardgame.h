@@ -27,7 +27,7 @@ struct BoardGame {
     float cellLenX = 0;
     float cellLenY = 0;
 
-    // Player info panel (shown for PVP mode)
+    // Player info panel (shared by PVP / PVC)
     string player1Name = "Player 1";
     string player2Name = "Player 2";
     int player1Score = 0;

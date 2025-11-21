@@ -40,7 +40,7 @@ void BoardGame::drawTable(RenderWindow& window) {
     if (showPlayerPanel) {
         drawPlayerInfoPanel(window);
     }
-    
+
     // ve man hinh thang
     if (resultGame == 1 || resultGame == 2) {
         drawWinnerMessage(window);
@@ -88,7 +88,7 @@ void BoardGame::drawPosition(int x, int y, RenderWindow& window) {
     window.draw(text);
 }
 void BoardGame::setChoice(RenderWindow& window) {
-    if (board[curX][curY] >= 1 || resultGame) 
+    if (board[curX][curY] >= 1 || resultGame)
         return;
     board[curX][curY] = curPlayer;
     curPlayer = 3 - curPlayer; //swap player
@@ -118,7 +118,7 @@ void BoardGame::setMove(RenderWindow& window) {
         makeBotMove();
         return;
     }
-    
+
     if (keyBoard.Up() && curY > 0) {
         --curY;
         PlaySoundClick(); // Play click sound when moving up
@@ -194,20 +194,20 @@ int BoardGame::checkResult() {
 }
 
 void BoardGame::drawWinnerMessage(RenderWindow& window) {
-  
+
     RectangleShape overlay(Vector2f(window.getSize().x, window.getSize().y));
-    overlay.setFillColor(Color(0, 0, 0, 180)); 
+    overlay.setFillColor(Color(0, 0, 0, 180));
     window.draw(overlay);
-    
+
     // tao chu
     Text winnerText;
     winnerText.setFont(font);
     winnerText.setCharacterSize(80);
-    
-  
+
+
     std::string message = "";
     Color textColor;
-    
+
     if (resultGame == 1) {
         message = "Player 1 Wins!";
         textColor = Color::Blue;
@@ -224,10 +224,10 @@ void BoardGame::drawWinnerMessage(RenderWindow& window) {
         // ko ve
         return;
     }
-    
+
     winnerText.setString(message);
     winnerText.setFillColor(textColor);
-    
+
     // can giua
     FloatRect textBounds = winnerText.getLocalBounds();
     winnerText.setOrigin(
@@ -238,20 +238,20 @@ void BoardGame::drawWinnerMessage(RenderWindow& window) {
         window.getSize().x / 2.f,
         window.getSize().y / 2.f - 50
     );
-    
+
     // Add outline for better visibility
     winnerText.setOutlineColor(Color::White);
     winnerText.setOutlineThickness(3);
-    
+
     window.draw(winnerText);
-    
+
     // Add instruction text
     Text instructionText;
     instructionText.setFont(font);
     instructionText.setCharacterSize(30);
     instructionText.setString("Press ENTER to play again  |  ESC to return");
     instructionText.setFillColor(Color::White);
-    
+
     FloatRect instructionBounds = instructionText.getLocalBounds();
     instructionText.setOrigin(
         instructionBounds.width / 2.f,
@@ -261,7 +261,7 @@ void BoardGame::drawWinnerMessage(RenderWindow& window) {
         window.getSize().x / 2.f,
         window.getSize().y / 2.f + 80
     );
-    
+
     window.draw(instructionText);
 }
 
@@ -285,7 +285,7 @@ void BoardGame::setMode(GameMode newMode) {
 
     if (mode == GameMode::PVC) {
         curPlayer = 1; // human starts
-        player1Name = "Player";
+        player1Name = "You";
         player2Name = "Computer";
     }
     else if (mode == GameMode::PVP) {
@@ -399,7 +399,7 @@ void BoardGame::drawPlayerInfoPanel(RenderWindow& window) {
         scoreText.setFillColor(Color(80, 80, 80));
         scoreText.setPosition(photoX + photoSize + 20, topY + 70);
         window.draw(scoreText);
-    };
+        };
 
     float firstSectionTop = panelY + 120;
     float secondSectionTop = firstSectionTop + (panelHeight - 160) / 2.f + 40;
