@@ -57,7 +57,7 @@ void KeyBoardPressed::setState(RenderWindow& window) {
     if (mask) 
         anyKeyPressed = true;
 
-    if (!anyKeyPressed) {
+    if (!anyKeyPressed && confirmedNameFirstTime) {
 		memset(combineAlphabet, 0, sizeof(combineAlphabet));
     }
     else {

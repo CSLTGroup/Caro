@@ -3,7 +3,7 @@ using namespace std;
 using namespace sf;
 
 Font font;
-int stateMenu = 0;
+int stateMenu = -1;
 KeyBoardPressed keyBoard;
 Menu menuGUI;
 BoardGame boardGame;

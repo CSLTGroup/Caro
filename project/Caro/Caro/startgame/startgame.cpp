@@ -21,7 +21,7 @@ void startGame() {
 
     // loading screen
     loadingScreen(window);
-
+    
     // start background music after loading screen
 	BackGroundMusic(window); // ham goi nhac nen
 
