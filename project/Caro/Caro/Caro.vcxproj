@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -133,6 +133,8 @@
     <ClCompile Include="bot_ai\bot_ai.cpp" />
     <ClCompile Include="button\button.cpp" />
     <ClCompile Include="caro.cpp" />
+    <ClCompile Include="firsttimeplaying\firsttimeplaying.cpp" />
+    <ClCompile Include="firsttimeplaying\firsttomeplaying.cpp" />
     <ClCompile Include="keyboard\keyboard.cpp" />
     <ClCompile Include="loadingscreen\loadingscreen.cpp" />
     <ClCompile Include="menu\menu.cpp" />
@@ -145,6 +147,7 @@
     <ClInclude Include="boardgame\boardgame.h" />
     <ClInclude Include="bot_ai\bot_ai.h" />
     <ClInclude Include="button\button.h" />
+    <ClInclude Include="firsttimeplaying\firsttimeplaying.h" />
     <ClInclude Include="global.h" />
     <ClInclude Include="keyboard\keyboard.h" />
     <ClInclude Include="loadingscreen\loadingscreen.h" />

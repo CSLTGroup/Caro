@@ -9,6 +9,7 @@
 #include "loadingscreen/loadingscreen.h"
 #include "sfx/sfx.h"
 #include "setting/setting.h"
+#include "firsttimeplaying/firsttimeplaying.h"
 #include <vector>
 #include <iostream>
 #include <string>
@@ -22,3 +23,5 @@ extern KeyBoardPressed keyBoard;
 extern BoardGame boardGame;
 extern Settings setting;
 extern string playerName[2];
+extern bool firstTimePlaying;
+extern bool confirmedNameFirstTime;

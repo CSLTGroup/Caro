@@ -81,6 +81,12 @@
     <ClCompile Include="bot_ai\bot_ai.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="firsttimeplaying\firsttomeplaying.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="firsttimeplaying\firsttimeplaying.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="keyboard\keyboard.h">
@@ -111,6 +117,9 @@
       <Filter>Source Files\setting</Filter>
     </ClInclude>
     <ClInclude Include="bot_ai\bot_ai.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="firsttimeplaying\firsttimeplaying.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

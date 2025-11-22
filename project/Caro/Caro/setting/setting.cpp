@@ -37,6 +37,7 @@ static bool inNameSubmenu = false; // track if we're in the name changing submen
 static bool isTypingName = false; // track if we're currently typing a name
 static int IDNameButtons = 0; // 0: change player 1 name, 1: change player 2 name
 static const int MAX_LENGTH_NAME = 14;
+bool firstTimePlaying = true;
 
 // UI handle
 float boxWidth = 0.0f;  // window.getSize().x * 0.4f; (shared with overlay)

@@ -44,9 +44,11 @@ void Menu::draw(RenderWindow& window) {
     }
 }
 void Menu::handleUI(RenderWindow& window) {
-    if (stateMenu == 0)
+    if (stateMenu == -1)
+        drawMenuName_for_firstTime(window);
+    else if (stateMenu == 0)
         draw(window);
-    if (stateMenu == listButton[0].ID)
+    else if (stateMenu == listButton[0].ID)
         draw(window), handleNewGame(window);
     else if (stateMenu == listButton[1].ID)
         handleLoadGame(window);
@@ -54,7 +56,10 @@ void Menu::handleUI(RenderWindow& window) {
         handleSettings(window);
 }
 void Menu::updateState(RenderWindow& window) {
-    if (stateMenu == ID) {
+    if (stateMenu == -1) { // first time playing
+        menuName_for_firstTimeLogic(window);
+    }
+    else if (stateMenu == ID) {
         if (keyBoard.Up() ^ keyBoard.Down()) {
             listButton[selectedButton].selected = false;
 
