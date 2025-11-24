@@ -57,8 +57,9 @@ void KeyBoardPressed::setState(RenderWindow& window) {
     if (mask) 
         anyKeyPressed = true;
 
-    if (!anyKeyPressed && confirmedNameFirstTime) {
+    if (!anyKeyPressed) {
 		memset(combineAlphabet, 0, sizeof(combineAlphabet));
+		menuGUI.updateState(window);
     }
     else {
         for (int c = 0; c < 26; c++) {

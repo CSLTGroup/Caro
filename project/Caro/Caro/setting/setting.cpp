@@ -41,7 +41,6 @@ static bool inNameSubmenu = false;        // track if we're in the name changing
 static bool isTypingName = false;         // track if we're currently typing a name
 static int IDNameButtons = 0;             // 0: change player 1 name, 1: change player 2 name
 static const int MAX_LENGTH_NAME = 14;
-bool firstTimePlaying = true;
 
 // UI handle
 float boxWidth = 0.0f;  // window.getSize().x * 0.4f; (shared with overlay)
@@ -195,27 +194,40 @@ void Settings::SettingsLogic(RenderWindow &window) {
                 }
             } else {
                 if (keyBoard.Backspace()) {
-                    if (!tmp_name.empty())
+                    if (!tmp_name.empty()) {
+						PlaySoundClick();
                         tmp_name.pop_back();
+                    }
                 } else if (keyBoard.Enter()) {
+					PlaySoundClick();
                     playerName[IDNameButtons] = tmp_name;
                     isTypingName = false;
                     tmp_name = "";
+					SaveSettings(); // save settings when name changes
+
                 } else if (keyBoard.Esc()) {
+					PlaySoundClick();
                     isTypingName = false;
                     tmp_name = "";
                 } else {
+					bool addedChar = false;
                     if (keyBoard.Shift()) {
                         for (char c = 'A'; c <= 'Z'; c++)
                             if (tmp_name.length() < MAX_LENGTH_NAME &&
-                                keyBoard.combineAlphabetCheck(c, true))
+                                keyBoard.combineAlphabetCheck(c, true)) {
                                 tmp_name += c;
+								addedChar = true;
+                            }
                     } else {
                         for (char c = 'A'; c <= 'Z'; c++)
                             if (tmp_name.length() < MAX_LENGTH_NAME &&
-                                keyBoard.combineAlphabetCheck(c))
+                                keyBoard.combineAlphabetCheck(c)) {
                                 tmp_name += (char)(c - 'A' + 'a');
+								addedChar = true;
+                            }
                     }
+                    if (addedChar)
+						PlaySoundClick();
                 }
             }
         }
@@ -490,6 +502,9 @@ void Settings::SaveSettings() {
     file << "isNotMuted=" << (isNotMuted ? "1" : "0") << std::endl;
     file << "MusicVolumeLevel=" << MusicVolumeLevel << std::endl;
     file << "EffectVolumeLevel=" << EffectVolumeLevel << std::endl;
+	file << "confirmedNameFirstTime=" << confirmedNameFirstTime << std::endl;
+	file << "Player1Name=" << playerName[0] << std::endl;
+	file << "Player2Name=" << playerName[1] << std::endl;
 
     file.close();
 }
@@ -506,6 +521,9 @@ void Settings::LoadSettings() {
     bool loadedIsNotMuted = isNotMuted; // default value
     int loadedMusicVolume = MusicVolumeLevel;
     int loadedEffectVolume = EffectVolumeLevel;
+	bool loadedConfirmedNameFirstTime = confirmedNameFirstTime;
+	string loadedPlayer1Name = playerName[0];
+	string loadedPlayer2Name = playerName[1];
 
     std::string line;
     while (std::getline(file, line)) {
@@ -532,6 +550,16 @@ void Settings::LoadSettings() {
             } catch (...) {
                 // Invalid value, skip
             }
+		} else if (key == "confirmedNameFirstTime") {
+            try {
+                loadedConfirmedNameFirstTime = (value == "1");
+            } catch (...) {
+                // Invalid value, skip
+			}
+        } else if (key == "Player1Name") {
+			loadedPlayer1Name = value;
+        } else if (key == "Player2Name") {
+			loadedPlayer2Name = value;
         }
     }
 
@@ -547,4 +575,10 @@ void Settings::LoadSettings() {
     isNotMuted = loadedIsNotMuted;
     // Sync with soundMute: isNotMuted == !soundMute
     SetSoundMute(!isNotMuted);
+
+    // apply name
+    confirmedNameFirstTime = loadedConfirmedNameFirstTime;
+	playerName[0] = loadedPlayer1Name;
+	playerName[1] = loadedPlayer2Name;
+
 }
