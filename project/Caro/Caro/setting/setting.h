@@ -8,13 +8,18 @@ struct Settings {
   void draw(RenderWindow &window);
   void SettingButtons(RenderWindow &window);
   void subSoundSettingBox(RenderWindow &window);
-  void generalSettingsBox(RenderWindow &window, int IDButton, int row, string contextString = "", int selectedC = -1);
+  void generalSettingsBox(RenderWindow &window, int IDButton, int row,
+                          string contextString = "", int selectedC = -1);
 
   // For overlay during gameplay
   void handleSettingsOverlay(RenderWindow &window);
   void settingBoxOverlay(RenderWindow &window);
   void SettingButtonsOverlay(RenderWindow &window);
   void generalSettingsBoxOverlay(RenderWindow &window, int IDButton, int row);
+
+  // Save/Load settings
+  void SaveSettings();
+  void LoadSettings();
 };
 
 #endif

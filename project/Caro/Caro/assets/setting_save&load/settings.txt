@@ -1,0 +1,3 @@
+isNotMuted=1
+MusicVolumeLevel=20
+EffectVolumeLevel=20

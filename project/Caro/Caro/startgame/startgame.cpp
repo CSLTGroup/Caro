@@ -1,15 +1,15 @@
 #include "../global.h"
 
-
-
 void startGame() {
-
-	// set up window
+    // set up window
     VideoMode desktop = VideoMode::getDesktopMode();
-    const double widthApp = desktop.width; // kich thuoc width toan man hinh
-    const double heightApp = desktop.height; // kich thuoc height toan man hinh
-    RenderWindow window(VideoMode(desktop.width, desktop.height), "Caro Game!", Style::Close);
-
+    const double widthApp  = desktop.width;   // kich thuoc width toan man hinh
+    const double heightApp = desktop.height;  // kich thuoc height toan man hinh
+    RenderWindow window(
+        VideoMode(desktop.width, desktop.height),
+        "Caro Game!",
+        Style::Close
+    );
 
     // set font
     if (!font.getInfo().family.size()) {
@@ -21,33 +21,34 @@ void startGame() {
 
     // loading screen
     loadingScreen(window);
-    
+
+    // load settings before starting background music
+    setting.LoadSettings();
+
     // start background music after loading screen
-	BackGroundMusic(window); // ham goi nhac nen
+    BackGroundMusic(window); // ham goi nhac nen
 
     // set up board game
-    boardGame.setUp(); 
+    boardGame.setUp();
     bool firstTime = true; // draw lan dau khi window load
 
-    while (window.isOpen())
-    {
-
+    while (window.isOpen()) {
         Event event;
-        while (firstTime || window.pollEvent(event))
-        {
-            if (!firstTime && event.type == Event::Closed)
+        while (firstTime || window.pollEvent(event)) {
+            if (!firstTime && event.type == Event::Closed) {
                 window.close();
-            else if (firstTime || event.type == Event::KeyPressed || event.type == Event::KeyReleased) {
+            } else if (firstTime ||
+                       event.type == Event::KeyPressed ||
+                       event.type == Event::KeyReleased) {
 
                 window.clear();
 
                 keyBoard.setState(window); // update keyboard state
-                menuGUI.handleUI(window); // update menu & smaller GUI state
-                window.display(); // show menu
+                menuGUI.handleUI(window);  // update menu & smaller GUI state
+                window.display();          // show menu
 
                 firstTime = false;
             }
         }
     }
-
 }

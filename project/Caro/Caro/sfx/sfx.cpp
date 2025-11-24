@@ -24,7 +24,8 @@ void BackGroundMusic(RenderWindow &window) {
       return;
     }
     backgroundMusic.setLoop(true);
-    backgroundMusic.setVolume(musicVolume); // set volume initially to 100%
+    // Respect mute state when setting initial volume
+    backgroundMusic.setVolume(soundMute ? 0.0f : musicVolume);
     backgroundMusic.play(); // Start playing immediately after loading
     loaded = true;
   }
@@ -62,36 +63,48 @@ void PlaySoundWin() {
   winSound.play(); // Volume is managed by SoundMute() and SetEffectVolume()
 }
 void PlaySoundDraw() {
-  static bool loaded = false;
+	static bool loaded = false;
 
-  if (!loaded) {
-    if (!drawBuffer.loadFromFile("assets/Music&sfx/sfx/drawsound.wav")) {
-      return;
-    }
-    drawSound.setBuffer(drawBuffer);
-    loaded = true;
-  }
-
-  drawSound.play(); // Volume is managed by SoundMute() and SetEffectVolume()
+	if (!loaded) {
+		if (!drawBuffer.loadFromFile("assets/Music&sfx/sfx/drawsound.wav")) {
+			return;
+		}
+		drawSound.setBuffer(drawBuffer);
+		loaded = true;
+	}
+	drawSound.play(); // Volume is managed by SoundMute() and SetEffectVolume()
 }
 void PlaySoundLoading() {
-  static bool loaded = false;
-  if (!loaded) {
-    if (!loadingBuffer.loadFromFile(
+	static bool loaded = false;
+	if (!loaded) {
+		if (!loadingBuffer.loadFromFile(
             "assets/Music&sfx/backgroundMusic/loading.mp3")) {
-      return;
-    }
-    loadingSound.setBuffer(loadingBuffer);
-    loaded = true;
-  }
+			return;
+            }
+		loadingSound.setBuffer(loadingBuffer);
+		loaded = true;
+	}
   // Set volume based on mute state and effect volume
-  loadingSound.setVolume(soundMute ? 0.0f : EffectVolume);
-  loadingSound.play();
+	loadingSound.setVolume(soundMute ? 0.0f : EffectVolume);
+	loadingSound.play();
 }
 // Ajust sound option
 // Mute/Unmute all features
 void SoundMute() {
   soundMute = !soundMute;
+  if (soundMute) {
+    backgroundMusic.setVolume(0.0f);
+    winSound.setVolume(0.0f);
+    drawSound.setVolume(0.0f);
+  } else {
+    backgroundMusic.setVolume(musicVolume);
+    winSound.setVolume(EffectVolume);
+    drawSound.setVolume(EffectVolume);
+  }
+}
+bool GetSoundMute() { return soundMute; }
+void SetSoundMute(bool mute) {
+  soundMute = mute;
   if (soundMute) {
     backgroundMusic.setVolume(0.0f);
     winSound.setVolume(0.0f);

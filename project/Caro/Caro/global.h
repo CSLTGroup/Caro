@@ -13,8 +13,11 @@
 #include <vector>
 #include <iostream>
 #include <string>
+#include <fstream>
+#include <sstream>
 
 using namespace sf;
+//using namespace std;
 
 extern int stateMenu;
 extern Font font;
