@@ -26,6 +26,10 @@ static float boxWidth = 0.0f;  // window.getSize().x * 0.6f; (shared with overla
 static float boxHeight = 0.0f; // window.getSize().y * 0.5f; (shared with overlay)
 
 void menuName_for_firstTimeLogic(RenderWindow& window) {
+    if (confirmedNameFirstTime) {
+		stateMenu = 0; // go to main menu
+        return;
+    }
     if (!initialized) {
         SelectPage = 0;
         numSettingsCurPage = min(3, totalSetButtons - SelectPage * 3);
@@ -35,10 +39,8 @@ void menuName_for_firstTimeLogic(RenderWindow& window) {
 		isTypingName = false;
     }
     if (!isTypingName) { // exit game
-        cerr << "im here" << endl;
         if (keyBoard.Esc()) {
             PlaySoundClick();
-            firstTimePlaying = true;
 			initialized = false;
             window.close();
         }
@@ -50,8 +52,10 @@ void menuName_for_firstTimeLogic(RenderWindow& window) {
     }
     else {
         if (keyBoard.Backspace()) {
-            if (!tmp_name.empty())
+            if (!tmp_name.empty()) {
                 tmp_name.pop_back();
+				PlaySoundClick();
+            }
         }
         else if (keyBoard.Enter()) {
             playerName[ID] = tmp_name;
@@ -59,29 +63,40 @@ void menuName_for_firstTimeLogic(RenderWindow& window) {
             tmp_name = "";
             confirmedNameFirstTime = true;
 			stateMenu = 0; // go to main menu
+            setting.SaveSettings();
+			PlaySoundClick();
         }
         else if (keyBoard.Esc()) {
             isTypingName = false;
             tmp_name = "";
+			PlaySoundClick();
         }
         else {
+            bool addedChar = false;
             if (keyBoard.Shift()) {
                 for (char c = 'A'; c <= 'Z'; c++)
-                    if (tmp_name.length() < MAX_LENGTH_NAME && keyBoard.combineAlphabetCheck(c, true))
+                    if (tmp_name.length() < MAX_LENGTH_NAME &&
+                        keyBoard.combineAlphabetCheck(c, true)) {
                         tmp_name += c;
+                        addedChar = true;
+                    }
             }
             else {
                 for (char c = 'A'; c <= 'Z'; c++)
-                    if (tmp_name.length() < MAX_LENGTH_NAME && keyBoard.combineAlphabetCheck(c))
+                    if (tmp_name.length() < MAX_LENGTH_NAME &&
+                        keyBoard.combineAlphabetCheck(c)) {
                         tmp_name += (char)(c - 'A' + 'a');
+                        addedChar = true;
+                    }
             }
+            if (addedChar)
+                PlaySoundClick();
         }
     }
 }
 
 void drawMenuName_for_firstTime(RenderWindow& window) {
 
-    cerr << "im here2" << endl;
     // pre set up
     const float winWidth = window.getSize().x;
     const float winHeight = window.getSize().y;

@@ -134,7 +134,6 @@
     <ClCompile Include="button\button.cpp" />
     <ClCompile Include="caro.cpp" />
     <ClCompile Include="firsttimeplaying\firsttimeplaying.cpp" />
-    <ClCompile Include="firsttimeplaying\firsttomeplaying.cpp" />
     <ClCompile Include="keyboard\keyboard.cpp" />
     <ClCompile Include="loadingscreen\loadingscreen.cpp" />
     <ClCompile Include="menu\menu.cpp" />
