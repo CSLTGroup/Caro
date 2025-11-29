@@ -42,6 +42,10 @@ static bool isTypingName = false;         // track if we're currently typing a n
 static int IDNameButtons = 0;             // 0: change player 1 name, 1: change player 2 name
 static const int MAX_LENGTH_NAME = 14;
 
+// player picture paths
+string selectedPlayer1PicturePath = "assets/image/apex4.png"; // Player 1
+string selectedPlayer2PicturePath = "assets/image/apex2.png"; // Player 2
+
 // UI handle
 float boxWidth = 0.0f;  // window.getSize().x * 0.4f; (shared with overlay)
 float boxHeight = 0.0f; // window.getSize().y * 0.5f; (shared with overlay)
@@ -505,6 +509,8 @@ void Settings::SaveSettings() {
 	file << "confirmedNameFirstTime=" << confirmedNameFirstTime << std::endl;
 	file << "Player1Name=" << playerName[0] << std::endl;
 	file << "Player2Name=" << playerName[1] << std::endl;
+	file << "SelectedPlayer1Picture=" << selectedPlayer1PicturePath << std::endl;
+	file << "SelectedPlayer2Picture=" << selectedPlayer2PicturePath << std::endl;
 
     file.close();
 }
@@ -524,6 +530,8 @@ void Settings::LoadSettings() {
 	bool loadedConfirmedNameFirstTime = confirmedNameFirstTime;
 	string loadedPlayer1Name = playerName[0];
 	string loadedPlayer2Name = playerName[1];
+	string loadedSelectedPlayer1Picture = selectedPlayer1PicturePath;
+	string loadedSelectedPlayer2Picture = selectedPlayer2PicturePath;
 
     std::string line;
     while (std::getline(file, line)) {
@@ -560,6 +568,10 @@ void Settings::LoadSettings() {
 			loadedPlayer1Name = value;
         } else if (key == "Player2Name") {
 			loadedPlayer2Name = value;
+        } else if (key == "SelectedPlayer1Picture") {
+			loadedSelectedPlayer1Picture = value;
+        } else if (key == "SelectedPlayer2Picture") {
+			loadedSelectedPlayer2Picture = value;
         }
     }
 
@@ -580,5 +592,7 @@ void Settings::LoadSettings() {
     confirmedNameFirstTime = loadedConfirmedNameFirstTime;
 	playerName[0] = loadedPlayer1Name;
 	playerName[1] = loadedPlayer2Name;
+	selectedPlayer1PicturePath = loadedSelectedPlayer1Picture;
+	selectedPlayer2PicturePath = loadedSelectedPlayer2Picture;
 
 }

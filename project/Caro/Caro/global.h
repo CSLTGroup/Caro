@@ -27,3 +27,6 @@ extern BoardGame boardGame;
 extern Settings setting;
 extern string playerName[2];
 extern bool confirmedNameFirstTime;
+// Player picture paths (P1 + P2)
+extern string selectedPlayer1PicturePath;
+extern string selectedPlayer2PicturePath;

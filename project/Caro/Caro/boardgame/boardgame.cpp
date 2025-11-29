@@ -319,12 +319,22 @@ void BoardGame::makeBotMove() {
 
 void BoardGame::ensurePlayerAssets() {
     if (!player1PhotoLoaded) {
-        if (player1Photo.loadFromFile("assets/image/player1_egg-egg-sheeran.gif")) {
+        // Try to load from saved path first
+        if (!selectedPlayer1PicturePath.empty() &&
+            player1Photo.loadFromFile(selectedPlayer1PicturePath)) {
+            player1PhotoLoaded = true;
+        }
+        // Fallback to default if saved path doesn't work
+        else if (player1Photo.loadFromFile("assets/image/apex4.png")) {
             player1PhotoLoaded = true;
         }
     }
     if (!player2PhotoLoaded) {
-        if (player2Photo.loadFromFile("assets/image/player2_onepunchman.jpg")) {
+        if (!selectedPlayer2PicturePath.empty() &&
+            player2Photo.loadFromFile(selectedPlayer2PicturePath)) {
+            player2PhotoLoaded = true;
+        }
+        else if (player2Photo.loadFromFile("assets/image/apex2.png")) {
             player2PhotoLoaded = true;
         }
     }
