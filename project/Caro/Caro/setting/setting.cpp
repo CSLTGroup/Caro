@@ -2,12 +2,13 @@
 
 // for expanding settings in the future (please add ID buttons down below AND a
 // section for specific buttons' variables if needed)
-const int totalSetButtons = 4;
-string contextSetButtons[totalSetButtons] = {
+const int totalSetButtons = 5;
+const vector<string> contextSetButtons = {
     "Sound",
     "Back to Menu",
     "Exit Game",
-    "Change your Name"
+    "Change your Name",
+    "Change resolution"
 };
 
 // general settings variables
@@ -26,6 +27,7 @@ const int IDSFX = 0;
 const int IDBACKTOMENU = 1;
 const int IDEXITGAME = 2;
 const int IDCHANGENAME = 3;
+const int IDCHANGERESOLUTION = 4;
 
 // sound settings variables
 int IDSoundButtons = 0; // 0: mute/ unmute sound 1: adjust music volume 2: adjust effect volume
@@ -41,6 +43,29 @@ static bool inNameSubmenu = false;        // track if we're in the name changing
 static bool isTypingName = false;         // track if we're currently typing a name
 static int IDNameButtons = 0;             // 0: change player 1 name, 1: change player 2 name
 static const int MAX_LENGTH_NAME = 14;
+
+// window size variables
+vector<pair<int, int> > listWindowSize = {
+    {800, 600},
+    {1024, 768},
+    {1280, 720},
+    {1280, 800},
+    {1366, 768},
+    {1440, 900},
+    {1600, 900},
+    {1680, 1050},
+    {1920, 1080},
+    {1920, 1200},
+    {2560, 1440},
+    {2560, 1600},
+    {3440, 1440},
+    {3840, 2160},
+    {5120, 1440},
+    {5120, 2160},
+    {7680, 4320}
+};
+int idWindowSize = -1; // not set yet
+int tmp_idWindowSize = -1;
 
 // UI handle
 float boxWidth = 0.0f;  // window.getSize().x * 0.4f; (shared with overlay)
@@ -166,6 +191,9 @@ void Settings::SettingsLogic(RenderWindow &window) {
             } else if (SelectSettings == IDEXITGAME) { // exit game
                 window.close();
             }
+            else if (SelectSettings == IDCHANGERESOLUTION) { // change resolutionm
+                tmp_idWindowSize = idWindowSize;
+            }
             PlaySoundClick();
         }
     } else // for specific submenu handling
@@ -228,6 +256,38 @@ void Settings::SettingsLogic(RenderWindow &window) {
                     }
                     if (addedChar)
 						PlaySoundClick();
+                }
+            }
+        }
+        else if (inSetButtons[IDCHANGERESOLUTION]) { // change resolution
+            if (keyBoard.Up() ^ keyBoard.Down()) {
+                int preIDWindowSize = tmp_idWindowSize;
+                static int nWindowList = listWindowSize.size();
+                if (keyBoard.Up())
+                    tmp_idWindowSize = min(tmp_idWindowSize + 1, nWindowList - 1);
+                else if (keyBoard.Down())
+                    tmp_idWindowSize = max(tmp_idWindowSize - 1, 0);
+                // neu co thay doi
+                if (preIDWindowSize != tmp_idWindowSize) {
+                    PlaySoundClick();
+                }
+            }
+            else if (keyBoard.Esc()) {
+                tmp_idWindowSize = idWindowSize;
+                PlaySoundClick();
+                inSetButtons[IDCHANGENAME] = false;
+                inGeneralSettings = true; // back to general settings
+            }
+            else if (keyBoard.Enter()) {
+                // kiem tra neu co thay doi
+                if (tmp_idWindowSize != idWindowSize) {
+                    idWindowSize = tmp_idWindowSize;
+                    // change resolution
+                    window.create(VideoMode(listWindowSize[idWindowSize].first, listWindowSize[idWindowSize].second),
+                        "Caro Game!",
+                        Style::Close);
+                    SaveSettings();
+                    PlaySoundClick();
                 }
             }
         }
@@ -299,11 +359,11 @@ void Settings::SettingButtons(RenderWindow &window) {
             generalSettingsBox(window, IDButton, cntBut);
         }
     } else // draw specific settings
-        if (inSetButtons[IDSFX]) {
+        if (inSetButtons[IDSFX]) { // change sound effect
             // draw sound setting
             generalSettingsBox(window, IDSFX, 0); // highlight Sound button
             subSoundSettingBox(window);
-        } else if (inSetButtons[IDCHANGENAME]) {
+        } else if (inSetButtons[IDCHANGENAME]) { // change name
             if (isTypingName) {
                 string display_name = tmp_name;
                 if (display_name.empty())
@@ -319,6 +379,14 @@ void Settings::SettingButtons(RenderWindow &window) {
                 generalSettingsBox(window, IDCHANGENAME, 1, playerName[1],
                                    IDNameButtons == 1); // highlight Change Name button
             }
+        }
+        else if (inSetButtons[IDCHANGERESOLUTION]) { // change resolution
+            string display_width = to_string(listWindowSize[tmp_idWindowSize].first);
+            string display_height = to_string(listWindowSize[tmp_idWindowSize].second);
+            string display_res = "Resolution: " + display_width + ":" + display_height;
+            generalSettingsBox(window, IDCHANGERESOLUTION, 0, display_res, 1);
+            generalSettingsBox(window, IDCHANGERESOLUTION, 1, "Press Enter to confirm", 0);
+            generalSettingsBox(window, IDCHANGERESOLUTION, 2, "Press W & S to change", 0);
         }
 
     // others
@@ -505,11 +573,12 @@ void Settings::SaveSettings() {
 	file << "confirmedNameFirstTime=" << confirmedNameFirstTime << std::endl;
 	file << "Player1Name=" << playerName[0] << std::endl;
 	file << "Player2Name=" << playerName[1] << std::endl;
+	file << "ResolutionID=" << idWindowSize << std::endl;
 
     file.close();
 }
 
-void Settings::LoadSettings() {
+void Settings::LoadSettings(RenderWindow &window) {
     std::ifstream file("assets/setting_save&load/settings.txt");
     if (!file.is_open()) {
         std::cout << "Settings file not found. Using default settings."
@@ -524,6 +593,7 @@ void Settings::LoadSettings() {
 	bool loadedConfirmedNameFirstTime = confirmedNameFirstTime;
 	string loadedPlayer1Name = playerName[0];
 	string loadedPlayer2Name = playerName[1];
+    int loadedIDWindowSize = idWindowSize;
 
     std::string line;
     while (std::getline(file, line)) {
@@ -561,6 +631,14 @@ void Settings::LoadSettings() {
         } else if (key == "Player2Name") {
 			loadedPlayer2Name = value;
         }
+        else if (key == "ResolutionID") {
+            // chuyen doi xau thanh so nguyen
+            loadedIDWindowSize = 0;
+            for (int i = value.size() - 1; i >= 0; i--) {
+                loadedIDWindowSize *= 10;
+                loadedIDWindowSize += value[i] - '0';
+            }
+        }
     }
 
     file.close();
@@ -580,5 +658,13 @@ void Settings::LoadSettings() {
     confirmedNameFirstTime = loadedConfirmedNameFirstTime;
 	playerName[0] = loadedPlayer1Name;
 	playerName[1] = loadedPlayer2Name;
+
+    // apply new resolution
+    if (loadedIDWindowSize != idWindowSize) {
+        idWindowSize = loadedIDWindowSize;
+        window.create(VideoMode(listWindowSize[idWindowSize].first, listWindowSize[idWindowSize].second),
+            "Caro Game!",
+            Style::Close);
+    }
 
 }
