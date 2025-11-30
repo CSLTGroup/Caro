@@ -27,3 +27,5 @@ extern BoardGame boardGame;
 extern Settings setting;
 extern string playerName[2];
 extern bool confirmedNameFirstTime;
+extern int idWindowSize;
+extern vector<pair<int, int> > listWindowSize;

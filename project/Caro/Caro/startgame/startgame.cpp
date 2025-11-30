@@ -3,10 +3,17 @@
 void startGame() {
     // set up window
     VideoMode desktop = VideoMode::getDesktopMode();
-    const double widthApp  = desktop.width;   // kich thuoc width toan man hinh
-    const double heightApp = desktop.height;  // kich thuoc height toan man hinh
+    const double widthRES  = desktop.width;   // kich thuoc width toan man hinh
+    const double heightRES = desktop.height;  // kich thuoc height toan man hinh
+    if (idWindowSize == -1) {
+        idWindowSize = listWindowSize.size() - 1;
+        while (idWindowSize >= 0 && (listWindowSize[idWindowSize].first > widthRES
+            || listWindowSize[idWindowSize].second > heightRES)) {
+            --idWindowSize;
+        }
+    }
     RenderWindow window(
-        VideoMode(desktop.width, desktop.height),
+        VideoMode(listWindowSize[idWindowSize].first, listWindowSize[idWindowSize].second),
         "Caro Game!",
         Style::Close
     );
@@ -23,7 +30,7 @@ void startGame() {
     loadingScreen(window);
 
     // load settings before starting background music
-    setting.LoadSettings();
+    setting.LoadSettings(window);
 
     // start background music after loading screen
     BackGroundMusic(window); // ham goi nhac nen

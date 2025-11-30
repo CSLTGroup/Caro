@@ -19,7 +19,7 @@ struct Settings {
 
   // Save/Load settings
   void SaveSettings();
-  void LoadSettings();
+  void LoadSettings(RenderWindow&);
 };
 
 #endif
