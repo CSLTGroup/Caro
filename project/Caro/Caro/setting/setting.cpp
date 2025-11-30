@@ -122,9 +122,6 @@ void Settings::SettingsLogic(RenderWindow &window) {
         // music part
         MusicVolumeLevel = (int)(GetMusicVolume() / 5.0f);
         EffectVolumeLevel = (int)(GetEffectVolume() / 5.0f);
-        // UI part
-        boxWidth = window.getSize().x * 0.4f;
-        boxHeight = window.getSize().y * 0.5f;
         initialized = true;
     }
 
@@ -295,8 +292,12 @@ void Settings::SettingsLogic(RenderWindow &window) {
 
 void Settings::draw(RenderWindow &window) {
     // pre set up
-    const float winWidth = window.getSize().x;
-    const float winHeight = window.getSize().y;
+    float winWidth = window.getSize().x;
+    float winHeight = window.getSize().y;
+
+    // UI part
+    boxWidth = winWidth * 0.4f;
+    boxHeight = winHeight * 0.5f;
 
     // Draw settings menu
     RectangleShape bg(Vector2f(winWidth, winHeight));
@@ -341,16 +342,16 @@ void Settings::draw(RenderWindow &window) {
 
 void Settings::SettingButtons(RenderWindow &window) {
     // window size
-    static float winWidth = window.getSize().x;
-    static float winHeight = window.getSize().y;
+    float winWidth = window.getSize().x;
+    float winHeight = window.getSize().y;
 
     // fixed size and indentations
-    static float startY = winHeight / 2 - boxHeight / 2 + winHeight * 0.12f;
-    static float buttonHeight = winHeight * 0.06f;
-    static float buttonWidth = boxWidth * 0.75f;
-    static float buttonSpacing = winHeight * 0.12f;
-    static float outlineThick = winHeight * 0.004f;
-    static float outlineThickSelected = winHeight * 0.006f;
+    float startY = winHeight / 2 - boxHeight / 2 + winHeight * 0.12f;
+    float buttonHeight = winHeight * 0.06f;
+    float buttonWidth = boxWidth * 0.75f;
+    float buttonSpacing = winHeight * 0.12f;
+    float outlineThick = winHeight * 0.004f;
+    float outlineThickSelected = winHeight * 0.006f;
 
     // draw general settings buttons
     if (inGeneralSettings || !inSettings) { // fix auto enter issue
@@ -421,16 +422,16 @@ void Settings::generalSettingsBox(RenderWindow &window, int IDButton, int row,
         selected = true;
 
     // window size
-    static float winWidth = window.getSize().x;
-    static float winHeight = window.getSize().y;
+    float winWidth = window.getSize().x;
+    float winHeight = window.getSize().y;
 
     // fixed size and indentations
-    static float startY = winHeight / 2 - boxHeight / 2 + winHeight * 0.12f;
-    static float buttonHeight = winHeight * 0.06f;
-    static float buttonWidth = boxWidth * 0.75f;
-    static float buttonSpacing = winHeight * 0.12f;
-    static float outlineThick = winHeight * 0.004f;
-    static float outlineThickSelected = winHeight * 0.006f;
+    float startY = winHeight / 2 - boxHeight / 2 + winHeight * 0.12f;
+    float buttonHeight = winHeight * 0.06f;
+    float buttonWidth = boxWidth * 0.75f;
+    float buttonSpacing = winHeight * 0.12f;
+    float outlineThick = winHeight * 0.004f;
+    float outlineThickSelected = winHeight * 0.006f;
 
     // Box for each button
     RectangleShape buttonBox(Vector2f(buttonWidth, buttonHeight));
