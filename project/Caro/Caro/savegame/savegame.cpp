@@ -35,8 +35,8 @@ void SaveGame()
 	curTime += tostr(now.tm_mon + 1, 2) + "-";
 	curTime += tostr(now.tm_mday, 2);
 	curTime += tostr(now.tm_hour, 2) + "-";
-	curTime += tostr(now.tm_year, 2) + "-";
-	curTime += tostr(now.tm_year, 2);
+	curTime += tostr(now.tm_min, 2) + "-";
+	curTime += tostr(now.tm_sec, 2);
 
 	std::string record_name = curTime; // default value of record name, can be changed in later update
 	file << record_name << "\n"; 
@@ -73,9 +73,9 @@ void SaveGame()
 		{
 			for (int i = 0; i < boardGame.board.size(); i++)
 			{
+				file << "\n";
 				for (int j = 0; j < boardGame.board[i].size(); j++)
 					file << boardGame.board[i][j] << " ";
-				file << "\n";
 			}
 		}
 		else if (component == 9)

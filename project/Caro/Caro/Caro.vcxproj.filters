@@ -84,6 +84,9 @@
     <ClCompile Include="firsttimeplaying\firsttimeplaying.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="savegame\savegame.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="keyboard\keyboard.h">
@@ -119,6 +122,9 @@
     <ClInclude Include="firsttimeplaying\firsttimeplaying.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="savegame\savegame.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Font Include="assets\font\arial.ttf">
@@ -141,5 +147,8 @@
     <Image Include="assets\image\player2_onepunchman.jpg">
       <Filter>Resource Files</Filter>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="assets\game_save\gamesave.txt" />
   </ItemGroup>
 </Project>
