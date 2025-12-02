@@ -1,0 +1,69 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\Minh\\HCMUS\\HK1\\CSLT\\Caro\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\Minh\\HCMUS\\HK1\\CSLT\\Caro\\project\\Caro\\Caro\\caro.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:project\\Caro\\Caro\\caro.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\Minh\\HCMUS\\HK1\\CSLT\\Caro\\project\\Caro\\Caro\\startgame\\startgame.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:project\\Caro\\Caro\\startgame\\startgame.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\Minh\\HCMUS\\HK1\\CSLT\\Caro\\CppProperties.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:CppProperties.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 2,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "CppProperties.json",
+              "DocumentMoniker": "D:\\Minh\\HCMUS\\HK1\\CSLT\\Caro\\CppProperties.json",
+              "RelativeDocumentMoniker": "CppProperties.json",
+              "ToolTip": "D:\\Minh\\HCMUS\\HK1\\CSLT\\Caro\\CppProperties.json",
+              "RelativeToolTip": "CppProperties.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-11-29T00:40:31.732Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "startgame.cpp",
+              "DocumentMoniker": "D:\\Minh\\HCMUS\\HK1\\CSLT\\Caro\\project\\Caro\\Caro\\startgame\\startgame.cpp",
+              "RelativeDocumentMoniker": "project\\Caro\\Caro\\startgame\\startgame.cpp",
+              "ToolTip": "D:\\Minh\\HCMUS\\HK1\\CSLT\\Caro\\project\\Caro\\Caro\\startgame\\startgame.cpp",
+              "RelativeToolTip": "project\\Caro\\Caro\\startgame\\startgame.cpp",
+              "ViewState": "AgIAABQAAAAAAAAAAAAAABUAAAAVAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2025-11-28T08:15:38.633Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "caro.cpp",
+              "DocumentMoniker": "D:\\Minh\\HCMUS\\HK1\\CSLT\\Caro\\project\\Caro\\Caro\\caro.cpp",
+              "RelativeDocumentMoniker": "project\\Caro\\Caro\\caro.cpp",
+              "ToolTip": "D:\\Minh\\HCMUS\\HK1\\CSLT\\Caro\\project\\Caro\\Caro\\caro.cpp",
+              "RelativeToolTip": "project\\Caro\\Caro\\caro.cpp",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2025-11-28T08:15:28.804Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

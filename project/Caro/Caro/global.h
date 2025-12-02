@@ -6,6 +6,7 @@
 #include "boardgame/boardgame.h"
 #include "menu/menu.h"
 #include "startgame/startgame.h"
+#include "savegame/savegame.h"
 #include "loadingscreen/loadingscreen.h"
 #include "sfx/sfx.h"
 #include "setting/setting.h"
@@ -15,6 +16,7 @@
 #include <string>
 #include <fstream>
 #include <sstream>
+#include <ctime>
 
 using namespace sf;
 //using namespace std;
@@ -27,3 +29,4 @@ extern BoardGame boardGame;
 extern Settings setting;
 extern string playerName[2];
 extern bool confirmedNameFirstTime;
+//extern void SaveGame();
