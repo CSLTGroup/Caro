@@ -1,13 +1,14 @@
-#include "../global.h"
+﻿#include "../global.h"
 
 // for expanding settings in the future (please add ID buttons down below AND a
 // section for specific buttons' variables if needed)
-const int totalSetButtons = 4;
+const int totalSetButtons = 5;
 string contextSetButtons[totalSetButtons] = {
     "Sound",
     "Back to Menu",
     "Exit Game",
-    "Change your Name"
+    "Change your Name",
+    "Change your Avatar"
 };
 
 // general settings variables
@@ -26,6 +27,7 @@ const int IDSFX = 0;
 const int IDBACKTOMENU = 1;
 const int IDEXITGAME = 2;
 const int IDCHANGENAME = 3;
+const int IDCHANGEAVATAR = 4;
 
 // sound settings variables
 int IDSoundButtons = 0; // 0: mute/ unmute sound 1: adjust music volume 2: adjust effect volume
@@ -37,23 +39,32 @@ static bool inSoundSubmenu = false; // track if we're in the sound settings subm
 // username variables
 string playerName[2] = {"Player 1", "Player 2"};
 static string tmp_name = "";
-static bool inNameSubmenu = false;        // track if we're in the name changing submenu
-static bool isTypingName = false;         // track if we're currently typing a name
-static int IDNameButtons = 0;             // 0: change player 1 name, 1: change player 2 name
+static bool inNameSubmenu = false;                        // track if we're in the name changing submenu
+static bool isTypingName = false; // track if we're currently typing a name
+static int IDNameButtons = 0; // 0: change player 1 name, 1: change player 2 name
 static const int MAX_LENGTH_NAME = 14;
 
 // UI handle
 float boxWidth = 0.0f;  // window.getSize().x * 0.4f; (shared with overlay)
 float boxHeight = 0.0f; // window.getSize().y * 0.5f; (shared with overlay)
 
+// avatar change variables
+static bool inAvatarSubmenu = false; // track if we're in the avatar changing submenu
+static int IDAvatarButtons = 0; // 0: change player 1 avatar, 1: change player 2 avatar
+static int numberAvatar = 0; // total number of available avatars
+int selectedAvatarIndex = -1; // index of currently selected avatar during change
+static bool inAvatarBrowsingMode = false; // true: browsing avatars, false: selecting player
+
 void Settings::sfx() {
     if (keyBoard.Up() ^ keyBoard.Down()) {
         if (keyBoard.Up()) {
             --IDSoundButtons;
-            if (IDSoundButtons < 0) IDSoundButtons = 2;
+            if (IDSoundButtons < 0)
+                IDSoundButtons = 2;
         } else {
             ++IDSoundButtons;
-            if (IDSoundButtons == 3) IDSoundButtons = 0;
+            if (IDSoundButtons == 3)
+                IDSoundButtons = 0;
         }
         PlaySoundClick();
     }
@@ -68,8 +79,10 @@ void Settings::sfx() {
     } else if (IDSoundButtons == 1) { // Adjust music volume (sound == 1)
         if (keyBoard.Left() ^ keyBoard.Right()) {
             float preMusicVolumeLevel = MusicVolumeLevel;
-            if (keyBoard.Left()) MusicVolumeLevel = max(MusicVolumeLevel - 1, 0);
-            else MusicVolumeLevel = min(MusicVolumeLevel + 1, 20);
+            if (keyBoard.Left())
+                MusicVolumeLevel = max(MusicVolumeLevel - 1, 0);
+            else
+                MusicVolumeLevel = min(MusicVolumeLevel + 1, 20);
             if (preMusicVolumeLevel != MusicVolumeLevel) {
                 float newVolume = MusicVolumeLevel * 5.0f;
                 PlaySoundClick();
@@ -80,8 +93,10 @@ void Settings::sfx() {
     } else if (IDSoundButtons == 2) { // Adjust effect volume (sound == 2)
         if (keyBoard.Left() ^ keyBoard.Right()) {
             float preEffectVolumeLevel = EffectVolumeLevel;
-            if (keyBoard.Left()) EffectVolumeLevel = max(EffectVolumeLevel - 1, 0);
-            else EffectVolumeLevel = min(EffectVolumeLevel + 1, 20);
+            if (keyBoard.Left())
+                EffectVolumeLevel = max(EffectVolumeLevel - 1, 0);
+            else
+                EffectVolumeLevel = min(EffectVolumeLevel + 1, 20);
             if (EffectVolumeLevel != preEffectVolumeLevel) {
                 float newVolume = EffectVolumeLevel * 5.0f;
                 PlaySoundClick();
@@ -165,6 +180,31 @@ void Settings::SettingsLogic(RenderWindow &window) {
                 IDSoundButtons = 0;
             } else if (SelectSettings == IDEXITGAME) { // exit game
                 window.close();
+            } else if (SelectSettings == IDCHANGENAME) { // change name submenu
+                IDNameButtons = 0;
+                isTypingName = false;
+                tmp_name = "";
+            } else if (SelectSettings == IDCHANGEAVATAR) { // change avatar submenu
+                IDAvatarButtons = 0;
+                inAvatarSubmenu = true;
+                inAvatarBrowsingMode = false; // Start in player selection mode
+                // Load avatars if not already loaded
+                if (avatarTextures.empty()) {
+                    loadAllAvatars();
+                }
+                // Set initial selection to current player's avatar
+                if (numberAvatar > 0) {
+                    std::string currentPath = player1AvatarPath;
+                    selectedAvatarIndex = 0; // Default to first if not found
+                    for (int i = 0; i < avatarPaths.size(); ++i) {
+                        if (avatarPaths[i] == currentPath) {
+                            selectedAvatarIndex = i;
+                            break;
+                        }
+                    }
+                } else {
+                    selectedAvatarIndex = -1;
+                }
             }
             PlaySoundClick();
         }
@@ -195,41 +235,43 @@ void Settings::SettingsLogic(RenderWindow &window) {
             } else {
                 if (keyBoard.Backspace()) {
                     if (!tmp_name.empty()) {
-						PlaySoundClick();
+                        PlaySoundClick();
                         tmp_name.pop_back();
                     }
                 } else if (keyBoard.Enter()) {
-					PlaySoundClick();
+                    PlaySoundClick();
                     playerName[IDNameButtons] = tmp_name;
                     isTypingName = false;
                     tmp_name = "";
-					SaveSettings(); // save settings when name changes
+                    SaveSettings(); // save settings when name changes
 
                 } else if (keyBoard.Esc()) {
-					PlaySoundClick();
+                    PlaySoundClick();
                     isTypingName = false;
                     tmp_name = "";
                 } else {
-					bool addedChar = false;
+                    bool addedChar = false;
                     if (keyBoard.Shift()) {
                         for (char c = 'A'; c <= 'Z'; c++)
                             if (tmp_name.length() < MAX_LENGTH_NAME &&
                                 keyBoard.combineAlphabetCheck(c, true)) {
                                 tmp_name += c;
-								addedChar = true;
+                                addedChar = true;
                             }
                     } else {
                         for (char c = 'A'; c <= 'Z'; c++)
                             if (tmp_name.length() < MAX_LENGTH_NAME &&
                                 keyBoard.combineAlphabetCheck(c)) {
                                 tmp_name += (char)(c - 'A' + 'a');
-								addedChar = true;
+                                addedChar = true;
                             }
                     }
                     if (addedChar)
-						PlaySoundClick();
+                        PlaySoundClick();
                 }
             }
+        } else if (inSetButtons[IDCHANGEAVATAR]) { // change avatar submenu
+            changeAvatar();
         }
 }
 
@@ -319,6 +361,11 @@ void Settings::SettingButtons(RenderWindow &window) {
                 generalSettingsBox(window, IDCHANGENAME, 1, playerName[1],
                                    IDNameButtons == 1); // highlight Change Name button
             }
+        } else if (inSetButtons[IDCHANGEAVATAR]) {
+            // Highlight Change Avatar button
+            generalSettingsBox(window, IDCHANGEAVATAR, 0);
+            // Draw avatar selection UI
+            drawAvatarChangeBox(window);
         }
 
     // others
@@ -491,6 +538,298 @@ void Settings::subSoundSettingBox(RenderWindow &window) {
     window.draw(effectBarFill);
 }
 
+void Settings::loadAllAvatars() {
+    avatarTextures.clear();
+    avatarSprites.clear();
+    avatarPaths.clear();
+
+	std::string folderPath = "assets/image/Avatar/"; // path to avatar folder
+	std::string searchPath = folderPath + "*.*"; // find all files
+
+    WIN32_FIND_DATAA findData; // Use A version for std::string (ANSI)
+    HANDLE hFind = FindFirstFileA(searchPath.c_str(), &findData);
+
+    int i = 0;
+
+    if (hFind != INVALID_HANDLE_VALUE) {
+        do {
+            // Skip current (.) and parent (..) directories
+            std::string fileName = findData.cFileName;
+            if (fileName == "." || fileName == "..")
+                continue;
+
+			// check file extension
+            // If you are sure the folder only contains images, this check is not too strict
+            if (fileName.find(".png") != std::string::npos ||
+                fileName.find(".jpg") != std::string::npos ||
+                fileName.find(".gif") != std::string::npos) {
+
+                std::string fullPath = folderPath + fileName;
+                sf::Texture tex;
+
+                if (tex.loadFromFile(fullPath)) {
+                    avatarTextures.push_back(tex);
+                    avatarPaths.push_back(fullPath); // Store the path
+
+                    sf::Sprite sprite;
+                    sprite.setTexture(avatarTextures.back());
+                    avatarSprites.push_back(sprite);
+                    i++;
+                }
+            }
+        } while (FindNextFileA(hFind, &findData));
+
+        FindClose(hFind);
+    } else {
+        std::cerr << "Cannot find the directory: " << folderPath << std::endl;
+    }
+
+    numberAvatar = avatarTextures.size(); // Update total number of avatars
+}
+
+void Settings::changeAvatar() {
+    // Load avatars if not already loaded
+    if (avatarTextures.empty()) {
+        loadAllAvatars();
+    }
+
+    // If no avatars found, return
+    if (avatarTextures.empty()) {
+        return;
+    }
+
+    if (!inAvatarBrowsingMode) {
+        // Player selection mode - only Up/Down works
+        if (keyBoard.Up() ^ keyBoard.Down()) {
+            int oldPlayer = IDAvatarButtons;
+            IDAvatarButtons ^= 1; // Toggle between 0 and 1
+            PlaySoundClick();
+
+            // Update selected avatar to show current player's avatar
+            if (numberAvatar > 0) {
+                std::string currentPath =
+                    (IDAvatarButtons == 0) ? player1AvatarPath : player2AvatarPath;
+                selectedAvatarIndex = 0; // Default to first if not found
+                for (int i = 0; i < avatarPaths.size(); ++i) {
+                    if (avatarPaths[i] == currentPath) {
+                        selectedAvatarIndex = i;
+                        break;
+                    }
+                }
+            }
+        }
+
+        // Enter avatar browsing mode with Enter
+        if (keyBoard.Enter()) {
+            inAvatarBrowsingMode = true;
+            PlaySoundClick();
+        }
+    } else {
+        // Avatar browsing mode - Left/Right to browse, Enter to confirm
+        if (keyBoard.Left() ^ keyBoard.Right()) {
+            if (keyBoard.Left()) {
+                --selectedAvatarIndex;
+                if (selectedAvatarIndex < 0)
+                    selectedAvatarIndex = numberAvatar - 1;
+            } else {
+                ++selectedAvatarIndex;
+                if (selectedAvatarIndex >= numberAvatar)
+                    selectedAvatarIndex = 0;
+            }
+            PlaySoundClick();
+        }
+
+        // Confirm avatar selection with Enter
+        if (keyBoard.Enter()) {
+            if (selectedAvatarIndex >= 0 &&
+                selectedAvatarIndex < avatarPaths.size()) {
+                if (IDAvatarButtons == 0) { // Player 1
+                    player1AvatarPath = avatarPaths[selectedAvatarIndex];
+                    // Update boardgame immediately if it's loaded
+                    if (boardGame.player1PhotoLoaded) {
+                        boardGame.player1PhotoLoaded = false;
+                    }
+                } else { // Player 2
+                    player2AvatarPath = avatarPaths[selectedAvatarIndex];
+                    // Update boardgame immediately if it's loaded
+                    if (boardGame.player2PhotoLoaded) {
+                        boardGame.player2PhotoLoaded = false;
+                    }
+                }
+                PlaySoundClick();
+                SaveSettings(); // Save the new avatar selection
+                // Return to player selection mode
+                inAvatarBrowsingMode = false;
+            }
+        }
+    }
+
+    // Exit avatar browsing mode back to player selection with Esc (if in browsing
+    // mode) Or exit avatar submenu completely if in player selection mode
+    if (keyBoard.Esc()) {
+        PlaySoundClick();
+        if (inAvatarBrowsingMode) {
+            // Go back to player selection mode
+            inAvatarBrowsingMode = false;
+        } else {
+            // Exit avatar submenu completely
+            inSetButtons[IDCHANGEAVATAR] = false;
+            inAvatarSubmenu = false;
+            inGeneralSettings = true; // Back to general settings
+            selectedAvatarIndex = -1;
+        }
+    }
+}
+
+void Settings::drawAvatarChangeBox(RenderWindow &window) {
+    float winWidth = window.getSize().x;
+    float winHeight = window.getSize().y;
+
+    // Draw background panel
+    RectangleShape panel(Vector2f(boxWidth * 1.5f, boxHeight * 1.2f));
+    panel.setFillColor(Color(50, 50, 50, 240));
+    panel.setOutlineColor(Color::White);
+    panel.setOutlineThickness(winHeight * 0.003f);
+    panel.setPosition(winWidth / 2 - boxWidth * 0.75f,
+                      winHeight / 2 - boxHeight * 0.6f);
+    window.draw(panel);
+
+    // Title
+    Text titleText;
+    titleText.setFont(font);
+    titleText.setString("Change Avatar");
+    titleText.setCharacterSize((int)(winHeight * 0.05f));
+    titleText.setFillColor(Color::Yellow);
+    FloatRect titleBounds = titleText.getLocalBounds();
+    titleText.setPosition(winWidth / 2 - titleBounds.width / 2,
+                          winHeight / 2 - boxHeight * 0.55f + winHeight * 0.03f);
+    window.draw(titleText);
+
+    // New layout: Player labels on left, selected avatar on left, grid on right
+    float contentStartY = winHeight / 2 - boxHeight * 0.55f + winHeight * 0.12f;
+    float leftSideX = winWidth / 2 - boxWidth * 0.5f + boxWidth * 0.15f;
+    float rightSideX = winWidth / 2 + boxWidth * 0.1f;
+    float spacing = winHeight * 0.05f;
+
+    // Draw player labels on the left (P1 and P2)
+    float playerLabelY = contentStartY;
+    float labelHeight = winHeight * 0.05f;
+
+    // Player 1 label
+    Text player1Label;
+    player1Label.setFont(font);
+    player1Label.setString("Player 1");
+    player1Label.setCharacterSize((int)(winHeight * 0.04f));
+    player1Label.setFillColor((IDAvatarButtons == 0 && !inAvatarBrowsingMode)
+                                ? Color::Yellow
+                                : Color::White);
+    FloatRect p1LabelBounds = player1Label.getLocalBounds();
+    player1Label.setPosition(leftSideX, playerLabelY);
+    window.draw(player1Label);
+
+    // Player 2 label
+    Text player2Label;
+    player2Label.setFont(font);
+    player2Label.setString("Player 2");
+    player2Label.setCharacterSize((int)(winHeight * 0.04f));
+    player2Label.setFillColor((IDAvatarButtons == 1 && !inAvatarBrowsingMode)
+                                ? Color::Yellow
+                                : Color::White);
+    FloatRect p2LabelBounds = player2Label.getLocalBounds();
+    player2Label.setPosition(leftSideX, playerLabelY + labelHeight + spacing);
+    window.draw(player2Label);
+
+    // Draw selected avatar preview on the left side (below player labels)
+    float selectedAvatarY = playerLabelY + (labelHeight + spacing) * 2;
+    float selectedAvatarSize = min(winHeight * 0.2f, boxWidth * 0.25f);
+    float previewX = leftSideX;
+
+    if (!avatarSprites.empty() && selectedAvatarIndex >= 0 &&
+        selectedAvatarIndex < avatarSprites.size()) {
+        // Draw preview box
+        RectangleShape previewBox(
+            Vector2f(selectedAvatarSize + 20, selectedAvatarSize + 20));
+        previewBox.setFillColor(Color(30, 30, 30));
+        previewBox.setOutlineColor(inAvatarBrowsingMode ? Color::Yellow
+                                                        : Color::White);
+        previewBox.setOutlineThickness(inAvatarBrowsingMode ? 4 : 2);
+        previewBox.setPosition(previewX - 10, selectedAvatarY - 10);
+        window.draw(previewBox);
+
+        // Draw the selected avatar - use texture directly to avoid copy issues
+        sf::Vector2u texSize = avatarTextures[selectedAvatarIndex].getSize();
+        float scaleX = selectedAvatarSize / texSize.x;
+        float scaleY = selectedAvatarSize / texSize.y;
+        float scale = min(scaleX, scaleY);
+
+        sf::Sprite previewSprite;
+        previewSprite.setTexture(avatarTextures[selectedAvatarIndex]);
+        previewSprite.setScale(scale, scale);
+        float spriteX = previewX + (selectedAvatarSize - texSize.x * scale) / 2;
+        float spriteY =
+            selectedAvatarY + (selectedAvatarSize - texSize.y * scale) / 2;
+        previewSprite.setPosition(spriteX, spriteY);
+        window.draw(previewSprite);
+
+        // Show selection info below preview
+        Text selectionText;
+        selectionText.setFont(font);
+        selectionText.setString("Avatar " + to_string(selectedAvatarIndex + 1) +
+                                " / " + to_string(numberAvatar));
+        selectionText.setCharacterSize((int)(winHeight * 0.025f));
+        selectionText.setFillColor(Color(200, 200, 200));
+        FloatRect selBounds = selectionText.getLocalBounds();
+        selectionText.setPosition(previewX + selectedAvatarSize / 2 -
+                                      selBounds.width / 2,
+                                  selectedAvatarY + selectedAvatarSize + 15);
+        window.draw(selectionText);
+    }
+
+    // Draw avatar grid on the right side (always visible, not just in browsing
+    // mode)
+    if (!avatarSprites.empty() && selectedAvatarIndex >= 0 &&
+        selectedAvatarIndex < avatarSprites.size()) {
+        float gridY = contentStartY;
+        float gridAvatarSize = min(winHeight * 0.1f, boxWidth * 0.12f);
+        float gridSpacing = gridAvatarSize * 0.2f;
+        int avatarsPerRow = 4;
+        float totalGridWidth =
+            avatarsPerRow * gridAvatarSize + (avatarsPerRow - 1) * gridSpacing;
+
+        // Draw avatar grid
+        for (int i = 0; i < avatarSprites.size() && i < 12; ++i) {
+            int row = i / avatarsPerRow;
+            int col = i % avatarsPerRow;
+            float x = rightSideX + col * (gridAvatarSize + gridSpacing);
+            float y = gridY + row * (gridAvatarSize + gridSpacing);
+
+            // Draw box for each avatar
+            RectangleShape avatarBox(
+                Vector2f(gridAvatarSize + 4, gridAvatarSize + 4));
+            avatarBox.setFillColor(Color(30, 30, 30));
+            avatarBox.setOutlineColor((i == selectedAvatarIndex) ? Color::Yellow
+                                                                 : Color::White);
+            avatarBox.setOutlineThickness((i == selectedAvatarIndex) ? 3 : 1);
+            avatarBox.setPosition(x - 2, y - 2);
+            window.draw(avatarBox);
+
+            // Scale sprite to fit
+            sf::Vector2u texSize = avatarTextures[i].getSize();
+            float scaleX = gridAvatarSize / texSize.x;
+            float scaleY = gridAvatarSize / texSize.y;
+            float scale = min(scaleX, scaleY);
+
+            sf::Sprite gridSprite;
+            gridSprite.setTexture(avatarTextures[i]);
+            gridSprite.setScale(scale, scale);
+            float spriteX = x + (gridAvatarSize - texSize.x * scale) / 2;
+            float spriteY = y + (gridAvatarSize - texSize.y * scale) / 2;
+            gridSprite.setPosition(spriteX, spriteY);
+            window.draw(gridSprite);
+        }
+    }
+}
+
 void Settings::SaveSettings() {
     std::ofstream file("assets/setting_save&load/settings.txt");
     if (!file.is_open()) {
@@ -502,9 +841,11 @@ void Settings::SaveSettings() {
     file << "isNotMuted=" << (isNotMuted ? "1" : "0") << std::endl;
     file << "MusicVolumeLevel=" << MusicVolumeLevel << std::endl;
     file << "EffectVolumeLevel=" << EffectVolumeLevel << std::endl;
-	file << "confirmedNameFirstTime=" << confirmedNameFirstTime << std::endl;
-	file << "Player1Name=" << playerName[0] << std::endl;
-	file << "Player2Name=" << playerName[1] << std::endl;
+    file << "confirmedNameFirstTime=" << confirmedNameFirstTime << std::endl;
+    file << "Player1Name=" << playerName[0] << std::endl;
+    file << "Player2Name=" << playerName[1] << std::endl;
+    file << "Player1Avatar=" << player1AvatarPath << std::endl;
+    file << "Player2Avatar=" << player2AvatarPath << std::endl;
 
     file.close();
 }
@@ -521,9 +862,11 @@ void Settings::LoadSettings() {
     bool loadedIsNotMuted = isNotMuted; // default value
     int loadedMusicVolume = MusicVolumeLevel;
     int loadedEffectVolume = EffectVolumeLevel;
-	bool loadedConfirmedNameFirstTime = confirmedNameFirstTime;
-	string loadedPlayer1Name = playerName[0];
-	string loadedPlayer2Name = playerName[1];
+    bool loadedConfirmedNameFirstTime = confirmedNameFirstTime;
+    string loadedPlayer1Name = playerName[0];
+    string loadedPlayer2Name = playerName[1];
+    std::string loadedPlayer1Avatar = player1AvatarPath;
+    std::string loadedPlayer2Avatar = player2AvatarPath;
 
     std::string line;
     while (std::getline(file, line)) {
@@ -550,16 +893,20 @@ void Settings::LoadSettings() {
             } catch (...) {
                 // Invalid value, skip
             }
-		} else if (key == "confirmedNameFirstTime") {
+        } else if (key == "confirmedNameFirstTime") {
             try {
                 loadedConfirmedNameFirstTime = (value == "1");
             } catch (...) {
                 // Invalid value, skip
-			}
+            }
         } else if (key == "Player1Name") {
-			loadedPlayer1Name = value;
+            loadedPlayer1Name = value;
         } else if (key == "Player2Name") {
-			loadedPlayer2Name = value;
+            loadedPlayer2Name = value;
+        } else if (key == "Player1Avatar") {
+            loadedPlayer1Avatar = value;
+        } else if (key == "Player2Avatar") {
+            loadedPlayer2Avatar = value;
         }
     }
 
@@ -578,7 +925,10 @@ void Settings::LoadSettings() {
 
     // apply name
     confirmedNameFirstTime = loadedConfirmedNameFirstTime;
-	playerName[0] = loadedPlayer1Name;
-	playerName[1] = loadedPlayer2Name;
+    playerName[0] = loadedPlayer1Name;
+    playerName[1] = loadedPlayer2Name;
 
+    // apply avatar paths
+    player1AvatarPath = loadedPlayer1Avatar;
+    player2AvatarPath = loadedPlayer2Avatar;
 }

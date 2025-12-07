@@ -15,6 +15,7 @@
 #include <string>
 #include <fstream>
 #include <sstream>
+#include <windows.h>
 
 using namespace sf;
 //using namespace std;
