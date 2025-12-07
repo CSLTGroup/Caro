@@ -2,12 +2,13 @@
 
 // for expanding settings in the future (please add ID buttons down below AND a
 // section for specific buttons' variables if needed)
-const int totalSetButtons = 5;
+const int totalSetButtons = 6;
 const vector<string> contextSetButtons = {
     "Sound",
     "Back to Menu",
     "Exit Game",
     "Change your Name",
+    "Change your Avatar",
     "Change resolution"
 };
 
@@ -16,8 +17,8 @@ static int SelectSettings = 0; // 0: Sound 1: Back to Menu 2: Exit Game
 static int SelectPage = 0;     // 0: first 3 buttons; 1: next 3 buttons; ...
 static int numSettingsCurPage = 3;
 const int totalPage = (totalSetButtons + 2) / 3;
-bool hoverSetButtons[totalSetButtons] = {false}; // hover button settings
-bool inSetButtons[totalSetButtons] = {false};    // check in button settings
+bool hoverSetButtons[totalSetButtons] = { false }; // hover button settings
+bool inSetButtons[totalSetButtons] = { false };    // check in button settings
 bool initialized = false;
 static bool inSettings = false;
 static bool inGeneralSettings = false; // to ignore first enter key
@@ -27,7 +28,8 @@ const int IDSFX = 0;
 const int IDBACKTOMENU = 1;
 const int IDEXITGAME = 2;
 const int IDCHANGENAME = 3;
-const int IDCHANGERESOLUTION = 4;
+const int IDCHANGEAVATAR = 4;
+const int IDCHANGERESOLUTION = 5;
 
 // sound settings variables
 int IDSoundButtons = 0; // 0: mute/ unmute sound 1: adjust music volume 2: adjust effect volume
@@ -37,7 +39,7 @@ int EffectVolumeLevel = 20; // from 0 to 20 step 5% in 100% (0-100%)
 static bool inSoundSubmenu = false; // track if we're in the sound settings submenu
 
 // username variables
-string playerName[2] = {"Player 1", "Player 2"};
+string playerName[2] = { "Player 1", "Player 2" };
 static string tmp_name = "";
 static bool inNameSubmenu = false;        // track if we're in the name changing submenu
 static bool isTypingName = false;         // track if we're currently typing a name
@@ -71,12 +73,21 @@ int tmp_idWindowSize = -1;
 float boxWidth = 0.0f;  // window.getSize().x * 0.4f; (shared with overlay)
 float boxHeight = 0.0f; // window.getSize().y * 0.5f; (shared with overlay)
 
+
+// avatar change variables
+static bool inAvatarSubmenu = false; // track if we're in the avatar changing submenu
+static int IDAvatarButtons = 0; // 0: change player 1 avatar, 1: change player 2 avatar
+static int numberAvatar = 0; // total number of available avatars
+int selectedAvatarIndex = -1; // index of currently selected avatar during change
+static bool inAvatarBrowsingMode = false; // true: browsing avatars, false: selecting player
+
 void Settings::sfx() {
     if (keyBoard.Up() ^ keyBoard.Down()) {
         if (keyBoard.Up()) {
             --IDSoundButtons;
             if (IDSoundButtons < 0) IDSoundButtons = 2;
-        } else {
+        }
+        else {
             ++IDSoundButtons;
             if (IDSoundButtons == 3) IDSoundButtons = 0;
         }
@@ -90,7 +101,8 @@ void Settings::sfx() {
             SoundMute();
             SaveSettings(); // Save when mute state changes
         }
-    } else if (IDSoundButtons == 1) { // Adjust music volume (sound == 1)
+    }
+    else if (IDSoundButtons == 1) { // Adjust music volume (sound == 1)
         if (keyBoard.Left() ^ keyBoard.Right()) {
             float preMusicVolumeLevel = MusicVolumeLevel;
             if (keyBoard.Left()) MusicVolumeLevel = max(MusicVolumeLevel - 1, 0);
@@ -102,7 +114,8 @@ void Settings::sfx() {
                 SaveSettings(); // Save when music volume changes
             }
         }
-    } else if (IDSoundButtons == 2) { // Adjust effect volume (sound == 2)
+    }
+    else if (IDSoundButtons == 2) { // Adjust effect volume (sound == 2)
         if (keyBoard.Left() ^ keyBoard.Right()) {
             float preEffectVolumeLevel = EffectVolumeLevel;
             if (keyBoard.Left()) EffectVolumeLevel = max(EffectVolumeLevel - 1, 0);
@@ -117,14 +130,11 @@ void Settings::sfx() {
     }
 }
 
-void Settings::SettingsLogic(RenderWindow &window) {
+void Settings::SettingsLogic(RenderWindow& window) {
     if (!initialized) {
         // music part
         MusicVolumeLevel = (int)(GetMusicVolume() / 5.0f);
         EffectVolumeLevel = (int)(GetEffectVolume() / 5.0f);
-        // UI part
-        boxWidth = window.getSize().x * 0.4f;
-        boxHeight = window.getSize().y * 0.5f;
         initialized = true;
     }
 
@@ -135,7 +145,8 @@ void Settings::SettingsLogic(RenderWindow &window) {
         numSettingsCurPage = min(3, totalSetButtons - SelectPage * 3);
         inSettings = true;
         inGeneralSettings = true;
-    } else if (inGeneralSettings) {
+    }
+    else if (inGeneralSettings) {
 
         // Action in settings board
         // SelectSettings: 0 = Sound, 1 = Back to Menu, 2 = Exit Game
@@ -145,7 +156,8 @@ void Settings::SettingsLogic(RenderWindow &window) {
                 --SelectSettings;
                 if (SelectSettings < SelectPage * 3)
                     SelectSettings += numSettingsCurPage;
-            } else {
+            }
+            else {
                 ++SelectSettings;
                 if (SelectSettings == SelectPage * 3 + numSettingsCurPage)
                     SelectSettings = SelectPage * 3;
@@ -162,7 +174,8 @@ void Settings::SettingsLogic(RenderWindow &window) {
             int preSelectPage = SelectPage;
             if (keyBoard.Left()) {
                 SelectPage = max(SelectPage - 1, 0);
-            } else {
+            }
+            else {
                 SelectPage = min(SelectPage + 1, totalPage - 1);
             }
             if (preSelectPage != SelectPage) {
@@ -188,15 +201,49 @@ void Settings::SettingsLogic(RenderWindow &window) {
             inSetButtons[SelectSettings] = true;
             if (SelectSettings == IDSFX) { // sound settings submenu
                 IDSoundButtons = 0;
-            } else if (SelectSettings == IDEXITGAME) { // exit game
+            }
+            else if (SelectSettings == IDEXITGAME) { // exit game
                 window.close();
             }
             else if (SelectSettings == IDCHANGERESOLUTION) { // change resolutionm
                 tmp_idWindowSize = idWindowSize;
             }
+        }
+        else if (SelectSettings == IDCHANGENAME) { // change name submenu
+
+            IDNameButtons = 0;
+
+            isTypingName = false;
+
+            tmp_name = "";
+
+        }
+        else if (SelectSettings == IDCHANGEAVATAR) { // change avatar submenu
+            IDAvatarButtons = 0;
+            inAvatarSubmenu = true;
+            inAvatarBrowsingMode = false; // Start in player selection mode
+            // Load avatars if not already loaded
+            if (avatarTextures.empty()) {
+                loadAllAvatars();
+            }
+            // Set initial selection to current player's avatar
+            if (numberAvatar > 0) {
+                std::string currentPath = player1AvatarPath;
+                selectedAvatarIndex = 0; // Default to first if not found
+                for (int i = 0; i < avatarPaths.size(); ++i) {
+                    if (avatarPaths[i] == currentPath) {
+                        selectedAvatarIndex = i;
+                        break;
+                    }
+                }
+            }
+            else {
+                selectedAvatarIndex = -1;
+            }
             PlaySoundClick();
         }
-    } else // for specific submenu handling
+    }
+    else // for specific submenu handling
         if (inSetButtons[IDSFX]) { // Handle sound submenu navigation
             sfx();
             // Exit sound submenu on Esc
@@ -206,56 +253,64 @@ void Settings::SettingsLogic(RenderWindow &window) {
                 IDSoundButtons = 0;       // reset to mute/unmute
                 inGeneralSettings = true; // back to general settings
             }
-        } else if (inSetButtons[IDCHANGENAME]) { // change name
+        }
+        else if (inSetButtons[IDCHANGENAME]) { // change name
             if (!isTypingName) {
                 if (keyBoard.Esc()) {
                     PlaySoundClick();
                     inSetButtons[IDCHANGENAME] = false;
                     inGeneralSettings = true; // back to general settings
-                } else if (keyBoard.Up() ^ keyBoard.Down()) {
+                }
+                else if (keyBoard.Up() ^ keyBoard.Down()) {
                     IDNameButtons ^= 1;
                     PlaySoundClick();
-                } else if (keyBoard.Enter()) {
+                }
+                else if (keyBoard.Enter()) {
                     PlaySoundClick();
                     isTypingName = true;
                     tmp_name = "";
                 }
-            } else {
+            }
+            else {
                 if (keyBoard.Backspace()) {
                     if (!tmp_name.empty()) {
-						PlaySoundClick();
+                        PlaySoundClick();
                         tmp_name.pop_back();
                     }
-                } else if (keyBoard.Enter()) {
-					PlaySoundClick();
+                }
+                else if (keyBoard.Enter()) {
+                    PlaySoundClick();
                     playerName[IDNameButtons] = tmp_name;
                     isTypingName = false;
                     tmp_name = "";
-					SaveSettings(); // save settings when name changes
+                    SaveSettings(); // save settings when name changes
 
-                } else if (keyBoard.Esc()) {
-					PlaySoundClick();
+                }
+                else if (keyBoard.Esc()) {
+                    PlaySoundClick();
                     isTypingName = false;
                     tmp_name = "";
-                } else {
-					bool addedChar = false;
+                }
+                else {
+                    bool addedChar = false;
                     if (keyBoard.Shift()) {
                         for (char c = 'A'; c <= 'Z'; c++)
                             if (tmp_name.length() < MAX_LENGTH_NAME &&
                                 keyBoard.combineAlphabetCheck(c, true)) {
                                 tmp_name += c;
-								addedChar = true;
+                                addedChar = true;
                             }
-                    } else {
+                    }
+                    else {
                         for (char c = 'A'; c <= 'Z'; c++)
                             if (tmp_name.length() < MAX_LENGTH_NAME &&
                                 keyBoard.combineAlphabetCheck(c)) {
                                 tmp_name += (char)(c - 'A' + 'a');
-								addedChar = true;
+                                addedChar = true;
                             }
                     }
                     if (addedChar)
-						PlaySoundClick();
+                        PlaySoundClick();
                 }
             }
         }
@@ -291,12 +346,19 @@ void Settings::SettingsLogic(RenderWindow &window) {
                 }
             }
         }
+        else if (inSetButtons[IDCHANGEAVATAR]) { // change avatar submenu
+            changeAvatar();
+        }
 }
 
-void Settings::draw(RenderWindow &window) {
+void Settings::draw(RenderWindow& window) {
     // pre set up
-    const float winWidth = window.getSize().x;
-    const float winHeight = window.getSize().y;
+    float winWidth = window.getSize().x;
+    float winHeight = window.getSize().y;
+
+    // UI part
+    boxWidth = winWidth * 0.4f;
+    boxHeight = winHeight * 0.5f;
 
     // Draw settings menu
     RectangleShape bg(Vector2f(winWidth, winHeight));
@@ -308,7 +370,7 @@ void Settings::draw(RenderWindow &window) {
     settingsBox.setOutlineColor(Color::White);
     settingsBox.setOutlineThickness(winHeight * 0.003f);
     settingsBox.setPosition(winWidth / 2 - boxWidth / 2,
-                            winHeight / 2 - boxHeight / 2);
+        winHeight / 2 - boxHeight / 2);
     window.draw(settingsBox);
 
     Text titleText;
@@ -318,66 +380,69 @@ void Settings::draw(RenderWindow &window) {
     titleText.setFillColor(Color::Yellow);
     FloatRect titleBounds = titleText.getLocalBounds();
     titleText.setPosition(window.getSize().x / 2 - titleBounds.width / 2,
-                          winHeight / 2 - boxHeight / 2 + winHeight * 0.03f);
+        winHeight / 2 - boxHeight / 2 + winHeight * 0.03f);
     window.draw(titleText);
 
     // draw page
     Text pageText;
     pageText.setFont(font);
     pageText.setString("Page " + to_string(SelectPage + 1) + "/" +
-                       to_string(totalPage));
+        to_string(totalPage));
     pageText.setCharacterSize((int)(winHeight * 0.03f));
     pageText.setStyle(Text::Italic);
     pageText.setFillColor(Color(120, 158, 158));
     FloatRect pageBounds = pageText.getLocalBounds();
     pageText.setOrigin(pageBounds.width / 2, pageBounds.height / 2);
     pageText.setPosition(winWidth / 2 + boxWidth / 2 - boxWidth * 0.125,
-                         winHeight / 2 + boxHeight / 2 - boxHeight * 0.07f);
+        winHeight / 2 + boxHeight / 2 - boxHeight * 0.07f);
     window.draw(pageText);
 
     // draw buttons
     SettingButtons(window);
 }
 
-void Settings::SettingButtons(RenderWindow &window) {
+void Settings::SettingButtons(RenderWindow& window) {
     // window size
-    static float winWidth = window.getSize().x;
-    static float winHeight = window.getSize().y;
+    float winWidth = window.getSize().x;
+    float winHeight = window.getSize().y;
 
     // fixed size and indentations
-    static float startY = winHeight / 2 - boxHeight / 2 + winHeight * 0.12f;
-    static float buttonHeight = winHeight * 0.06f;
-    static float buttonWidth = boxWidth * 0.75f;
-    static float buttonSpacing = winHeight * 0.12f;
-    static float outlineThick = winHeight * 0.004f;
-    static float outlineThickSelected = winHeight * 0.006f;
+    float startY = winHeight / 2 - boxHeight / 2 + winHeight * 0.12f;
+    float buttonHeight = winHeight * 0.06f;
+    float buttonWidth = boxWidth * 0.75f;
+    float buttonSpacing = winHeight * 0.12f;
+    float outlineThick = winHeight * 0.004f;
+    float outlineThickSelected = winHeight * 0.006f;
 
     // draw general settings buttons
     if (inGeneralSettings || !inSettings) { // fix auto enter issue
         for (int IDButton = SelectPage * 3, cntBut = 0; cntBut < numSettingsCurPage;
-             ++IDButton, ++cntBut) {
+            ++IDButton, ++cntBut) {
             generalSettingsBox(window, IDButton, cntBut);
         }
-    } else // draw specific settings
+    }
+    else // draw specific settings
         if (inSetButtons[IDSFX]) { // change sound effect
             // draw sound setting
             generalSettingsBox(window, IDSFX, 0); // highlight Sound button
             subSoundSettingBox(window);
-        } else if (inSetButtons[IDCHANGENAME]) { // change name
+        }
+        else if (inSetButtons[IDCHANGENAME]) { // change name
             if (isTypingName) {
                 string display_name = tmp_name;
                 if (display_name.empty())
                     display_name = " ";
                 generalSettingsBox(window, IDCHANGENAME, 0, "Typing: " + display_name,
-                                   1);
+                    1);
                 generalSettingsBox(window, IDCHANGENAME, 1, "Press Enter to confirm",
-                                   0);
+                    0);
                 generalSettingsBox(window, IDCHANGENAME, 2, "Press Esc to cancel", 0);
-            } else {
+            }
+            else {
                 generalSettingsBox(window, IDCHANGENAME, 0, playerName[0],
-                                   IDNameButtons == 0); // highlight Change Name button
+                    IDNameButtons == 0); // highlight Change Name button
                 generalSettingsBox(window, IDCHANGENAME, 1, playerName[1],
-                                   IDNameButtons == 1); // highlight Change Name button
+                    IDNameButtons == 1); // highlight Change Name button
             }
         }
         else if (inSetButtons[IDCHANGERESOLUTION]) { // change resolution
@@ -387,6 +452,12 @@ void Settings::SettingButtons(RenderWindow &window) {
             generalSettingsBox(window, IDCHANGERESOLUTION, 0, display_res, 1);
             generalSettingsBox(window, IDCHANGERESOLUTION, 1, "Press Enter to confirm", 0);
             generalSettingsBox(window, IDCHANGERESOLUTION, 2, "Press W & S to change", 0);
+        }
+        else if (inSetButtons[IDCHANGEAVATAR]) {
+            // Highlight Change Avatar button
+            generalSettingsBox(window, IDCHANGEAVATAR, 0);
+            // Draw avatar selection UI
+            drawAvatarChangeBox(window);
         }
 
     // others
@@ -400,37 +471,38 @@ void Settings::SettingButtons(RenderWindow &window) {
         muteText.setCharacterSize((int)(winHeight * 0.03f));
         if (inSoundSubmenu && IDSoundButtons == 0) {
             muteText.setFillColor(Color::Yellow);
-        } else {
+        }
+        else {
             muteText.setFillColor(isNotMuted ? Color(100, 200, 100)
-                                             : Color(200, 100, 100));
+                : Color(200, 100, 100));
         }
         FloatRect muteTextBounds = muteText.getLocalBounds();
         float muteX = winWidth / 2 + boxWidth * 0.375f - muteTextBounds.width -
-                      winWidth * 0.005f;
+            winWidth * 0.005f;
         muteText.setPosition(muteX,
-                             startY + buttonHeight / 2 - muteTextBounds.height / 2);
+            startY + buttonHeight / 2 - muteTextBounds.height / 2);
         window.draw(muteText);
     }
 }
 
-void Settings::generalSettingsBox(RenderWindow &window, int IDButton, int row,
-                                  string contextString, int selectedC) {
+void Settings::generalSettingsBox(RenderWindow& window, int IDButton, int row,
+    string contextString, int selectedC) {
     bool selected = false;
     if ((selectedC != -1 && selectedC == 1) ||
         (selectedC == -1 && SelectSettings == IDButton))
         selected = true;
 
     // window size
-    static float winWidth = window.getSize().x;
-    static float winHeight = window.getSize().y;
+    float winWidth = window.getSize().x;
+    float winHeight = window.getSize().y;
 
     // fixed size and indentations
-    static float startY = winHeight / 2 - boxHeight / 2 + winHeight * 0.12f;
-    static float buttonHeight = winHeight * 0.06f;
-    static float buttonWidth = boxWidth * 0.75f;
-    static float buttonSpacing = winHeight * 0.12f;
-    static float outlineThick = winHeight * 0.004f;
-    static float outlineThickSelected = winHeight * 0.006f;
+    float startY = winHeight / 2 - boxHeight / 2 + winHeight * 0.12f;
+    float buttonHeight = winHeight * 0.06f;
+    float buttonWidth = boxWidth * 0.75f;
+    float buttonSpacing = winHeight * 0.12f;
+    float outlineThick = winHeight * 0.004f;
+    float outlineThickSelected = winHeight * 0.006f;
 
     // Box for each button
     RectangleShape buttonBox(Vector2f(buttonWidth, buttonHeight));
@@ -438,26 +510,26 @@ void Settings::generalSettingsBox(RenderWindow &window, int IDButton, int row,
     buttonBox.setOutlineColor(selected ? Color::Yellow : Color::White);
     buttonBox.setOutlineThickness(selected ? outlineThickSelected : outlineThick);
     buttonBox.setPosition(winWidth / 2 - boxWidth * 0.375f,
-                          startY + buttonSpacing * row);
+        startY + buttonSpacing * row);
 
     // Button text (centered)
     Text buttonText;
     buttonText.setFont(font);
     buttonText.setString(contextString.empty() ? contextSetButtons[IDButton]
-                                               : contextString);
+        : contextString);
     buttonText.setCharacterSize((int)(winHeight * 0.04f));
     buttonText.setFillColor(selected ? Color::Yellow : Color::White);
 
     FloatRect buttonTextBounds = buttonText.getLocalBounds();
     buttonText.setPosition(winWidth / 2 - buttonTextBounds.width / 2,
-                           startY + buttonSpacing * row + buttonHeight / 2 -
-                               buttonTextBounds.height / 2 - winHeight * 0.01f);
+        startY + buttonSpacing * row + buttonHeight / 2 -
+        buttonTextBounds.height / 2 - winHeight * 0.01f);
 
     window.draw(buttonBox);
     window.draw(buttonText);
 }
 
-void Settings::subSoundSettingBox(RenderWindow &window) {
+void Settings::subSoundSettingBox(RenderWindow& window) {
     float winHeight = window.getSize().y;
     float winWidth = window.getSize().x;
 
@@ -473,27 +545,27 @@ void Settings::subSoundSettingBox(RenderWindow &window) {
     // Music Volume Box
     RectangleShape MusicSettingBox(Vector2f(volBoxwidth, volBoxHeight));
     MusicSettingBox.setFillColor((IDSoundButtons == 1) ? Color(100, 150, 200)
-                                                       : Color(70, 70, 70));
+        : Color(70, 70, 70));
     MusicSettingBox.setOutlineColor((IDSoundButtons == 1) ? Color::Yellow
-                                                          : Color::White);
+        : Color::White);
     float outlineThick = winHeight * 0.003f;         // line while not selected
     float outlineThickSelected = winHeight * 0.005f; // line when selected
     MusicSettingBox.setOutlineThickness(
         (IDSoundButtons == 1) ? outlineThickSelected : outlineThick);
     MusicSettingBox.setPosition(window.getSize().x / 2 - boxWidth * 0.375f,
-                                volBoxY);
+        volBoxY);
     window.draw(MusicSettingBox);
 
     // Music Volume Text
     Text musicText;
     musicText.setFont(font);
     musicText.setString("Music Volume: " + std::to_string(MusicVolumeLevel * 5) +
-                        "%");
+        "%");
     musicText.setCharacterSize((int)(winHeight * 0.02f));
     musicText.setFillColor((IDSoundButtons == 1) ? Color::Yellow : Color::White);
     FloatRect musicTextBounds = musicText.getLocalBounds();
     musicText.setPosition(window.getSize().x / 2 - musicTextBounds.width / 2,
-                          volBoxY + winHeight * 0.0065f);
+        volBoxY + winHeight * 0.0065f);
     window.draw(musicText);
 
     // Music Volume Bar Background
@@ -513,7 +585,7 @@ void Settings::subSoundSettingBox(RenderWindow &window) {
     float musicFillWidth = barWidth * (MusicVolumeLevel / 20.0f);
     RectangleShape musicBarFill(Vector2f(musicFillWidth, barHeight));
     musicBarFill.setFillColor((IDSoundButtons == 1) ? Color(100, 200, 100)
-                                                    : Color(50, 150, 50));
+        : Color(50, 150, 50));
     musicBarFill.setPosition(barX, barY);
     window.draw(musicBarFill);
 
@@ -521,13 +593,13 @@ void Settings::subSoundSettingBox(RenderWindow &window) {
     float effectBoxY = volBoxY + volBoxHeight + spacing;
     RectangleShape EffectSettingBox(Vector2f(volBoxwidth, volBoxHeight));
     EffectSettingBox.setFillColor((IDSoundButtons == 2) ? Color(100, 150, 200)
-                                                        : Color(70, 70, 70));
+        : Color(70, 70, 70));
     EffectSettingBox.setOutlineColor((IDSoundButtons == 2) ? Color::Yellow
-                                                           : Color::White);
+        : Color::White);
     EffectSettingBox.setOutlineThickness(
         (IDSoundButtons == 2) ? outlineThickSelected : outlineThick);
     EffectSettingBox.setPosition(window.getSize().x / 2 - boxWidth * 0.375f,
-                                 effectBoxY);
+        effectBoxY);
     window.draw(EffectSettingBox);
 
     // Effect Volume Text
@@ -539,7 +611,7 @@ void Settings::subSoundSettingBox(RenderWindow &window) {
     effectText.setFillColor((IDSoundButtons == 2) ? Color::Yellow : Color::White);
     FloatRect effectTextBounds = effectText.getLocalBounds();
     effectText.setPosition(window.getSize().x / 2 - effectTextBounds.width / 2,
-                           effectBoxY + winHeight * 0.0065f);
+        effectBoxY + winHeight * 0.0065f);
     window.draw(effectText);
 
     // Effect Volume Bar Background
@@ -554,9 +626,306 @@ void Settings::subSoundSettingBox(RenderWindow &window) {
     float effectFillWidth = barWidth * (EffectVolumeLevel / 20.0f);
     RectangleShape effectBarFill(Vector2f(effectFillWidth, barHeight));
     effectBarFill.setFillColor((IDSoundButtons == 2) ? Color(100, 200, 100)
-                                                     : Color(50, 150, 50));
+        : Color(50, 150, 50));
     effectBarFill.setPosition(barX, effectBoxY + winHeight * 0.035f);
     window.draw(effectBarFill);
+}
+
+void Settings::loadAllAvatars() {
+    avatarTextures.clear();
+    avatarSprites.clear();
+    avatarPaths.clear();
+
+    std::string folderPath = "assets/image/Avatar/"; // path to avatar folder
+    std::string searchPath = folderPath + "*.*"; // find all files
+
+    WIN32_FIND_DATAA findData; // Use A version for std::string (ANSI)
+    HANDLE hFind = FindFirstFileA(searchPath.c_str(), &findData);
+
+    int i = 0;
+
+    if (hFind != INVALID_HANDLE_VALUE) {
+        do {
+            // Skip current (.) and parent (..) directories
+            std::string fileName = findData.cFileName;
+            if (fileName == "." || fileName == "..")
+                continue;
+
+            // check file extension
+            // If you are sure the folder only contains images, this check is not too strict
+            if (fileName.find(".png") != std::string::npos ||
+                fileName.find(".jpg") != std::string::npos ||
+                fileName.find(".gif") != std::string::npos) {
+
+                std::string fullPath = folderPath + fileName;
+                sf::Texture tex;
+
+                if (tex.loadFromFile(fullPath)) {
+                    avatarTextures.push_back(tex);
+                    avatarPaths.push_back(fullPath); // Store the path
+
+                    sf::Sprite sprite;
+                    sprite.setTexture(avatarTextures.back());
+                    avatarSprites.push_back(sprite);
+                    i++;
+                }
+            }
+        } while (FindNextFileA(hFind, &findData));
+
+        FindClose(hFind);
+    }
+    else {
+        std::cerr << "Cannot find the directory: " << folderPath << std::endl;
+    }
+
+    numberAvatar = avatarTextures.size(); // Update total number of avatars
+}
+
+void Settings::changeAvatar() {
+    // Load avatars if not already loaded
+    if (avatarTextures.empty()) {
+        loadAllAvatars();
+    }
+
+    // If no avatars found, return
+    if (avatarTextures.empty()) {
+        return;
+    }
+
+    if (!inAvatarBrowsingMode) {
+        // Player selection mode - only Up/Down works
+        if (keyBoard.Up() ^ keyBoard.Down()) {
+            int oldPlayer = IDAvatarButtons;
+            IDAvatarButtons ^= 1; // Toggle between 0 and 1
+            PlaySoundClick();
+
+            // Update selected avatar to show current player's avatar
+            if (numberAvatar > 0) {
+                std::string currentPath =
+                    (IDAvatarButtons == 0) ? player1AvatarPath : player2AvatarPath;
+                selectedAvatarIndex = 0; // Default to first if not found
+                for (int i = 0; i < avatarPaths.size(); ++i) {
+                    if (avatarPaths[i] == currentPath) {
+                        selectedAvatarIndex = i;
+                        break;
+                    }
+                }
+            }
+        }
+
+        // Enter avatar browsing mode with Enter
+        if (keyBoard.Enter()) {
+            inAvatarBrowsingMode = true;
+            PlaySoundClick();
+        }
+    }
+    else {
+        // Avatar browsing mode - Left/Right to browse, Enter to confirm
+        if (keyBoard.Left() ^ keyBoard.Right()) {
+            if (keyBoard.Left()) {
+                --selectedAvatarIndex;
+                if (selectedAvatarIndex < 0)
+                    selectedAvatarIndex = numberAvatar - 1;
+            }
+            else {
+                ++selectedAvatarIndex;
+                if (selectedAvatarIndex >= numberAvatar)
+                    selectedAvatarIndex = 0;
+            }
+            PlaySoundClick();
+        }
+
+        // Confirm avatar selection with Enter
+        if (keyBoard.Enter()) {
+            if (selectedAvatarIndex >= 0 &&
+                selectedAvatarIndex < avatarPaths.size()) {
+                if (IDAvatarButtons == 0) { // Player 1
+                    player1AvatarPath = avatarPaths[selectedAvatarIndex];
+                    // Update boardgame immediately if it's loaded
+                    if (boardGame.player1PhotoLoaded) {
+                        boardGame.player1PhotoLoaded = false;
+                    }
+                }
+                else { // Player 2
+                    player2AvatarPath = avatarPaths[selectedAvatarIndex];
+                    // Update boardgame immediately if it's loaded
+                    if (boardGame.player2PhotoLoaded) {
+                        boardGame.player2PhotoLoaded = false;
+                    }
+                }
+                PlaySoundClick();
+                SaveSettings(); // Save the new avatar selection
+                // Return to player selection mode
+                inAvatarBrowsingMode = false;
+            }
+        }
+    }
+
+    // Exit avatar browsing mode back to player selection with Esc (if in browsing
+    // mode) Or exit avatar submenu completely if in player selection mode
+    if (keyBoard.Esc()) {
+        PlaySoundClick();
+        if (inAvatarBrowsingMode) {
+            // Go back to player selection mode
+            inAvatarBrowsingMode = false;
+        }
+        else {
+            // Exit avatar submenu completely
+            inSetButtons[IDCHANGEAVATAR] = false;
+            inAvatarSubmenu = false;
+            inGeneralSettings = true; // Back to general settings
+            selectedAvatarIndex = -1;
+        }
+    }
+}
+
+void Settings::drawAvatarChangeBox(RenderWindow& window) {
+    float winWidth = window.getSize().x;
+    float winHeight = window.getSize().y;
+
+    // Draw background panel
+    RectangleShape panel(Vector2f(boxWidth * 1.5f, boxHeight * 1.2f));
+    panel.setFillColor(Color(50, 50, 50, 240));
+    panel.setOutlineColor(Color::White);
+    panel.setOutlineThickness(winHeight * 0.003f);
+    panel.setPosition(winWidth / 2 - boxWidth * 0.75f,
+        winHeight / 2 - boxHeight * 0.6f);
+    window.draw(panel);
+
+    // Title
+    Text titleText;
+    titleText.setFont(font);
+    titleText.setString("Change Avatar");
+    titleText.setCharacterSize((int)(winHeight * 0.05f));
+    titleText.setFillColor(Color::Yellow);
+    FloatRect titleBounds = titleText.getLocalBounds();
+    titleText.setPosition(winWidth / 2 - titleBounds.width / 2,
+        winHeight / 2 - boxHeight * 0.55f + winHeight * 0.03f);
+    window.draw(titleText);
+
+    // New layout: Player labels on left, selected avatar on left, grid on right
+    float contentStartY = winHeight / 2 - boxHeight * 0.55f + winHeight * 0.12f;
+    float leftSideX = winWidth / 2 - boxWidth * 0.5f + boxWidth * 0.15f;
+    float rightSideX = winWidth / 2 + boxWidth * 0.1f;
+    float spacing = winHeight * 0.05f;
+
+    // Draw player labels on the left (P1 and P2)
+    float playerLabelY = contentStartY;
+    float labelHeight = winHeight * 0.05f;
+
+    // Player 1 label
+    Text player1Label;
+    player1Label.setFont(font);
+    player1Label.setString("Player 1");
+    player1Label.setCharacterSize((int)(winHeight * 0.04f));
+    player1Label.setFillColor((IDAvatarButtons == 0 && !inAvatarBrowsingMode)
+        ? Color::Yellow
+        : Color::White);
+    FloatRect p1LabelBounds = player1Label.getLocalBounds();
+    player1Label.setPosition(leftSideX, playerLabelY);
+    window.draw(player1Label);
+
+    // Player 2 label
+    Text player2Label;
+    player2Label.setFont(font);
+    player2Label.setString("Player 2");
+    player2Label.setCharacterSize((int)(winHeight * 0.04f));
+    player2Label.setFillColor((IDAvatarButtons == 1 && !inAvatarBrowsingMode)
+        ? Color::Yellow
+        : Color::White);
+    FloatRect p2LabelBounds = player2Label.getLocalBounds();
+    player2Label.setPosition(leftSideX, playerLabelY + labelHeight + spacing);
+    window.draw(player2Label);
+
+    // Draw selected avatar preview on the left side (below player labels)
+    float selectedAvatarY = playerLabelY + (labelHeight + spacing) * 2;
+    float selectedAvatarSize = min(winHeight * 0.2f, boxWidth * 0.25f);
+    float previewX = leftSideX;
+
+    if (!avatarSprites.empty() && selectedAvatarIndex >= 0 &&
+        selectedAvatarIndex < avatarSprites.size()) {
+        // Draw preview box
+        RectangleShape previewBox(
+            Vector2f(selectedAvatarSize + 20, selectedAvatarSize + 20));
+        previewBox.setFillColor(Color(30, 30, 30));
+        previewBox.setOutlineColor(inAvatarBrowsingMode ? Color::Yellow
+            : Color::White);
+        previewBox.setOutlineThickness(inAvatarBrowsingMode ? 4 : 2);
+        previewBox.setPosition(previewX - 10, selectedAvatarY - 10);
+        window.draw(previewBox);
+
+        // Draw the selected avatar - use texture directly to avoid copy issues
+        sf::Vector2u texSize = avatarTextures[selectedAvatarIndex].getSize();
+        float scaleX = selectedAvatarSize / texSize.x;
+        float scaleY = selectedAvatarSize / texSize.y;
+        float scale = min(scaleX, scaleY);
+
+        sf::Sprite previewSprite;
+        previewSprite.setTexture(avatarTextures[selectedAvatarIndex]);
+        previewSprite.setScale(scale, scale);
+        float spriteX = previewX + (selectedAvatarSize - texSize.x * scale) / 2;
+        float spriteY =
+            selectedAvatarY + (selectedAvatarSize - texSize.y * scale) / 2;
+        previewSprite.setPosition(spriteX, spriteY);
+        window.draw(previewSprite);
+
+        // Show selection info below preview
+        Text selectionText;
+        selectionText.setFont(font);
+        selectionText.setString("Avatar " + to_string(selectedAvatarIndex + 1) +
+            " / " + to_string(numberAvatar));
+        selectionText.setCharacterSize((int)(winHeight * 0.025f));
+        selectionText.setFillColor(Color(200, 200, 200));
+        FloatRect selBounds = selectionText.getLocalBounds();
+        selectionText.setPosition(previewX + selectedAvatarSize / 2 -
+            selBounds.width / 2,
+            selectedAvatarY + selectedAvatarSize + 15);
+        window.draw(selectionText);
+    }
+
+    // Draw avatar grid on the right side (always visible, not just in browsing
+    // mode)
+    if (!avatarSprites.empty() && selectedAvatarIndex >= 0 &&
+        selectedAvatarIndex < avatarSprites.size()) {
+        float gridY = contentStartY;
+        float gridAvatarSize = min(winHeight * 0.1f, boxWidth * 0.12f);
+        float gridSpacing = gridAvatarSize * 0.2f;
+        int avatarsPerRow = 4;
+        float totalGridWidth =
+            avatarsPerRow * gridAvatarSize + (avatarsPerRow - 1) * gridSpacing;
+
+        // Draw avatar grid
+        for (int i = 0; i < avatarSprites.size() && i < 12; ++i) {
+            int row = i / avatarsPerRow;
+            int col = i % avatarsPerRow;
+            float x = rightSideX + col * (gridAvatarSize + gridSpacing);
+            float y = gridY + row * (gridAvatarSize + gridSpacing);
+
+            // Draw box for each avatar
+            RectangleShape avatarBox(
+                Vector2f(gridAvatarSize + 4, gridAvatarSize + 4));
+            avatarBox.setFillColor(Color(30, 30, 30));
+            avatarBox.setOutlineColor((i == selectedAvatarIndex) ? Color::Yellow
+                : Color::White);
+            avatarBox.setOutlineThickness((i == selectedAvatarIndex) ? 3 : 1);
+            avatarBox.setPosition(x - 2, y - 2);
+            window.draw(avatarBox);
+
+            // Scale sprite to fit
+            sf::Vector2u texSize = avatarTextures[i].getSize();
+            float scaleX = gridAvatarSize / texSize.x;
+            float scaleY = gridAvatarSize / texSize.y;
+            float scale = min(scaleX, scaleY);
+
+            sf::Sprite gridSprite;
+            gridSprite.setTexture(avatarTextures[i]);
+            gridSprite.setScale(scale, scale);
+            float spriteX = x + (gridAvatarSize - texSize.x * scale) / 2;
+            float spriteY = y + (gridAvatarSize - texSize.y * scale) / 2;
+            gridSprite.setPosition(spriteX, spriteY);
+            window.draw(gridSprite);
+        }
+    }
 }
 
 void Settings::SaveSettings() {
@@ -570,19 +939,21 @@ void Settings::SaveSettings() {
     file << "isNotMuted=" << (isNotMuted ? "1" : "0") << std::endl;
     file << "MusicVolumeLevel=" << MusicVolumeLevel << std::endl;
     file << "EffectVolumeLevel=" << EffectVolumeLevel << std::endl;
-	file << "confirmedNameFirstTime=" << confirmedNameFirstTime << std::endl;
-	file << "Player1Name=" << playerName[0] << std::endl;
-	file << "Player2Name=" << playerName[1] << std::endl;
-	file << "ResolutionID=" << idWindowSize << std::endl;
+    file << "confirmedNameFirstTime=" << confirmedNameFirstTime << std::endl;
+    file << "Player1Name=" << playerName[0] << std::endl;
+    file << "Player2Name=" << playerName[1] << std::endl;
+    file << "ResolutionID=" << idWindowSize << std::endl;
+    file << "Player1Avatar=" << player1AvatarPath << std::endl;
+    file << "Player2Avatar=" << player2AvatarPath << std::endl;
 
     file.close();
 }
 
-void Settings::LoadSettings(RenderWindow &window) {
+void Settings::LoadSettings(RenderWindow& window) {
     std::ifstream file("assets/setting_save&load/settings.txt");
     if (!file.is_open()) {
         std::cout << "Settings file not found. Using default settings."
-                  << std::endl;
+            << std::endl;
         return;
     }
 
@@ -590,10 +961,12 @@ void Settings::LoadSettings(RenderWindow &window) {
     bool loadedIsNotMuted = isNotMuted; // default value
     int loadedMusicVolume = MusicVolumeLevel;
     int loadedEffectVolume = EffectVolumeLevel;
-	bool loadedConfirmedNameFirstTime = confirmedNameFirstTime;
-	string loadedPlayer1Name = playerName[0];
-	string loadedPlayer2Name = playerName[1];
+    bool loadedConfirmedNameFirstTime = confirmedNameFirstTime;
+    string loadedPlayer1Name = playerName[0];
+    string loadedPlayer2Name = playerName[1];
     int loadedIDWindowSize = idWindowSize;
+    std::string loadedPlayer1Avatar = player1AvatarPath;
+    std::string loadedPlayer2Avatar = player2AvatarPath;
 
     std::string line;
     while (std::getline(file, line)) {
@@ -606,30 +979,38 @@ void Settings::LoadSettings(RenderWindow &window) {
 
         if (key == "isNotMuted") {
             loadedIsNotMuted = (value == "1");
-        } else if (key == "MusicVolumeLevel") {
+        }
+        else if (key == "MusicVolumeLevel") {
             try {
                 int vol = std::stoi(value);
                 loadedMusicVolume = max(0, min(20, vol));
-            } catch (...) {
+            }
+            catch (...) {
                 // Invalid value, skip
             }
-        } else if (key == "EffectVolumeLevel") {
+        }
+        else if (key == "EffectVolumeLevel") {
             try {
                 int vol = std::stoi(value);
                 loadedEffectVolume = max(0, min(20, vol));
-            } catch (...) {
+            }
+            catch (...) {
                 // Invalid value, skip
             }
-		} else if (key == "confirmedNameFirstTime") {
+        }
+        else if (key == "confirmedNameFirstTime") {
             try {
                 loadedConfirmedNameFirstTime = (value == "1");
-            } catch (...) {
+            }
+            catch (...) {
                 // Invalid value, skip
-			}
-        } else if (key == "Player1Name") {
-			loadedPlayer1Name = value;
-        } else if (key == "Player2Name") {
-			loadedPlayer2Name = value;
+            }
+        }
+        else if (key == "Player1Name") {
+            loadedPlayer1Name = value;
+        }
+        else if (key == "Player2Name") {
+            loadedPlayer2Name = value;
         }
         else if (key == "ResolutionID") {
             // chuyen doi xau thanh so nguyen
@@ -638,6 +1019,12 @@ void Settings::LoadSettings(RenderWindow &window) {
                 loadedIDWindowSize *= 10;
                 loadedIDWindowSize += value[i] - '0';
             }
+        }
+        else if (key == "Player1Avatar") {
+            loadedPlayer1Avatar = value;
+        }
+        else if (key == "Player2Avatar") {
+            loadedPlayer2Avatar = value;
         }
     }
 
@@ -656,8 +1043,8 @@ void Settings::LoadSettings(RenderWindow &window) {
 
     // apply name
     confirmedNameFirstTime = loadedConfirmedNameFirstTime;
-	playerName[0] = loadedPlayer1Name;
-	playerName[1] = loadedPlayer2Name;
+    playerName[0] = loadedPlayer1Name;
+    playerName[1] = loadedPlayer2Name;
 
     // apply new resolution
     if (loadedIDWindowSize != idWindowSize) {
@@ -666,5 +1053,9 @@ void Settings::LoadSettings(RenderWindow &window) {
             "Caro Game!",
             Style::Close);
     }
+
+    // apply avatar paths
+    player1AvatarPath = loadedPlayer1Avatar;
+    player2AvatarPath = loadedPlayer2Avatar;
 
 }
