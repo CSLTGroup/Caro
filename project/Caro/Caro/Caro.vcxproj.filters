@@ -84,6 +84,9 @@
     <ClCompile Include="firsttimeplaying\firsttimeplaying.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="savegame\savegame.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="keyboard\keyboard.h">
@@ -117,6 +120,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="firsttimeplaying\firsttimeplaying.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="savegame\savegame.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
