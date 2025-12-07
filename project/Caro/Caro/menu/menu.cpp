@@ -1,11 +1,6 @@
 #include "../global.h"
 void Menu::draw(RenderWindow& window) {
 
-    if (stateMenu == ID) {
-        awaitingModeSelection = true;
-        modeButtons.clear();
-    }
-
     //make new buttons if not exist
     if (!listButton.size()) {
         listButton.assign(3, Button());
@@ -20,6 +15,20 @@ void Menu::draw(RenderWindow& window) {
         listButton[newGameID].selected = true;
         stateMenu = ID;
     }
+
+    // draw background image
+    Texture bgImg;
+    bgImg.loadFromFile("assets/image/backgroundapex.png");
+    Sprite spriteBgImg(bgImg);
+    sf::Vector2u textureSize = bgImg.getSize();
+    sf::Vector2u windowSize = window.getSize();
+    float scaleX = (float)windowSize.x / textureSize.x;
+    float scaleY = (float)windowSize.y / textureSize.y;
+
+    spriteBgImg.setScale(scaleX, scaleY);
+    spriteBgImg.setPosition(0, 0);
+    
+    window.draw(spriteBgImg);
 
     // size menu
     width = window.getSize().x * 80 / 100;
@@ -60,6 +69,9 @@ void Menu::updateState(RenderWindow& window) {
         menuName_for_firstTimeLogic(window);
     }
     else if (stateMenu == ID) {
+        awaitingModeSelection = true;
+        modeButtons.clear();
+
         if (keyBoard.Up() ^ keyBoard.Down()) {
             listButton[selectedButton].selected = false;
 

@@ -17,7 +17,6 @@ static const int ID = 0;
 
 // username variables
 static string tmp_name = "";
-static bool isTypingName = false; // track if we're currently typing a name
 static const int MAX_LENGTH_NAME = 14;
 bool confirmedNameFirstTime = false;
 
@@ -33,65 +32,49 @@ void menuName_for_firstTimeLogic(RenderWindow& window) {
     if (!initialized) {
         SelectPage = 0;
         numSettingsCurPage = min(3, totalSetButtons - SelectPage * 3);
-		boxWidth = window.getSize().x * 0.5f;
-        boxHeight = window.getSize().y * 0.5f;
 		initialized = true;
-		isTypingName = false;
     }
-    if (!isTypingName) { // exit game
-        if (keyBoard.Esc()) {
-            PlaySoundClick();
-			initialized = false;
-            window.close();
+    if (keyBoard.Esc()) {
+        PlaySoundClick();
+		initialized = false;
+        window.close();
+    }
+    else if (keyBoard.Backspace()) {
+        if (!tmp_name.empty()) {
+            tmp_name.pop_back();
+			PlaySoundClick();
         }
-        else if (keyBoard.Enter()) {
-            PlaySoundClick();
-            isTypingName = true;
-            tmp_name = "";
-        }
+    }
+    else if (keyBoard.Enter()) {
+        if (tmp_name.empty())
+            tmp_name = "Player";
+        playerName[ID] = tmp_name;
+        tmp_name = "";
+        confirmedNameFirstTime = true;
+		stateMenu = 0; // go to main menu
+        setting.SaveSettings();
+		PlaySoundClick();
     }
     else {
-        if (keyBoard.Backspace()) {
-            if (!tmp_name.empty()) {
-                tmp_name.pop_back();
-				PlaySoundClick();
-            }
-        }
-        else if (keyBoard.Enter()) {
-            playerName[ID] = tmp_name;
-            isTypingName = false;
-            tmp_name = "";
-            confirmedNameFirstTime = true;
-			stateMenu = 0; // go to main menu
-            setting.SaveSettings();
-			PlaySoundClick();
-        }
-        else if (keyBoard.Esc()) {
-            isTypingName = false;
-            tmp_name = "";
-			PlaySoundClick();
+        bool addedChar = false;
+        if (keyBoard.Shift()) {
+            for (char c = 'A'; c <= 'Z'; c++)
+                if (tmp_name.length() < MAX_LENGTH_NAME &&
+                    keyBoard.combineAlphabetCheck(c, true)) {
+                    tmp_name += c;
+                    addedChar = true;
+                }
         }
         else {
-            bool addedChar = false;
-            if (keyBoard.Shift()) {
-                for (char c = 'A'; c <= 'Z'; c++)
-                    if (tmp_name.length() < MAX_LENGTH_NAME &&
-                        keyBoard.combineAlphabetCheck(c, true)) {
-                        tmp_name += c;
-                        addedChar = true;
-                    }
-            }
-            else {
-                for (char c = 'A'; c <= 'Z'; c++)
-                    if (tmp_name.length() < MAX_LENGTH_NAME &&
-                        keyBoard.combineAlphabetCheck(c)) {
-                        tmp_name += (char)(c - 'A' + 'a');
-                        addedChar = true;
-                    }
-            }
-            if (addedChar)
-                PlaySoundClick();
+            for (char c = 'A'; c <= 'Z'; c++)
+                if (tmp_name.length() < MAX_LENGTH_NAME &&
+                    keyBoard.combineAlphabetCheck(c)) {
+                    tmp_name += (char)(c - 'A' + 'a');
+                    addedChar = true;
+                }
         }
+        if (addedChar)
+            PlaySoundClick();
     }
 }
 
@@ -100,6 +83,9 @@ void drawMenuName_for_firstTime(RenderWindow& window) {
     // pre set up
     const float winWidth = window.getSize().x;
     const float winHeight = window.getSize().y;
+
+    boxWidth = winWidth * 0.5f;
+    boxHeight = winHeight * 0.5f;
 
     // Draw settings menu
     RectangleShape bg(Vector2f(winWidth, winHeight));
@@ -129,33 +115,25 @@ void drawMenuName_for_firstTime(RenderWindow& window) {
 
 void drawButtons(RenderWindow& window) {
     // window size
-    static float winWidth = window.getSize().x;
-    static float winHeight = window.getSize().y;
+    const float winWidth = window.getSize().x;
+    const float winHeight = window.getSize().y;
 
     // fixed size and indentations
-    static float startY = winHeight / 2 - boxHeight / 2 + winHeight * 0.12f;
-    static float buttonHeight = winHeight * 0.06f;
-    static float buttonWidth = boxWidth * 0.75f;
-    static float buttonSpacing = winHeight * 0.12f;
-    static float outlineThick = winHeight * 0.004f;
-    static float outlineThickSelected = winHeight * 0.006f;
+    float startY = winHeight / 2 - boxHeight / 2 + winHeight * 0.12f;
+    float buttonHeight = winHeight * 0.06f;
+    float buttonWidth = boxWidth * 0.75f;
+    float buttonSpacing = winHeight * 0.12f;
+    float outlineThick = winHeight * 0.004f;
+    float outlineThickSelected = winHeight * 0.006f;
 
     // draw general settings buttons
-    if (!isTypingName) { // fix auto enter issue
-        for (int IDButton = SelectPage * 3, cntBut = 0; cntBut < numSettingsCurPage;
-            ++IDButton, ++cntBut) {
-            generalSettingsBox(window, IDButton, cntBut);
-        }
-    }
-    else {
-        string display_name = tmp_name;
-        if (display_name.empty())
-            display_name = " ";
-        generalSettingsBox(window, 0, 0, "Typing: " + display_name, 1);
-        for (int IDButton = SelectPage * 3 + 1, cntBut = 1; cntBut < numSettingsCurPage;
-            ++IDButton, ++cntBut) {
-            generalSettingsBox(window, IDButton, cntBut);
-        }
+    string display_name = tmp_name;
+    if (display_name.empty())
+        display_name = " ";
+    generalSettingsBox(window, 0, 0, "Typing: " + display_name, 1);
+    for (int IDButton = SelectPage * 3 + 1, cntBut = 1; cntBut < numSettingsCurPage;
+        ++IDButton, ++cntBut) {
+        generalSettingsBox(window, IDButton, cntBut);
     }
 }
 
@@ -164,16 +142,16 @@ void generalSettingsBox(RenderWindow& window, int IDButton, int row, string cont
     if (row == 0)
         selected = true;
     // window size
-    static float winWidth = window.getSize().x;
-    static float winHeight = window.getSize().y;
+    const float winWidth = window.getSize().x;
+    const float winHeight = window.getSize().y;
 
     // fixed size and indentations
-    static float startY = winHeight / 2 - boxHeight / 2 + winHeight * 0.12f;
-    static float buttonHeight = winHeight * 0.06f;
-    static float buttonWidth = boxWidth * 0.75f;
-    static float buttonSpacing = winHeight * 0.12f;
-    static float outlineThick = winHeight * 0.004f;
-    static float outlineThickSelected = winHeight * 0.006f;
+    float startY = winHeight / 2 - boxHeight / 2 + winHeight * 0.12f;
+    float buttonHeight = winHeight * 0.06f;
+    float buttonWidth = boxWidth * 0.75f;
+    float buttonSpacing = winHeight * 0.12f;
+    float outlineThick = winHeight * 0.004f;
+    float outlineThickSelected = winHeight * 0.006f;
 
     // Box for each button
     RectangleShape buttonBox(Vector2f(buttonWidth, buttonHeight));
