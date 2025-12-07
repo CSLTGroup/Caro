@@ -62,7 +62,7 @@ void Menu::handleUI(RenderWindow& window) {
     else if (stateMenu == listButton[1].ID)
         handleLoadGame(window);
     else if (stateMenu == listButton[2].ID)
-        handleSettings(window);
+        draw(window), handleSettings(window);
 }
 void Menu::updateState(RenderWindow& window) {
     if (stateMenu == -1) { // first time playing
