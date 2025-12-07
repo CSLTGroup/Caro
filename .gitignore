@@ -37,3 +37,5 @@
 /project/Caro/Caro/x64/Debug/vc143.pdb
 /project/Caro/x64/Debug/Caro.exe
 /project/Caro/x64/Debug/Caro.pdb
+.vs/
+*.ipch
