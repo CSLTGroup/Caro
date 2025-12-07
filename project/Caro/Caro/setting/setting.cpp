@@ -357,16 +357,11 @@ void Settings::draw(RenderWindow& window) {
     float winHeight = window.getSize().y;
 
     // UI part
-    boxWidth = winWidth * 0.4f;
+    boxWidth = winWidth * 0.6f;
     boxHeight = winHeight * 0.5f;
 
-    // Draw settings menu
-    RectangleShape bg(Vector2f(winWidth, winHeight));
-    bg.setFillColor(Color(30, 30, 30));
-    window.draw(bg); // thich them background gi thi tu them vao
-
     RectangleShape settingsBox(Vector2f(boxWidth, boxHeight));
-    settingsBox.setFillColor(Color(50, 50, 50, 240));
+    settingsBox.setFillColor(Color(50, 50, 50, 150));
     settingsBox.setOutlineColor(Color::White);
     settingsBox.setOutlineThickness(winHeight * 0.003f);
     settingsBox.setPosition(winWidth / 2 - boxWidth / 2,
@@ -485,8 +480,7 @@ void Settings::SettingButtons(RenderWindow& window) {
     }
 }
 
-void Settings::generalSettingsBox(RenderWindow& window, int IDButton, int row,
-    string contextString, int selectedC) {
+void Settings::generalSettingsBox(RenderWindow& window, int IDButton, int row, string contextString, int selectedC) {
     bool selected = false;
     if ((selectedC != -1 && selectedC == 1) ||
         (selectedC == -1 && SelectSettings == IDButton))
