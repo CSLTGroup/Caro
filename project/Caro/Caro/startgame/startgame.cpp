@@ -32,6 +32,20 @@ void startGame() {
     boardGame.setUp();
     bool firstTime = true; // draw lan dau khi window load
 
+    // Load background image for entire UI
+    Texture backgroundTexture;
+    Sprite backgroundSprite;
+    bool backgroundLoaded = false;
+    if (backgroundTexture.loadFromFile("assets/image/background_img.png")) {
+        backgroundLoaded = true;
+        backgroundSprite.setTexture(backgroundTexture);
+        // Scale to cover entire window
+        float scaleX = static_cast<float>(window.getSize().x) / backgroundTexture.getSize().x;
+        float scaleY = static_cast<float>(window.getSize().y) / backgroundTexture.getSize().y;
+        backgroundSprite.setScale(scaleX, scaleY);
+        backgroundSprite.setPosition(0, 0);
+    }
+
     while (window.isOpen()) {
         Event event;
         while (firstTime || window.pollEvent(event)) {
@@ -42,6 +56,11 @@ void startGame() {
                        event.type == Event::KeyReleased) {
 
                 window.clear();
+
+                // Draw background image for entire UI
+                if (backgroundLoaded) {
+                    window.draw(backgroundSprite);
+                }
 
                 keyBoard.setState(window); // update keyboard state
                 menuGUI.handleUI(window);  // update menu & smaller GUI state

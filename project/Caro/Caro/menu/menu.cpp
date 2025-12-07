@@ -31,16 +31,18 @@ void Menu::draw(RenderWindow& window) {
     int spacingTop = height * 20 / 100;
     int spacingBetween = (height - (spacingTop * 2) - listButton.size() * heightButton) / (listButton.size() - 1);
 
-    //draw
-    for (int i = 0; i < 3; i++) {
-        auto& button = listButton[i];
-        button.setPosition(
-            window.getSize().x / 2 - widthButton / 2,                                                   // x
-            window.getSize().y / 2 - height / 2 + spacingTop + (heightButton + spacingBetween) * i,     // y
-            widthButton,                                                                                // x_len
-            heightButton                                                                                // y_len
-        );
-        button.draw(window);
+    //draw - only show buttons when in main menu (stateMenu == ID)
+    if (stateMenu == ID) {
+        for (int i = 0; i < 3; i++) {
+            auto& button = listButton[i];
+            button.setPosition(
+                window.getSize().x / 2 - widthButton / 2,                                                   // x
+                window.getSize().y / 2 - height / 2 + spacingTop + (heightButton + spacingBetween) * i,     // y
+                widthButton,                                                                                // x_len
+                heightButton                                                                                // y_len
+            );
+            button.draw(window);
+        }
     }
 }
 void Menu::handleUI(RenderWindow& window) {
@@ -151,6 +153,11 @@ void Menu::initModeButtons(RenderWindow& window) {
 }
 
 void Menu::drawModeSelection(RenderWindow& window) {
+    // Only draw mode selection UI when awaiting selection
+    if (!awaitingModeSelection) {
+        return;
+    }
+
     if (!modeButtons.size())
         initModeButtons(window);
 
@@ -171,6 +178,7 @@ void Menu::drawModeSelection(RenderWindow& window) {
     title.setOrigin(bounds.left + bounds.width / 2.f, bounds.top + bounds.height / 2.f);
     title.setPosition(window.getSize().x / 2.f, panel.getPosition().y - panel.getSize().y / 2.f + 70.f);
     window.draw(title);
+
 
     for (auto& button : modeButtons) {
         button.draw(window);

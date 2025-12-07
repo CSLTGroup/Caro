@@ -1,0 +1,8 @@
+isNotMuted=1
+MusicVolumeLevel=15
+EffectVolumeLevel=15
+confirmedNameFirstTime=1
+Player1Name=asdasdasdas
+Player2Name=asfkaj
+SelectedPlayer1Picture=assets/image/apex3.png
+SelectedPlayer2Picture=assets/image/apex2.png

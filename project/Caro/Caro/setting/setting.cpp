@@ -1,5 +1,5 @@
 #include "../global.h"
-
+//#include "../firsttimeplaying/"
 // for expanding settings in the future (please add ID buttons down below AND a
 // section for specific buttons' variables if needed)
 const int totalSetButtons = 4;
@@ -43,7 +43,7 @@ static int IDNameButtons = 0;             // 0: change player 1 name, 1: change 
 static const int MAX_LENGTH_NAME = 14;
 
 // player picture paths
-string selectedPlayer1PicturePath = "assets/image/apex4.png"; // Player 1
+string selectedPlayer1PicturePath; // Player 1
 string selectedPlayer2PicturePath = "assets/image/apex2.png"; // Player 2
 
 // UI handle

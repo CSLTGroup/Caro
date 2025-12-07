@@ -22,6 +22,7 @@ static const int MAX_LENGTH_NAME = 14;
 bool confirmedNameFirstTime = false;
 
 // picture selection variables
+extern string selectedPlayer1PicturePath;
 static bool isSelectingPicture = false;
 static bool nameConfirmed = false;
 static int selectedPictureIndex = 0;
