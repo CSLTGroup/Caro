@@ -117,7 +117,7 @@ void Menu::handleNewGame(RenderWindow& window) {
         boardGame.drawTable(window);
 }
 void Menu::handleLoadGame(RenderWindow& window) {
-    // draw load game here
+    LoadGame(window);
 }
 void Menu::handleSettings(RenderWindow& window) {
     setting.draw(window);

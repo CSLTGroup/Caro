@@ -3,148 +3,31 @@
   "WorkspaceRootPath": "D:\\Minh\\HCMUS\\HK1\\CSLT\\Caro\\project\\Caro\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\Minh\\HCMUS\\HK1\\CSLT\\Caro\\project\\Caro\\Caro\\savegame\\savegame.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Caro\\savegame\\savegame.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+      "AbsoluteMoniker": "D:0:0:{147E1718-D540-4B4F-A0A1-757A4E0A3AF0}|Caro\\Caro.vcxproj|D:\\Minh\\HCMUS\\HK1\\CSLT\\Caro\\project\\Caro\\Caro\\savegame\\savegame.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{147E1718-D540-4B4F-A0A1-757A4E0A3AF0}|Caro\\Caro.vcxproj|solutionrelative:Caro\\savegame\\savegame.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{147E1718-D540-4B4F-A0A1-757A4E0A3AF0}|Caro\\Caro.vcxproj|D:\\Minh\\HCMUS\\HK1\\CSLT\\Caro\\project\\Caro\\Caro\\boardgame\\boardgame.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{147E1718-D540-4B4F-A0A1-757A4E0A3AF0}|Caro\\Caro.vcxproj|solutionrelative:Caro\\boardgame\\boardgame.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{147E1718-D540-4B4F-A0A1-757A4E0A3AF0}|Caro\\Caro.vcxproj|D:\\Minh\\HCMUS\\HK1\\CSLT\\Caro\\project\\Caro\\Caro\\keyboard\\keyboard.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{147E1718-D540-4B4F-A0A1-757A4E0A3AF0}|Caro\\Caro.vcxproj|solutionrelative:Caro\\keyboard\\keyboard.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{147E1718-D540-4B4F-A0A1-757A4E0A3AF0}|Caro\\Caro.vcxproj|D:\\Minh\\HCMUS\\HK1\\CSLT\\Caro\\project\\Caro\\Caro\\menu\\menu.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{147E1718-D540-4B4F-A0A1-757A4E0A3AF0}|Caro\\Caro.vcxproj|solutionrelative:Caro\\menu\\menu.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{147E1718-D540-4B4F-A0A1-757A4E0A3AF0}|Caro\\Caro.vcxproj|D:\\Minh\\HCMUS\\HK1\\CSLT\\Caro\\project\\Caro\\Caro\\global.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{147E1718-D540-4B4F-A0A1-757A4E0A3AF0}|Caro\\Caro.vcxproj|solutionrelative:Caro\\global.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{147E1718-D540-4B4F-A0A1-757A4E0A3AF0}|Caro\\Caro.vcxproj|D:\\Minh\\HCMUS\\HK1\\CSLT\\Caro\\project\\Caro\\Caro\\menu\\menu.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{147E1718-D540-4B4F-A0A1-757A4E0A3AF0}|Caro\\Caro.vcxproj|solutionrelative:Caro\\menu\\menu.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{147E1718-D540-4B4F-A0A1-757A4E0A3AF0}|Caro\\Caro.vcxproj|D:\\Minh\\HCMUS\\HK1\\CSLT\\Caro\\project\\Caro\\Caro\\caro.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{147E1718-D540-4B4F-A0A1-757A4E0A3AF0}|Caro\\Caro.vcxproj|solutionrelative:Caro\\caro.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{147E1718-D540-4B4F-A0A1-757A4E0A3AF0}|Caro\\Caro.vcxproj|D:\\Minh\\HCMUS\\HK1\\CSLT\\Caro\\project\\Caro\\Caro\\setting\\setting.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{147E1718-D540-4B4F-A0A1-757A4E0A3AF0}|Caro\\Caro.vcxproj|solutionrelative:Caro\\setting\\setting.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{147E1718-D540-4B4F-A0A1-757A4E0A3AF0}|Caro\\Caro.vcxproj|D:\\Minh\\HCMUS\\HK1\\CSLT\\Caro\\project\\Caro\\Caro\\keyboard\\keyboard.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{147E1718-D540-4B4F-A0A1-757A4E0A3AF0}|Caro\\Caro.vcxproj|solutionrelative:Caro\\keyboard\\keyboard.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{147E1718-D540-4B4F-A0A1-757A4E0A3AF0}|Caro\\Caro.vcxproj|D:\\Minh\\HCMUS\\HK1\\CSLT\\Caro\\project\\Caro\\Caro\\boardgame\\boardgame.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{147E1718-D540-4B4F-A0A1-757A4E0A3AF0}|Caro\\Caro.vcxproj|solutionrelative:Caro\\boardgame\\boardgame.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+      "AbsoluteMoniker": "D:0:0:{147E1718-D540-4B4F-A0A1-757A4E0A3AF0}|Caro\\Caro.vcxproj|D:\\Minh\\HCMUS\\HK1\\CSLT\\Caro\\project\\Caro\\Caro\\savegame\\savegame.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{147E1718-D540-4B4F-A0A1-757A4E0A3AF0}|Caro\\Caro.vcxproj|solutionrelative:Caro\\savegame\\savegame.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{147E1718-D540-4B4F-A0A1-757A4E0A3AF0}|Caro\\Caro.vcxproj|D:\\Minh\\HCMUS\\HK1\\CSLT\\Caro\\project\\Caro\\Caro\\setting\\setting.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{147E1718-D540-4B4F-A0A1-757A4E0A3AF0}|Caro\\Caro.vcxproj|solutionrelative:Caro\\setting\\setting.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\Minh\\HCMUS\\HK1\\CSLT\\Caro\\project\\Caro\\Caro\\savegame\\savegame.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Caro\\savegame\\savegame.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+      "AbsoluteMoniker": "D:0:0:{147E1718-D540-4B4F-A0A1-757A4E0A3AF0}|Caro\\Caro.vcxproj|D:\\Minh\\HCMUS\\HK1\\CSLT\\Caro\\project\\Caro\\Caro\\setting\\setting.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{147E1718-D540-4B4F-A0A1-757A4E0A3AF0}|Caro\\Caro.vcxproj|solutionrelative:Caro\\setting\\setting.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     }
   ],
   "DocumentGroupContainers": [
     {
-      "Orientation": 0,
+      "Orientation": 1,
       "VerticalTabListWidth": 256,
       "DocumentGroups": [
         {
-          "DockedWidth": 200,
-          "SelectedChildIndex": 7,
+          "DockedHeight": 200,
+          "SelectedChildIndex": 0,
           "Children": [
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "global.h",
-              "DocumentMoniker": "D:\\Minh\\HCMUS\\HK1\\CSLT\\Caro\\project\\Caro\\Caro\\global.h",
-              "RelativeDocumentMoniker": "Caro\\global.h",
-              "ToolTip": "D:\\Minh\\HCMUS\\HK1\\CSLT\\Caro\\project\\Caro\\Caro\\global.h",
-              "RelativeToolTip": "Caro\\global.h",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAB8AAAAZAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2025-12-02T14:31:56.11Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "caro.cpp",
-              "DocumentMoniker": "D:\\Minh\\HCMUS\\HK1\\CSLT\\Caro\\project\\Caro\\Caro\\caro.cpp",
-              "RelativeDocumentMoniker": "Caro\\caro.cpp",
-              "ToolTip": "D:\\Minh\\HCMUS\\HK1\\CSLT\\Caro\\project\\Caro\\Caro\\caro.cpp",
-              "RelativeToolTip": "Caro\\caro.cpp",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2025-12-02T14:30:02.272Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "keyboard.cpp",
-              "DocumentMoniker": "D:\\Minh\\HCMUS\\HK1\\CSLT\\Caro\\project\\Caro\\Caro\\keyboard\\keyboard.cpp",
-              "RelativeDocumentMoniker": "Caro\\keyboard\\keyboard.cpp",
-              "ToolTip": "D:\\Minh\\HCMUS\\HK1\\CSLT\\Caro\\project\\Caro\\Caro\\keyboard\\keyboard.cpp",
-              "RelativeToolTip": "Caro\\keyboard\\keyboard.cpp",
-              "ViewState": "AgIAABUAAAAAAAAAAAAAACYAAAAvAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2025-12-02T13:47:16.613Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "setting.h",
-              "DocumentMoniker": "D:\\Minh\\HCMUS\\HK1\\CSLT\\Caro\\project\\Caro\\Caro\\setting\\setting.h",
-              "RelativeDocumentMoniker": "Caro\\setting\\setting.h",
-              "ToolTip": "D:\\Minh\\HCMUS\\HK1\\CSLT\\Caro\\project\\Caro\\Caro\\setting\\setting.h",
-              "RelativeToolTip": "Caro\\setting\\setting.h",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABUAAAAWAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2025-12-01T11:14:15.061Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "boardgame.cpp",
-              "DocumentMoniker": "D:\\Minh\\HCMUS\\HK1\\CSLT\\Caro\\project\\Caro\\Caro\\boardgame\\boardgame.cpp",
-              "RelativeDocumentMoniker": "Caro\\boardgame\\boardgame.cpp",
-              "ToolTip": "D:\\Minh\\HCMUS\\HK1\\CSLT\\Caro\\project\\Caro\\Caro\\boardgame\\boardgame.cpp",
-              "RelativeToolTip": "Caro\\boardgame\\boardgame.cpp",
-              "ViewState": "AgIAAH4AAAAAAAAAAAAAAIoAAAARAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2025-12-01T11:06:23.189Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "menu.h",
-              "DocumentMoniker": "D:\\Minh\\HCMUS\\HK1\\CSLT\\Caro\\project\\Caro\\Caro\\menu\\menu.h",
-              "RelativeDocumentMoniker": "Caro\\menu\\menu.h",
-              "ToolTip": "D:\\Minh\\HCMUS\\HK1\\CSLT\\Caro\\project\\Caro\\Caro\\menu\\menu.h",
-              "RelativeToolTip": "Caro\\menu\\menu.h",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2025-12-02T13:56:16.996Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "menu.cpp",
-              "DocumentMoniker": "D:\\Minh\\HCMUS\\HK1\\CSLT\\Caro\\project\\Caro\\Caro\\menu\\menu.cpp",
-              "RelativeDocumentMoniker": "Caro\\menu\\menu.cpp",
-              "ToolTip": "D:\\Minh\\HCMUS\\HK1\\CSLT\\Caro\\project\\Caro\\Caro\\menu\\menu.cpp",
-              "RelativeToolTip": "Caro\\menu\\menu.cpp",
-              "ViewState": "AgIAAE4AAAAAAAAAAAAAAD0AAAAeAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2025-11-30T09:47:12.597Z"
-            },
             {
               "$type": "Document",
               "DocumentIndex": 0,
@@ -153,58 +36,50 @@
               "RelativeDocumentMoniker": "Caro\\savegame\\savegame.cpp",
               "ToolTip": "D:\\Minh\\HCMUS\\HK1\\CSLT\\Caro\\project\\Caro\\Caro\\savegame\\savegame.cpp",
               "RelativeToolTip": "Caro\\savegame\\savegame.cpp",
-              "ViewState": "AgIAAEIAAAAAAAAAAAAAAE8AAAADAAAAAAAAAA==",
+              "ViewState": "AgIAAFYAAAAAAAAAAAAAAHYAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2025-11-30T09:40:50.559Z",
+              "WhenOpened": "2025-12-06T06:39:09.261Z",
+              "IsPinned": true,
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 1,
               "Title": "savegame.h",
               "DocumentMoniker": "D:\\Minh\\HCMUS\\HK1\\CSLT\\Caro\\project\\Caro\\Caro\\savegame\\savegame.h",
               "RelativeDocumentMoniker": "Caro\\savegame\\savegame.h",
               "ToolTip": "D:\\Minh\\HCMUS\\HK1\\CSLT\\Caro\\project\\Caro\\Caro\\savegame\\savegame.h",
               "RelativeToolTip": "Caro\\savegame\\savegame.h",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAQAAAAAAAAAA==",
+              "ViewState": "AgIAAAwAAAAAAAAAAAAAABgAAAAkAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2025-11-30T09:40:51.726Z"
+              "WhenOpened": "2025-12-06T16:15:08.901Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "keyboard.h",
-              "DocumentMoniker": "D:\\Minh\\HCMUS\\HK1\\CSLT\\Caro\\project\\Caro\\Caro\\keyboard\\keyboard.h",
-              "RelativeDocumentMoniker": "Caro\\keyboard\\keyboard.h",
-              "ToolTip": "D:\\Minh\\HCMUS\\HK1\\CSLT\\Caro\\project\\Caro\\Caro\\keyboard\\keyboard.h",
-              "RelativeToolTip": "Caro\\keyboard\\keyboard.h",
+              "DocumentIndex": 3,
+              "Title": "setting.h",
+              "DocumentMoniker": "D:\\Minh\\HCMUS\\HK1\\CSLT\\Caro\\project\\Caro\\Caro\\setting\\setting.h",
+              "RelativeDocumentMoniker": "Caro\\setting\\setting.h",
+              "ToolTip": "D:\\Minh\\HCMUS\\HK1\\CSLT\\Caro\\project\\Caro\\Caro\\setting\\setting.h",
+              "RelativeToolTip": "Caro\\setting\\setting.h",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2025-12-02T13:49:15.05Z"
+              "WhenOpened": "2025-12-07T02:07:20.983Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
-              "Title": "boardgame.h",
-              "DocumentMoniker": "D:\\Minh\\HCMUS\\HK1\\CSLT\\Caro\\project\\Caro\\Caro\\boardgame\\boardgame.h",
-              "RelativeDocumentMoniker": "Caro\\boardgame\\boardgame.h",
-              "ToolTip": "D:\\Minh\\HCMUS\\HK1\\CSLT\\Caro\\project\\Caro\\Caro\\boardgame\\boardgame.h",
-              "RelativeToolTip": "Caro\\boardgame\\boardgame.h",
-              "ViewState": "AgIAACQAAAAAAAAAAAAAABEAAAAVAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2025-12-01T11:06:32.262Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 2,
               "Title": "setting.cpp",
               "DocumentMoniker": "D:\\Minh\\HCMUS\\HK1\\CSLT\\Caro\\project\\Caro\\Caro\\setting\\setting.cpp",
               "RelativeDocumentMoniker": "Caro\\setting\\setting.cpp",
               "ToolTip": "D:\\Minh\\HCMUS\\HK1\\CSLT\\Caro\\project\\Caro\\Caro\\setting\\setting.cpp",
               "RelativeToolTip": "Caro\\setting\\setting.cpp",
-              "ViewState": "AgIAAOMBAAAAAAAAAAAAAPIBAAAFAAAAAAAAAA==",
+              "ViewState": "AgIAAOYAAAAAAAAAAAAIwHAAAAAVAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2025-12-01T11:09:14.437Z"
+              "WhenOpened": "2025-12-06T06:40:34.709Z",
+              "EditorCaption": ""
             }
           ]
         }

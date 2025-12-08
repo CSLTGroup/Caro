@@ -136,7 +136,7 @@ void BoardGame::setMove(RenderWindow& window) {
         PlaySoundClick(); // Play click sound when moving right
     }
     if (keyBoard.combineAlphabetCheck('L')) // save game
-        SaveGame();
+        SaveGame(window);
     if (keyBoard.Enter())
         setChoice(window);
     else if (keyBoard.Esc()) {
