@@ -735,17 +735,9 @@ void Settings::changeAvatar() {
                 selectedAvatarIndex < avatarPaths.size()) {
                 if (IDAvatarButtons == 0) { // Player 1
                     player1AvatarPath = avatarPaths[selectedAvatarIndex];
-                    // Update boardgame immediately if it's loaded
-                    if (boardGame.player1PhotoLoaded) {
-                        boardGame.player1PhotoLoaded = false;
-                    }
                 }
                 else { // Player 2
                     player2AvatarPath = avatarPaths[selectedAvatarIndex];
-                    // Update boardgame immediately if it's loaded
-                    if (boardGame.player2PhotoLoaded) {
-                        boardGame.player2PhotoLoaded = false;
-                    }
                 }
                 PlaySoundClick();
                 SaveSettings(); // Save the new avatar selection
@@ -933,7 +925,7 @@ void Settings::SaveSettings() {
     file << "isNotMuted=" << (isNotMuted ? "1" : "0") << std::endl;
     file << "MusicVolumeLevel=" << MusicVolumeLevel << std::endl;
     file << "EffectVolumeLevel=" << EffectVolumeLevel << std::endl;
-    file << "confirmedNameFirstTime=" << confirmedNameFirstTime << std::endl;
+    file << "confirmedSettingsFirstTime=" << confirmedSettingsFirstTime << std::endl;
     file << "Player1Name=" << playerName[0] << std::endl;
     file << "Player2Name=" << playerName[1] << std::endl;
     file << "ResolutionID=" << idWindowSize << std::endl;
@@ -955,7 +947,7 @@ void Settings::LoadSettings(RenderWindow& window) {
     bool loadedIsNotMuted = isNotMuted; // default value
     int loadedMusicVolume = MusicVolumeLevel;
     int loadedEffectVolume = EffectVolumeLevel;
-    bool loadedConfirmedNameFirstTime = confirmedNameFirstTime;
+    bool loadedConfirmedSettingsFirstTime = confirmedSettingsFirstTime;
     string loadedPlayer1Name = playerName[0];
     string loadedPlayer2Name = playerName[1];
     int loadedIDWindowSize = idWindowSize;
@@ -992,9 +984,9 @@ void Settings::LoadSettings(RenderWindow& window) {
                 // Invalid value, skip
             }
         }
-        else if (key == "confirmedNameFirstTime") {
+        else if (key == "confirmedSettingsFirstTime") {
             try {
-                loadedConfirmedNameFirstTime = (value == "1");
+                loadedConfirmedSettingsFirstTime = (value == "1");
             }
             catch (...) {
                 // Invalid value, skip
@@ -1036,7 +1028,7 @@ void Settings::LoadSettings(RenderWindow& window) {
     SetSoundMute(!isNotMuted);
 
     // apply name
-    confirmedNameFirstTime = loadedConfirmedNameFirstTime;
+    confirmedSettingsFirstTime = loadedConfirmedSettingsFirstTime;
     playerName[0] = loadedPlayer1Name;
     playerName[1] = loadedPlayer2Name;
 

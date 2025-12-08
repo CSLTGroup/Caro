@@ -28,14 +28,14 @@ struct Settings {
     // Save/Load settings
     void SaveSettings();
     void LoadSettings(RenderWindow&);
+    std::vector<std::string> avatarPaths;   // store avatar file paths
+    void loadAllAvatars(); // load images automatically
+    std::string player1AvatarPath = "assets/image/Avatar/player1_egg-egg-sheeran.gif"; // Default avatar paths
 private:
     std::vector<sf::Texture> avatarTextures; // image data
     std::vector<sf::Sprite> avatarSprites;   // up the image for drawing
-    std::vector<std::string> avatarPaths;   // store avatar file paths
     int selectedAvatarIndex = -1;            // currently selected avatar index
-    std::string player1AvatarPath = "assets/image/Avatar/player1_egg-egg-sheeran.gif"; // Default avatar paths
     std::string player2AvatarPath = "assets/image/Avatar/player2_onepunchman.jpg";
-    void loadAllAvatars(); // load images automatically
 };
 
 #endif

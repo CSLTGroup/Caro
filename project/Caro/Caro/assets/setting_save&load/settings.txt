@@ -1,7 +1,0 @@
-isNotMuted=0
-MusicVolumeLevel=20
-EffectVolumeLevel=20
-confirmedNameFirstTime=1
-Player1Name=nghiaaa
-Player2Name=Player 2
-ResolutionID=8

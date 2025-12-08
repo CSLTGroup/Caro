@@ -320,40 +320,20 @@ void BoardGame::makeBotMove() {
 }
 
 void BoardGame::ensurePlayerAssets() {
-    if (!player1PhotoLoaded) {
-        // Use saved avatar path from settings, or default if not set
-        std::string avatarPath = setting.getPlayer1AvatarPath();
-        if (avatarPath.empty()) {
-            avatarPath = "assets/image/Avatar/player1_egg-egg-sheeran.gif";
-        }
-        if (player1Photo.loadFromFile(avatarPath)) {
-            player1PhotoLoaded = true;
-        }
-        else {
-            // Fallback to default if saved path doesn't work
-
-            if (player1Photo.loadFromFile("assets/image/Avatar/player1_egg-egg-sheeran.gif")) {
-                player1PhotoLoaded = true;
-            }
-        }
+    // set avatar player 1
+    // Use saved avatar path from settings, or default if not set
+    std::string avatarPath = setting.getPlayer1AvatarPath();
+    if (avatarPath.empty()) {
+        avatarPath = "assets/image/Avatar/player1_egg-egg-sheeran.gif";
     }
+    player1PhotoLoaded = player1Photo.loadFromFile(avatarPath);
 
-    if (!player2PhotoLoaded) {
-        // Use saved avatar path from settings, or default if not set
-        std::string avatarPath = setting.getPlayer2AvatarPath();
-        if (avatarPath.empty()) {
-            avatarPath = "assets/image/Avatar/player2_onepunchman.jpg";
-        }
-        if (player2Photo.loadFromFile(avatarPath)) {
-            player2PhotoLoaded = true;
-        }
-        else {
-            // Fallback to default if saved path doesn't work
-            if (player2Photo.loadFromFile("assets/image/Avatar/player2_onepunchman.jpg")) {
-                player2PhotoLoaded = true;
-            }
-        }
+    // set avatar player 2
+    avatarPath = setting.getPlayer2AvatarPath();
+    if (avatarPath.empty()) {
+        avatarPath = "assets/image/Avatar/player2_onepunchman.jpg";
     }
+    player2PhotoLoaded = player2Photo.loadFromFile(avatarPath);
 }
 
 void BoardGame::drawPlayerInfoPanel(RenderWindow& window) {

@@ -38,6 +38,10 @@ void startGame() {
     // set up board game
     boardGame.setUp();
 
+    // check condition required to show "firstime" menu or normal menu
+    if (confirmedSettingsFirstTime)
+        stateMenu = 0;
+
     while (window.isOpen()) {
         Event event;
         window.pollEvent(event);
