@@ -1,9 +1,0 @@
-isNotMuted=0
-MusicVolumeLevel=20
-EffectVolumeLevel=20
-confirmedSettingsFirstTime=1
-Player1Name=nghiaaa
-Player2Name=Player 2
-ResolutionID=8
-Player1Avatar=assets/image/Avatar/avatar_1.png
-Player2Avatar=assets/image/Avatar/player2_onepunchman.jpg

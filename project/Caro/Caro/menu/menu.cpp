@@ -4,7 +4,7 @@
 void Menu::drawBackGround(RenderWindow& window) {
     static bool initialized = false;
     if (!initialized) {
-        bgImg.loadFromFile("assets/image/backgroundapex.png");
+        bgImg.loadFromFile("assets/image/backgroundapex03.png");
         spriteBgImg.setTexture(bgImg);
         spriteBgImg.setPosition(0, 0);
         spriteBgImg.setScale(1, 1);
