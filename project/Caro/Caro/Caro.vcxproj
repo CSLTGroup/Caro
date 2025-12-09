@@ -162,10 +162,14 @@
     <Font Include="assets\font\RDLatinFontPoint.otf" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="assets\image\backgroundapex.png" />
     <Image Include="assets\image\background_img.png" />
+    <Image Include="assets\image\focusButton.png" />
     <Image Include="assets\image\penguinGOGO.png" />
     <Image Include="assets\image\player1_egg-egg-sheeran.gif" />
     <Image Include="assets\image\player2_onepunchman.jpg" />
+    <Image Include="assets\image\shadow.png" />
+    <Image Include="assets\image\unfocusButton.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

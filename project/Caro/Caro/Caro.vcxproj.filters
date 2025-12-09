@@ -147,5 +147,17 @@
     <Image Include="assets\image\player2_onepunchman.jpg">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="assets\image\backgroundapex.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="assets\image\shadow.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="assets\image\focusButton.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="assets\image\unfocusButton.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

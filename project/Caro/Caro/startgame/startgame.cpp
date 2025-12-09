@@ -20,7 +20,7 @@ void startGame() {
 
     // set font
     if (!font.getInfo().family.size()) {
-        if (!font.loadFromFile("assets/font/RDLatinFontPoint.otf")) {
+        if (!font.loadFromFile("assets/font/pixelGame.otf")) {
             cout << "Failed to load font!" << endl;
             return;
         }
@@ -41,19 +41,21 @@ void startGame() {
     // check condition required to show "firstime" menu or normal menu
     if (confirmedSettingsFirstTime)
         stateMenu = 0;
-
+    bool firstTimeOpenApp = true;
     while (window.isOpen()) {
         Event event;
-        window.pollEvent(event);
-        if (event.type == Event::Closed)
-            window.close();
-        else if (event.type == Event::KeyPressed || event.type == Event::KeyReleased)
-            keyBoard.setState(window); // update keyboard state
+        while (window.pollEvent(event)) {
+            if (event.type == Event::Closed)
+                window.close();
+            else if (firstTimeOpenApp || event.type == Event::KeyPressed || event.type == Event::KeyReleased) {
 
-
-        window.clear();
-        menuGUI.handleUI(window);  // update menu & smaller GUI state
-        window.display();          // show menu
+                firstTimeOpenApp = false;
+                keyBoard.setState(window); // update keyboard state
+                window.clear();
+                menuGUI.handleUI(window);  // update menu & smaller GUI state
+                window.display();          // show menu
+            }
+        }
 
     }
 }

@@ -210,13 +210,9 @@ void Settings::SettingsLogic(RenderWindow& window) {
             }
         }
         else if (SelectSettings == IDCHANGENAME) { // change name submenu
-
             IDNameButtons = 0;
-
             isTypingName = false;
-
             tmp_name = "";
-
         }
         else if (SelectSettings == IDCHANGEAVATAR) { // change avatar submenu
             IDAvatarButtons = 0;
@@ -330,7 +326,7 @@ void Settings::SettingsLogic(RenderWindow& window) {
             else if (keyBoard.Esc()) {
                 tmp_idWindowSize = idWindowSize;
                 PlaySoundClick();
-                inSetButtons[IDCHANGENAME] = false;
+                inSetButtons[IDCHANGERESOLUTION] = false;
                 inGeneralSettings = true; // back to general settings
             }
             else if (keyBoard.Enter()) {

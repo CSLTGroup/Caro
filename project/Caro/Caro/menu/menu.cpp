@@ -1,68 +1,137 @@
 #include "../global.h"
-void Menu::draw(RenderWindow& window) {
-
-    //make new buttons if not exist
-    if (!listButton.size()) {
-        listButton.assign(3, Button());
-
-        listButton[newGameID].context = "New Game";
-        listButton[loadGameID].context = "Load Game";
-        listButton[settingID].context = "Settings";
-        listButton[newGameID].ID = 1;
-        listButton[loadGameID].ID = 2;
-        listButton[settingID].ID = 3;
-
-        listButton[newGameID].selected = true;
-        stateMenu = ID;
+void Menu::drawBackGround(RenderWindow& window) {
+    static bool initialized = false;
+    if (!initialized) {
+        bgImg.loadFromFile("assets/image/backgroundapex.png");
+        spriteBgImg.setTexture(bgImg);
+        spriteBgImg.setPosition(0, 0);
+        spriteBgImg.setScale(1, 1);
+        initialized = true;
     }
-
-    // draw background image
-    Texture bgImg;
-    bgImg.loadFromFile("assets/image/backgroundapex.png");
-    Sprite spriteBgImg(bgImg);
     sf::Vector2u textureSize = bgImg.getSize();
     sf::Vector2u windowSize = window.getSize();
     float scaleX = (float)windowSize.x / textureSize.x;
     float scaleY = (float)windowSize.y / textureSize.y;
+    if (!(spriteBgImg.getScale().x == scaleX && spriteBgImg.getScale().y == scaleY))
+        spriteBgImg.setScale(scaleX, scaleY);
 
-    spriteBgImg.setScale(scaleX, scaleY);
-    spriteBgImg.setPosition(0, 0);
-    
     window.draw(spriteBgImg);
+}
+void Menu::drawTitle(RenderWindow& window) {
+    const float winHeight = window.getSize().y;
+    const float winWidth = window.getSize().x;
 
-    // size menu
-    width = window.getSize().x * 80 / 100;
-    height = window.getSize().y * 80 / 100;
+    // draw title
+    int heightText = listButton[0].y * 5 / 14;
+    int distancePerText[] = { winWidth / 300.f, winHeight / 200.f };
+    int positionYText = winHeight / 13.0f;
+    
+    // draw 3 layer text
+
+    Text titleGame[3];
+    for (int i = 0; i < 3; i++) {
+        titleGame[i].setFont(font);
+        titleGame[i].setString("Caro Game"); // noi dung title
+        titleGame[i].setCharacterSize(heightText); // character's size = chieu cao text
+        titleGame[i].setStyle(Text::Bold);
+        FloatRect bounds = titleGame[i].getLocalBounds();
+        titleGame[i].setOrigin(bounds.width / 2.0f, bounds.height / 2.0f); // set origin point in the middle
+    }
+
+    /// third layer
+    titleGame[2].setFillColor(Color(150, 120, 11));
+    titleGame[2].setPosition(winWidth / 2.0f + 2 * distancePerText[0], positionYText + 2 * distancePerText[1]);
+
+    /// second layer
+    titleGame[1].setFillColor(Color(177, 166, 11));
+    titleGame[1].setPosition(winWidth / 2.0f + distancePerText[0], positionYText + distancePerText[1]);
+
+    /// first layer
+    titleGame[0].setFillColor(Color(255, 255, 0));
+    titleGame[0].setPosition(winWidth / 2.0f, positionYText);
+
+    // draw shadow image
+    Texture shadowTex;
+    shadowTex.loadFromFile("assets/image/shadow.png");
+    Sprite shadowSprite;
+    shadowSprite.setTexture(shadowTex);
+    FloatRect bounds = shadowSprite.getLocalBounds();
+    shadowSprite.setOrigin(bounds.width / 2.0f, bounds.height / 2.0f - heightText / 2.0f);
+    float scaleX = 3.0f * titleGame[0].getLocalBounds().width/ shadowSprite.getLocalBounds().width;
+    float scaleY = 5.0f * titleGame[0].getLocalBounds().height/ shadowSprite.getLocalBounds().height;
+    shadowSprite.scale(scaleX, scaleY);
+    shadowSprite.setPosition(winWidth / 2.0f, positionYText ); // set in the middle
+    shadowSprite.setColor(sf::Color(255, 255, 255, 100));
+
+    // draw onto the screen
+    window.draw(shadowSprite);
+    window.draw(titleGame[2]);
+    window.draw(titleGame[1]);
+    window.draw(titleGame[0]);
+}
+void Menu::drawMenu(RenderWindow& window) {
+    //make new buttons if not exist
+    if (!listButton.size()) {
+        listButton.assign(5, Button());
+
+        listButton[newGameID].context = "New Game";
+        listButton[loadGameID].context = "Load Game";
+        listButton[settingID].context = "Settings";
+        listButton[creditsID].context = "Credits";
+        listButton[howToPlayID].context = "How to Play";
+        listButton[newGameID].ID = 1;
+        listButton[loadGameID].ID = 2;
+        listButton[settingID].ID = 3;
+        listButton[howToPlayID].ID = 4;
+        listButton[creditsID].ID = 5;
+
+        listButton[0].selected = true;
+        stateMenu = ID;
+    }
+
+
+    // draw buttons
+    const float winHeight = window.getSize().y;
+    const float winWidth = window.getSize().x;
+
+    /// size box menu (contain 3 buttons)
+    width = winWidth * 80 / 100;
+    height = winHeight * 80 / 100;
 
     // size button
     int widthButton = width * 60 / 100;
-    int heightButton = height * 10 / 100;
-    int spacingTop = height * 20 / 100;
-    int spacingBetween = (height - (spacingTop * 2) - listButton.size() * heightButton) / (listButton.size() - 1);
+    int heightButton = height * 11 / 100;
+    int spacingBot = height * 20 / 100;
+    int spacingBetween = (height - (spacingBot * 2) - listButton.size() * heightButton) / (listButton.size() - 1);
 
     //draw
-    for (int i = 0; i < 3; i++) {
+    for (int i = listButton.size() - 1; i >= 0; i--) {
         auto& button = listButton[i];
         button.setPosition(
-            window.getSize().x / 2 - widthButton / 2,                                                   // x
-            window.getSize().y / 2 - height / 2 + spacingTop + (heightButton + spacingBetween) * i,     // y
+            winWidth / 2 - widthButton / 2,                                                             // x
+            winHeight - spacingBot - (heightButton + spacingBetween) * (listButton.size() - 1 - i),     // y
             widthButton,                                                                                // x_len
             heightButton                                                                                // y_len
         );
-        button.draw(window);
+        if (stateMenu == ID)
+            button.draw(window);
     }
+
+    // draw title game
+    drawTitle(window);
+
 }
 void Menu::handleUI(RenderWindow& window) {
     if (stateMenu == -1)
         drawMenuName_for_firstTime(window);
     else if (stateMenu == 0)
-        draw(window);
-    else if (stateMenu == listButton[0].ID)
-        draw(window), handleNewGame(window);
-    else if (stateMenu == listButton[1].ID)
+        drawBackGround(window), drawMenu(window);
+    else if (stateMenu == listButton[newGameID].ID)
+        drawBackGround(window), drawMenu(window), handleNewGame(window);
+    else if (stateMenu == listButton[loadGameID].ID)
         handleLoadGame(window);
-    else if (stateMenu == listButton[2].ID)
-        draw(window), handleSettings(window);
+    else if (stateMenu == listButton[settingID].ID)
+        drawBackGround(window), drawMenu(window), handleSettings(window);
 }
 void Menu::updateState(RenderWindow& window) {
     if (stateMenu == -1) { // first time playing
@@ -74,6 +143,7 @@ void Menu::updateState(RenderWindow& window) {
 
         if (keyBoard.Up() ^ keyBoard.Down()) {
             listButton[selectedButton].selected = false;
+            listButton[selectedButton].needUpdate = true;
 
             if (keyBoard.Up()) {
                 --selectedButton;
@@ -87,6 +157,7 @@ void Menu::updateState(RenderWindow& window) {
             }
 
             listButton[selectedButton].selected = true;
+            listButton[selectedButton].needUpdate = true;
             PlaySoundClick(); // Play click sound when navigating menu
         }
         else if (keyBoard.Enter()) {

@@ -10,6 +10,9 @@ struct Button {
     bool selected = false;
     string context = "";
     bool menuColorScheme = false;
+    bool needUpdate = true;
+    Sprite spriteButton;
+    Sprite spriteShadow;
     Button() {}
     void setPosition(int posX, int posY, int widthX, int heightY);
     void setMenuTheme(bool enable);
