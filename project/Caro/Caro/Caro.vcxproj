@@ -137,6 +137,7 @@
     <ClCompile Include="keyboard\keyboard.cpp" />
     <ClCompile Include="loadingscreen\loadingscreen.cpp" />
     <ClCompile Include="menu\menu.cpp" />
+    <ClCompile Include="others\others.cpp" />
     <ClCompile Include="savegame\savegame.cpp" />
     <ClCompile Include="setting\setting.cpp" />
     <ClCompile Include="setting\settingoverlay.cpp" />
@@ -152,6 +153,7 @@
     <ClInclude Include="keyboard\keyboard.h" />
     <ClInclude Include="loadingscreen\loadingscreen.h" />
     <ClInclude Include="menu\menu.h" />
+    <ClInclude Include="others\others.h" />
     <ClInclude Include="savegame\savegame.h" />
     <ClInclude Include="setting\setting.h" />
     <ClInclude Include="sfx\sfx.h" />

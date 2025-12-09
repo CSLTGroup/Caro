@@ -1,6 +1,5 @@
 #include "../global.h"
 using namespace sf;
-
 void Button::setPosition(int posX, int posY, int widthX, int heightY) {
     x = posX;
     y = posY;
@@ -29,14 +28,11 @@ void Button::draw(RenderWindow& window) {
 
     // draw text
     Text text;
-
     text.setFont(font);
     text.setString(context); // noi dung button
-	text.setCharacterSize(heightText); // character's size = chieu cao text
+	text.setCharacterSize(getCharacterSizeForLineHeight(font, heightText)); // character's size = chieu cao text
     FloatRect textBounds = text.getLocalBounds();
-
     bool useMenuColors = menuColorScheme || stateMenu == 0;
-
     if (selected) { // hover
         if (useMenuColors) {
             text.setFillColor(Color(254, 255, 195));
@@ -49,12 +45,11 @@ void Button::draw(RenderWindow& window) {
         }
         else text.setFillColor(Color(130, 130, 130));
     }
-    text.setOrigin(0, textBounds.height);
+    text.setOrigin(0, 0);
     text.setPosition(
         x + width / 10.f,
         y //+ (context == "Settings" || context == "How to Play") * (height / 10) 
         //- (context != "Settings" && context != "How to Play") * (height / 10)
-        - height / 10
     );
 
     // draw box menu & shadow
@@ -65,20 +60,20 @@ void Button::draw(RenderWindow& window) {
             spriteButton.setTexture(focusTexture);
         else spriteButton.setTexture(unfocusTexture);
 
-        spriteButton.setOrigin(spriteButton.getLocalBounds().width / 2, spriteButton.getLocalBounds().height / 2);
+        spriteButton.setOrigin(0, 0);
         float scaleX = 1.0f * width / focusTexture.getSize().x;
         float scaleY = 1.0f * height / focusTexture.getSize().y;
         spriteButton.setScale(scaleX, scaleY);
-        spriteButton.setPosition(winWidth / 2, y);
+        spriteButton.setPosition(x, y);
 
         // shadow
         spriteShadow.setTexture(shadowTex);
         FloatRect bounds = spriteShadow.getLocalBounds();
         spriteShadow.setOrigin(bounds.width / 2.0f, bounds.height / 2.0f);
-        scaleX = 1.40f * textBounds.width / shadowTex.getSize().x;
-        scaleY = 1.0f * textBounds.height / shadowTex.getSize().y;
+        scaleX = 1.25f * textBounds.width / shadowTex.getSize().x;
+        scaleY = 1.25f * textBounds.height / shadowTex.getSize().y;
         spriteShadow.setScale(scaleX, scaleY);
-        spriteShadow.setPosition(winWidth / 2.0f - width / 2.0f + width / 10.0f + textBounds.width / 2.0f, y); // set to the left
+        spriteShadow.setPosition(x + width / 10.f + textBounds.width / 2.0f, y + height / 2.0f); // set to the left
         spriteShadow.setColor(sf::Color(255, 255, 255, 120));
 
         needUpdate = false;

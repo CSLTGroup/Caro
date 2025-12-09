@@ -10,6 +10,7 @@
 #include "sfx/sfx.h"
 #include "setting/setting.h"
 #include "firsttimeplaying/firsttimeplaying.h"
+#include "others/others.h"
 #include <vector>
 #include <iostream>
 #include <string>

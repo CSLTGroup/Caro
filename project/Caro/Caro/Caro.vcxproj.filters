@@ -87,6 +87,9 @@
     <ClCompile Include="savegame\savegame.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="others\others.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="keyboard\keyboard.h">
@@ -123,6 +126,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="savegame\savegame.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="others\others.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

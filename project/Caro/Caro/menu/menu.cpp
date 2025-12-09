@@ -1,4 +1,6 @@
 #include "../global.h"
+
+
 void Menu::drawBackGround(RenderWindow& window) {
     static bool initialized = false;
     if (!initialized) {
@@ -22,9 +24,9 @@ void Menu::drawTitle(RenderWindow& window) {
     const float winWidth = window.getSize().x;
 
     // draw title
-    int heightText = listButton[0].y * 5 / 14;
-    int distancePerText[] = { winWidth / 300.f, winHeight / 200.f };
-    int positionYText = winHeight / 13.0f;
+    float distancePerText[] = { winWidth / 300.0f, winHeight / 200.0f };
+    float positionYText = winHeight * 34 * 33 / 10000.0f;
+    float heightText = winHeight * 44 * 30 / 10000.0f;
     
     // draw 3 layer text
 
@@ -32,8 +34,8 @@ void Menu::drawTitle(RenderWindow& window) {
     for (int i = 0; i < 3; i++) {
         titleGame[i].setFont(font);
         titleGame[i].setString("Caro Game"); // noi dung title
-        titleGame[i].setCharacterSize(heightText); // character's size = chieu cao text
         titleGame[i].setStyle(Text::Bold);
+        titleGame[i].setCharacterSize(getCharacterSizeForLineHeight(font, heightText)); // character's size = chieu cao text
         FloatRect bounds = titleGame[i].getLocalBounds();
         titleGame[i].setOrigin(bounds.width / 2.0f, bounds.height / 2.0f); // set origin point in the middle
     }
@@ -56,11 +58,11 @@ void Menu::drawTitle(RenderWindow& window) {
     Sprite shadowSprite;
     shadowSprite.setTexture(shadowTex);
     FloatRect bounds = shadowSprite.getLocalBounds();
-    shadowSprite.setOrigin(bounds.width / 2.0f, bounds.height / 2.0f - heightText / 2.0f);
+    shadowSprite.setOrigin(bounds.width / 2.0f, bounds.height / 2.0f);
     float scaleX = 3.0f * titleGame[0].getLocalBounds().width/ shadowSprite.getLocalBounds().width;
     float scaleY = 5.0f * titleGame[0].getLocalBounds().height/ shadowSprite.getLocalBounds().height;
     shadowSprite.scale(scaleX, scaleY);
-    shadowSprite.setPosition(winWidth / 2.0f, positionYText ); // set in the middle
+    shadowSprite.setPosition(titleGame[0].getPosition().x, titleGame[0].getPosition().y + heightText / 2.0f); // set in the middle
     shadowSprite.setColor(sf::Color(255, 255, 255, 100));
 
     // draw onto the screen
@@ -91,27 +93,26 @@ void Menu::drawMenu(RenderWindow& window) {
 
 
     // draw buttons
-    const float winHeight = window.getSize().y;
     const float winWidth = window.getSize().x;
+    const float winHeight = window.getSize().y;
 
     /// size box menu (contain 3 buttons)
-    width = winWidth * 80 / 100;
-    height = winHeight * 80 / 100;
+    widthBoxMenu = winWidth * 54.0f / 100;
+    heightBoxMenu = winHeight * 66.0f / 100;
 
     // size button
-    int widthButton = width * 60 / 100;
-    int heightButton = height * 11 / 100;
-    int spacingBot = height * 20 / 100;
-    int spacingBetween = (height - (spacingBot * 2) - listButton.size() * heightButton) / (listButton.size() - 1);
+    float widthButton = widthBoxMenu;
+    float heightButton = heightBoxMenu * 14.0f / 100;
+    float spacingBetween = 1.0f * heightBoxMenu / listButton.size() - heightButton;
 
     //draw
     for (int i = listButton.size() - 1; i >= 0; i--) {
         auto& button = listButton[i];
         button.setPosition(
-            winWidth / 2 - widthButton / 2,                                                             // x
-            winHeight - spacingBot - (heightButton + spacingBetween) * (listButton.size() - 1 - i),     // y
-            widthButton,                                                                                // x_len
-            heightButton                                                                                // y_len
+            winWidth / 2 - widthButton / 2,                                             // x
+            winHeight - (heightButton + spacingBetween) * (listButton.size() - i),     // y
+            widthButton,                                                               // x_len
+            heightButton                                                                     // y_len
         );
         if (stateMenu == ID)
             button.draw(window);
