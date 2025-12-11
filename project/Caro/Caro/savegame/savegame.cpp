@@ -86,7 +86,12 @@ void SaveGame(RenderWindow& window)
 				file << "PVP";
 		}
 		else if (component == 2)
-			file << boardGame.player1Name;
+		{
+			if (boardGame.player1Name == "")
+				file << "Player 1";
+			else
+				file << boardGame.player1Name;
+		}
 		else if (component == 3)
 			file << boardGame.player2Name;
 		else if (component == 4)
@@ -159,10 +164,16 @@ void LoadGameFetch()
 				file >> menuGUI.records.back().saved_time;
 			else if (content == "MODE")
 				file >> menuGUI.records.back().mode;
-			else if (content == "P1NAME")
-				file >> menuGUI.records.back().player1Name;
+			else if (content == "P1_NAME")
+			{
+				file.ignore();
+				getline(file, menuGUI.records.back().player1Name);
+			}
 			else if (content == "P2_NAME")
-				file >> menuGUI.records.back().player2Name;
+			{
+				file.ignore();
+				getline(file, menuGUI.records.back().player2Name);
+			}
 			else if (content == "P1_SCORE")
 				file >> menuGUI.records.back().player1Score;
 			else if (content == "P2_SCORE")
@@ -250,17 +261,18 @@ void LoadGameLogic()
 	{
 		RecordData& record = menuGUI.records[curRecord];
 		for (int COMP = 0; COMP < record.nCOMP; COMP++)
+		{
 			if (record.components[COMP] == "MODE")
 			{
-				if (record.mode == "PVC")
+				if (record.mode == "PVE")
 					boardGame.mode = BoardGame::GameMode::PVC;
 				else
 					boardGame.mode = BoardGame::GameMode::PVP;
 			}
 			else if (record.components[COMP] == "P1_NAME")
-				boardGame.player1Name = record.player1Name;
+				playerName[0] = record.player1Name;
 			else if (record.components[COMP] == "P2_NAME")
-				boardGame.player2Name = record.player2Name;
+				playerName[1] = record.player2Name;
 			else if (record.components[COMP] == "P1_SCORE")
 				boardGame.player1Score = record.player1Score;
 			else if (record.components[COMP] == "P2_SCORE")
@@ -277,6 +289,7 @@ void LoadGameLogic()
 			}
 			else if (record.components[COMP] == "RESULT")
 				boardGame.resultGame = record.resultGame;
+		}
 		menuGUI.fromLoadGame = true;
 		stateMenu = 1;
 		PlaySoundClick();
