@@ -16,10 +16,15 @@ struct RecordData
 	int boardsize = 12;
 	vector < vector <int> > boardGame;
 	int resultGame = 0;
+	RecordData() {}
 };
 
 void SaveGameUI(RenderWindow& window, bool = 1);
 
 void SaveGame(RenderWindow& window);
 
-void LoadGame(RenderWindow& window);
+void LoadGameFetch();
+
+void LoadGameLogic();
+
+void LoadGameUI(RenderWindow& window);

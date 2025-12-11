@@ -118,7 +118,19 @@ void SaveGame(RenderWindow& window)
 	file.close();
 }
 
-void LoadGame(RenderWindow& window)
+
+/*======= LOAD GAME UI VARIABLES =======*/
+
+int curRecord; // index in records
+int firstBtnRecord; // index (multiples of three)
+int numPage; // total pages
+int curPage; // current pages
+int numBtn; // number of button in this page
+int curBtn; // 0, 1, 2 in this page
+
+/*======================================*/
+
+void LoadGameFetch()
 {
 	std::ifstream file("assets/game_save/gamesave.txt");
 
@@ -128,47 +140,236 @@ void LoadGame(RenderWindow& window)
 	}
 
 	// file opened successully
-	vector <RecordData> records;
 	string content;
-	records.clear(); // delete records from previous call
+	menuGUI.records.clear(); // delete records from previous call
 	while (file >> content)
 	{
 		if (content == "END") // end of record, do nothing
 			continue;
 		else if (content == "BEGIN") // start of record, increase records size
 		{
-			records.resize(records.size() + 1);
-			file >> records.back().record_name;
-			file >> records.back().nCOMP;
+			menuGUI.records.resize(menuGUI.records.size() + 1);
+			file >> menuGUI.records.back().record_name;
+			file >> menuGUI.records.back().nCOMP;
 		}
-		else if (content == "TIME")
-			file >> records.back().saved_time;
-		else if (content == "MODE")
-			file >> records.back().mode;
-		else if (content == "P1NAME")
-			file >> records.back().player1Name;
-		else if (content == "P2_NAME")
-			file >> records.back().player2Name;
-		else if (content == "P1_SCORE")
-			file >> records.back().player1Score;
-		else if (content == "P2_SCORE")
-			file >> records.back().player2Score;
-		else if (content == "TURN")
-			file >> records.back().curPlayer;
-		else if (content == "BOARD_SIZE")
-			file >> records.back().boardsize;
-		else if (content == "BOARDGAME")
+		else
 		{
-			vector < vector <int>>& board = records.back().boardGame;
-			int& bsize = records.back().boardsize;
-			board.assign(bsize, vector <int>(bsize, 0));
-			for (int i = 0; i < bsize; i++)
-				for (int j = 0; j < bsize; j++)
-					file >> board[i][j];
+			menuGUI.records.back().components.push_back(content);
+			if (content == "TIME")
+				file >> menuGUI.records.back().saved_time;
+			else if (content == "MODE")
+				file >> menuGUI.records.back().mode;
+			else if (content == "P1NAME")
+				file >> menuGUI.records.back().player1Name;
+			else if (content == "P2_NAME")
+				file >> menuGUI.records.back().player2Name;
+			else if (content == "P1_SCORE")
+				file >> menuGUI.records.back().player1Score;
+			else if (content == "P2_SCORE")
+				file >> menuGUI.records.back().player2Score;
+			else if (content == "TURN")
+				file >> menuGUI.records.back().curPlayer;
+			else if (content == "BOARD_SIZE")
+				file >> menuGUI.records.back().boardsize;
+			else if (content == "BOARDGAME")
+			{
+				vector < vector <int>>& board = menuGUI.records.back().boardGame;
+				int& bsize = menuGUI.records.back().boardsize;
+				board.assign(bsize, vector <int>(bsize, 0));
+				for (int i = 0; i < bsize; i++)
+					for (int j = 0; j < bsize; j++)
+						file >> board[i][j];
+			}
+			else if (content == "RESULT")
+				file >> menuGUI.records.back().resultGame;
 		}
-		else if (content == "RESULT")
-			file >> records.back().resultGame;
 	}
 
 	file.close();
+
+	reverse(menuGUI.records.begin(), menuGUI.records.end());
+	firstBtnRecord = curPage = curBtn = 0;
+	numBtn = min(3, (int)menuGUI.records.size());
+	numPage = ((int)menuGUI.records.size() + 2) / 3 - 1;
+	curRecord = -1;
+}
+
+void LoadGameLogic()
+{
+	if (keyBoard.Esc()) // back to main menu
+	{
+		stateMenu = 0;
+		return;
+	}
+
+	if (menuGUI.records.size() == 0) // no records yet
+		return;
+
+	numBtn = 0;
+	if (curPage == numPage) // last page
+		numBtn = menuGUI.records.size() % 3;
+	if (numBtn == 0) // last page has 3 buttons or not last page
+		numBtn = 3;
+
+	if (keyBoard.Up() || keyBoard.Down()) // change button inside page
+	{
+		if (keyBoard.Up())
+		{
+			if (--curBtn < 0)
+				curBtn += numBtn;
+		}
+		else
+		{
+			if (++curBtn >= numBtn)
+				curBtn -= numBtn;
+		}
+		firstBtnRecord = 3 * curPage;
+		curRecord = firstBtnRecord + curBtn;
+		PlaySoundClick();
+	}
+	else if (keyBoard.Left() || keyBoard.Right()) // change page
+	{
+		int prvPage = curPage;
+		if (keyBoard.Left())
+			curPage = max(curPage - 1, 0);
+		else
+			curPage = min(curPage + 1, numPage);
+		if (curPage != prvPage)
+		{
+			curBtn = 0;
+			if (curPage == numPage) // last page
+				numBtn = menuGUI.records.size() % 3;
+			if (numBtn == 0) // last page has 3 buttons or not last page
+				numBtn = 3;
+			PlaySoundClick();
+		}
+		firstBtnRecord = 3 * curPage;
+		curRecord = firstBtnRecord + curBtn;
+	}
+	else if (keyBoard.Enter() && curRecord > -1) // choose record
+	{
+		RecordData& record = menuGUI.records[curRecord];
+		for (int COMP = 0; COMP < record.nCOMP; COMP++)
+			if (record.components[COMP] == "MODE")
+			{
+				if (record.mode == "PVC")
+					boardGame.mode = BoardGame::GameMode::PVC;
+				else
+					boardGame.mode = BoardGame::GameMode::PVP;
+			}
+			else if (record.components[COMP] == "P1_NAME")
+				boardGame.player1Name = record.player1Name;
+			else if (record.components[COMP] == "P2_NAME")
+				boardGame.player2Name = record.player2Name;
+			else if (record.components[COMP] == "P1_SCORE")
+				boardGame.player1Score = record.player1Score;
+			else if (record.components[COMP] == "P2_SCORE")
+				boardGame.player2Score = record.player2Score;
+			else if (record.components[COMP] == "TURN")
+				boardGame.curPlayer = record.curPlayer;
+			else if (record.components[COMP] == "BOARD_SIZE")
+				boardGame.size = record.boardsize;
+			else if (record.components[COMP] == "BOARDGAME")
+			{
+				for (int i = 0; i < boardGame.size; i++)
+					for (int j = 0; j < boardGame.size; j++)
+						boardGame.board[i][j] = record.boardGame[i][j];
+			}
+			else if (record.components[COMP] == "RESULT")
+				boardGame.resultGame = record.resultGame;
+		menuGUI.fromLoadGame = true;
+		stateMenu = 1;
+		PlaySoundClick();
+	}
+}
+
+void RecordButtonUI(RenderWindow& window, int Btn, float winWidth, float winHeight, float& frameWidth, float& frameHeight)
+{
+	RectangleShape buttonBox(Vector2f(frameWidth * 0.75, frameHeight / 10));
+	Text buttonText;
+	buttonText.setFont(font);
+	buttonText.setCharacterSize(0.04 * winHeight);
+
+	// custom button trait
+	// color, position, outline thickness
+	buttonBox.setFillColor(Btn == curBtn ? Color(100, 150, 200) : Color(70, 70, 70));
+	buttonBox.setOutlineThickness(Btn == curBtn ? winHeight * 0.006 : winHeight * -0.003);
+	buttonBox.setOutlineColor(Btn == curBtn ? Color::Yellow : Color::White);
+	buttonBox.setPosition(winWidth / 2 - frameWidth * 0.375f, 
+							winHeight / 2 - frameHeight / 2 + 0.11f * winHeight + 0.13f * winHeight * Btn);
+		
+	// custom text trait
+	// color, string, position
+	buttonText.setString(menuGUI.records[firstBtnRecord + Btn].record_name);
+	buttonText.setFillColor(Btn == curBtn ? Color::Yellow : Color::White);
+	buttonText.setPosition(winWidth / 2 - buttonText.getLocalBounds().width / 2,
+							winHeight / 2 - frameHeight + 0.36f * winHeight + 0.13f * winHeight * Btn);
+
+	// draw
+	window.draw(buttonBox);
+	window.draw(buttonText);
+}
+
+void LoadGameUI(RenderWindow& window)
+{
+	// activate choosing mode
+	if (curRecord == -1)
+		curRecord = 0;
+
+	// add background here
+
+
+	// setup
+	const float winWidth = window.getSize().x;
+	const float winHeight = window.getSize().y;
+
+	// draw load game frame
+	float frameWidth = winWidth * 0.4;
+	float frameHeight = winHeight * 0.5;
+	RectangleShape loadgameframe(Vector2f(frameWidth, frameHeight));
+	loadgameframe.setFillColor(Color(50, 50, 50, 240));
+	loadgameframe.setOutlineColor(Color::White);
+	loadgameframe.setOutlineThickness(winHeight * 0.003f);
+	loadgameframe.setPosition(winWidth / 2 - frameWidth / 2,
+		winHeight / 2 - frameHeight / 2);
+	window.draw(loadgameframe);
+
+	Text titleText;
+	titleText.setFont(font);
+	titleText.setString("Load game");
+	titleText.setCharacterSize((int)(winHeight * 0.05f));
+	titleText.setFillColor(Color::Yellow);
+	FloatRect titleBounds = titleText.getLocalBounds();
+	titleText.setPosition(window.getSize().x / 2 - titleBounds.width / 2,
+		winHeight / 2 - frameHeight / 2 + winHeight * 0.03f);
+	window.draw(titleText);
+
+	Text pageText;
+	pageText.setString("Page " + tostr(curPage + 1) + "/" + tostr(numPage));
+	pageText.setCharacterSize((int)(winHeight * 0.03f));
+	pageText.setStyle(Text::Italic);
+	//pageText.setFillColor(Color(120, 158, 158));
+	pageText.setFillColor(Color::Blue);
+	pageText.setPosition(winWidth / 2 + frameWidth / 2 - pageText.getLocalBounds().width * 1.05,
+		winHeight / 2 + frameHeight / 2 - pageText.getLocalBounds().height * 1.05);
+	window.draw(pageText);
+
+	// draw buttons
+	if (menuGUI.records.size() == 0) // no records yet
+	{
+		Text announcement;
+		announcement.setFont(font);
+		announcement.setString("No records yet!");
+		announcement.setCharacterSize((int)(winHeight * 0.05f));
+		announcement.setFillColor(Color::Yellow);
+		FloatRect announcementBounds = announcement.getLocalBounds();
+		announcement.setPosition(window.getSize().x / 2 - announcementBounds.width / 2,
+			winHeight / 2 - announcement.getLocalBounds().height / 2);
+		window.draw(announcement);
+		return;
+	}
+
+	for (int i = 0; i < numBtn; i++)
+		RecordButtonUI(window, i, winWidth, winHeight, frameWidth, frameHeight);
+
 }

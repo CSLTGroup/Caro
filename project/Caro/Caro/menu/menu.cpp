@@ -88,6 +88,8 @@ void Menu::updateState(RenderWindow& window) {
             }
             else if (stateMenu == listButton[loadGameID].ID) {
                 // Load game functionality can be added here
+                LoadGameFetch();
+                LoadGameLogic();
             }
             else if (stateMenu == listButton[settingID].ID) {
                 setting.SettingsLogic(window);
@@ -105,6 +107,7 @@ void Menu::updateState(RenderWindow& window) {
     }
     else if (stateMenu == listButton[loadGameID].ID) {
         // Load game functionality can be added here
+        LoadGameLogic();
     }
     else if (stateMenu == listButton[settingID].ID) {
         setting.SettingsLogic(window);
@@ -112,12 +115,22 @@ void Menu::updateState(RenderWindow& window) {
 }
 void Menu::handleNewGame(RenderWindow& window) {
     if (awaitingModeSelection)
+    {
+        if (fromLoadGame)
+        {
+            fromLoadGame = false;
+            awaitingModeSelection = false;
+            boardGame.showPlayerPanel = true;
+            boardGame.drawTable(window);
+            return;
+        }
         drawModeSelection(window);
+    }
     else
         boardGame.drawTable(window);
 }
 void Menu::handleLoadGame(RenderWindow& window) {
-    LoadGame(window);
+    LoadGameUI(window);
 }
 void Menu::handleSettings(RenderWindow& window) {
     setting.draw(window);
