@@ -15,6 +15,11 @@ struct Menu {
     Sprite spriteBgImg;
     Texture bgImg;
 
+    // draw title
+    Text titleGame[3];
+    Texture shadowTexTitle;
+    Sprite shadowSpriteTitle;
+
     // design 
     void drawBackGround(RenderWindow& window);
     void drawMenu(RenderWindow& window);
@@ -29,4 +34,5 @@ struct Menu {
     void initModeButtons(RenderWindow& window);
     void updateState(RenderWindow& window);
     void handleModeSelection(RenderWindow& window);
+    void initMenuButtons();
 };

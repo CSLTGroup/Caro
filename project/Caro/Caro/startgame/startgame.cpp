@@ -17,6 +17,7 @@ void startGame() {
         "Caro Game!",
         Style::Close
     );
+    window.setFramerateLimit(60); // set 60fps
 
     // set font
     if (!font.getInfo().family.size()) {
@@ -41,21 +42,19 @@ void startGame() {
     // check condition required to show "firstime" menu or normal menu
     if (confirmedSettingsFirstTime)
         stateMenu = 0;
-    bool firstTimeOpenApp = true;
+
+    menuGUI.handleUI(window);
     while (window.isOpen()) {
+        window.clear();
+        menuGUI.handleUI(window);  // update menu & smaller GUI state
+        window.display();          // show menu
         Event event;
         while (window.pollEvent(event)) {
             if (event.type == Event::Closed)
                 window.close();
-            else if (firstTimeOpenApp || event.type == Event::KeyPressed || event.type == Event::KeyReleased) {
-
-                firstTimeOpenApp = false;
+            else if (event.type == Event::KeyPressed || event.type == Event::KeyReleased) {
                 keyBoard.setState(window); // update keyboard state
-                window.clear();
-                menuGUI.handleUI(window);  // update menu & smaller GUI state
-                window.display();          // show menu
             }
         }
-
     }
 }

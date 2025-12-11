@@ -23,18 +23,22 @@ void Menu::drawTitle(RenderWindow& window) {
     const float winHeight = window.getSize().y;
     const float winWidth = window.getSize().x;
 
+
     // draw title
     float distancePerText[] = { winWidth / 300.0f, winHeight / 200.0f };
     float positionYText = winHeight * 34 * 33 / 10000.0f;
     float heightText = winHeight * 44 * 30 / 10000.0f;
     
     // draw 3 layer text
-
-    Text titleGame[3];
+    static bool initialized = false;
+    if (!initialized) {
+        for (int i = 0; i < 3; i++) {
+            titleGame[i].setFont(font);
+            titleGame[i].setString("Caro Game"); // noi dung title
+            titleGame[i].setStyle(Text::Bold);
+        }
+    }
     for (int i = 0; i < 3; i++) {
-        titleGame[i].setFont(font);
-        titleGame[i].setString("Caro Game"); // noi dung title
-        titleGame[i].setStyle(Text::Bold);
         titleGame[i].setCharacterSize(getCharacterSizeForLineHeight(font, heightText)); // character's size = chieu cao text
         FloatRect bounds = titleGame[i].getLocalBounds();
         titleGame[i].setOrigin(bounds.width / 2.0f, bounds.height / 2.0f); // set origin point in the middle
@@ -53,44 +57,30 @@ void Menu::drawTitle(RenderWindow& window) {
     titleGame[0].setPosition(winWidth / 2.0f, positionYText);
 
     // draw shadow image
-    Texture shadowTex;
-    shadowTex.loadFromFile("assets/image/shadow.png");
-    Sprite shadowSprite;
-    shadowSprite.setTexture(shadowTex);
-    FloatRect bounds = shadowSprite.getLocalBounds();
-    shadowSprite.setOrigin(bounds.width / 2.0f, bounds.height / 2.0f);
-    float scaleX = 3.0f * titleGame[0].getLocalBounds().width/ shadowSprite.getLocalBounds().width;
-    float scaleY = 5.0f * titleGame[0].getLocalBounds().height/ shadowSprite.getLocalBounds().height;
-    shadowSprite.scale(scaleX, scaleY);
-    shadowSprite.setPosition(titleGame[0].getPosition().x, titleGame[0].getPosition().y + heightText / 2.0f); // set in the middle
-    shadowSprite.setColor(sf::Color(255, 255, 255, 100));
+    if (!initialized) {
+        shadowTexTitle.loadFromFile("assets/image/shadow.png");
+        shadowSpriteTitle.setTexture(shadowTexTitle);
+        FloatRect bounds = shadowSpriteTitle.getLocalBounds();
+        shadowSpriteTitle.setOrigin(bounds.width / 2.0f, bounds.height / 2.0f);
+    }
+    float scaleX = 3.0f * titleGame[0].getLocalBounds().width/ shadowSpriteTitle.getLocalBounds().width;
+    float scaleY = 5.0f * titleGame[0].getLocalBounds().height/ shadowSpriteTitle.getLocalBounds().height;
+    if (shadowSpriteTitle.getScale().x != scaleX || shadowSpriteTitle.getScale().y != scaleY)
+        shadowSpriteTitle.setScale(scaleX, scaleY);
+    shadowSpriteTitle.setPosition(titleGame[0].getPosition().x, titleGame[0].getPosition().y + heightText / 2.0f); // set in the middle
+    shadowSpriteTitle.setColor(sf::Color(255, 255, 255, 100));
 
     // draw onto the screen
-    window.draw(shadowSprite);
+    window.draw(shadowSpriteTitle);
     window.draw(titleGame[2]);
     window.draw(titleGame[1]);
     window.draw(titleGame[0]);
+
+    initialized = true;
 }
 void Menu::drawMenu(RenderWindow& window) {
-    //make new buttons if not exist
-    if (!listButton.size()) {
-        listButton.assign(5, Button());
 
-        listButton[newGameID].context = "New Game";
-        listButton[loadGameID].context = "Load Game";
-        listButton[settingID].context = "Settings";
-        listButton[creditsID].context = "Credits";
-        listButton[howToPlayID].context = "How to Play";
-        listButton[newGameID].ID = 1;
-        listButton[loadGameID].ID = 2;
-        listButton[settingID].ID = 3;
-        listButton[howToPlayID].ID = 4;
-        listButton[creditsID].ID = 5;
-
-        listButton[0].selected = true;
-        stateMenu = ID;
-    }
-
+    initMenuButtons();
 
     // draw buttons
     const float winWidth = window.getSize().x;
@@ -141,6 +131,7 @@ void Menu::updateState(RenderWindow& window) {
     else if (stateMenu == ID) {
         awaitingModeSelection = true;
         modeButtons.clear();
+        initMenuButtons();
 
         if (keyBoard.Up() ^ keyBoard.Down()) {
             listButton[selectedButton].selected = false;
@@ -307,5 +298,25 @@ void Menu::handleModeSelection(RenderWindow& window) {
         awaitingModeSelection = false;
         boardGame.setMode(BoardGame::GameMode::None);
         modeButtons.clear();
+    }
+}
+void Menu::initMenuButtons() {
+    //make new buttons if not exist
+    if (!listButton.size()) {
+        listButton.assign(5, Button());
+
+        listButton[newGameID].context = "New Game";
+        listButton[loadGameID].context = "Load Game";
+        listButton[settingID].context = "Settings";
+        listButton[creditsID].context = "Credits";
+        listButton[howToPlayID].context = "How to Play";
+        listButton[newGameID].ID = 1;
+        listButton[loadGameID].ID = 2;
+        listButton[settingID].ID = 3;
+        listButton[howToPlayID].ID = 4;
+        listButton[creditsID].ID = 5;
+
+        listButton[0].selected = true;
+        stateMenu = ID;
     }
 }
