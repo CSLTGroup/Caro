@@ -15,3 +15,17 @@ float getCharacterSizeForLineHeight(const sf::Font& font, float targetHeight)
     }
     return (low + high) / 2;
 }
+
+std::string tostr(int k, int len)
+{
+    std::string str = "";
+    while (k)
+    {
+        str += char(k % 10 + 48);
+        k /= 10;
+    }
+    while (str.length() < len)
+        str += "0";
+    reverse(str.begin(), str.end());
+    return str;
+}

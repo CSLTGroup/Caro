@@ -1,9 +1,14 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
+
+using namespace sf;
+
+#include "animation/animation.h"
 #include "button/button.h"
 #include "keyboard/keyboard.h"
 #include "boardgame/boardgame.h"
+#include "savegame/savegame.h"
 #include "menu/menu.h"
 #include "startgame/startgame.h"
 #include "loadingscreen/loadingscreen.h"
@@ -18,8 +23,6 @@
 #include <sstream>
 #include <windows.h>
 
-using namespace sf;
-//using namespace std;
 
 extern int stateMenu;
 extern Font font;

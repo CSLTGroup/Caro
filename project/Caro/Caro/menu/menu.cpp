@@ -4,11 +4,8 @@
 void Menu::drawBackGround(RenderWindow& window) {
     static bool initialized = false;
     if (!initialized) {
-        bgImg.loadFromFile("assets/image/backgroundapex03.png");
+        bgImg.loadFromFile("assets/image/backgroundapex02.png");
         spriteBgImg.setTexture(bgImg);
-        spriteBgImg.setPosition(0, 0);
-        spriteBgImg.setScale(1, 1);
-        initialized = true;
     }
     sf::Vector2u textureSize = bgImg.getSize();
     sf::Vector2u windowSize = window.getSize();
@@ -18,6 +15,24 @@ void Menu::drawBackGround(RenderWindow& window) {
         spriteBgImg.setScale(scaleX, scaleY);
 
     window.draw(spriteBgImg);
+
+    // draw animated snow falling
+    static Animation snowfall("assets/image/snowfall.png", 2600, 3600, 7, 2, 4);
+    static Sprite spriteSnow;
+    static Clock clock;
+    static int currentFrame = 0;
+    static float timer = 0.f;
+    const static float fps = 5.0f;   // animation speed
+    float dt = clock.restart().asSeconds();
+    updateAnimation(dt, fps, snowfall.frameCount, currentFrame, timer);
+    applyFrame(spriteSnow, snowfall, currentFrame);
+    scaleX = 2.0f * windowSize.x / snowfall.texture.getSize().x;
+    scaleY = 4.0f * windowSize.y / snowfall.texture.getSize().y;
+    if (spriteSnow.getScale().x != scaleX || spriteSnow.getScale().y != scaleY)
+        spriteSnow.setScale(scaleX, scaleY);
+    
+    window.draw(spriteSnow);
+    initialized = true;
 }
 void Menu::drawTitle(RenderWindow& window) {
     const float winHeight = window.getSize().y;
@@ -88,24 +103,24 @@ void Menu::drawMenu(RenderWindow& window) {
 
     /// size box menu (contain 3 buttons)
     widthBoxMenu = winWidth * 54.0f / 100;
-    heightBoxMenu = winHeight * 66.0f / 100;
+    heightBoxMenu = winHeight * 70.0f / 100;
 
     // size button
     float widthButton = widthBoxMenu;
     float heightButton = heightBoxMenu * 14.0f / 100;
     float spacingBetween = 1.0f * heightBoxMenu / listButton.size() - heightButton;
+    float spacingBuffBot = winHeight * 4 / 100.0f;
 
     //draw
     for (int i = listButton.size() - 1; i >= 0; i--) {
         auto& button = listButton[i];
         button.setPosition(
             winWidth / 2 - widthButton / 2,                                             // x
-            winHeight - (heightButton + spacingBetween) * (listButton.size() - i),     // y
+            winHeight - (heightButton + spacingBetween) * (listButton.size() - i) - spacingBuffBot,     // y
             widthButton,                                                               // x_len
             heightButton                                                                     // y_len
         );
-        if (stateMenu == ID)
-            button.draw(window);
+        button.draw(window);
     }
 
     // draw title game
@@ -118,11 +133,11 @@ void Menu::handleUI(RenderWindow& window) {
     else if (stateMenu == 0)
         drawBackGround(window), drawMenu(window);
     else if (stateMenu == listButton[newGameID].ID)
-        drawBackGround(window), drawMenu(window), handleNewGame(window);
+        drawBackGround(window), drawTitle(window), handleNewGame(window);
     else if (stateMenu == listButton[loadGameID].ID)
-        handleLoadGame(window);
+        drawBackGround(window), drawTitle(window), handleLoadGame(window);
     else if (stateMenu == listButton[settingID].ID)
-        drawBackGround(window), drawMenu(window), handleSettings(window);
+        drawBackGround(window), drawTitle(window), handleSettings(window);
 }
 void Menu::updateState(RenderWindow& window) {
     if (stateMenu == -1) { // first time playing
@@ -163,6 +178,8 @@ void Menu::updateState(RenderWindow& window) {
             }
             else if (stateMenu == listButton[loadGameID].ID) {
                 // Load game functionality can be added here
+                LoadGameFetch();
+                LoadGameLogic();
             }
             else if (stateMenu == listButton[settingID].ID) {
                 setting.SettingsLogic(window);
@@ -180,6 +197,7 @@ void Menu::updateState(RenderWindow& window) {
     }
     else if (stateMenu == listButton[loadGameID].ID) {
         // Load game functionality can be added here
+        LoadGameLogic();
     }
     else if (stateMenu == listButton[settingID].ID) {
         setting.SettingsLogic(window);
@@ -187,17 +205,25 @@ void Menu::updateState(RenderWindow& window) {
 }
 void Menu::handleNewGame(RenderWindow& window) {
     if (awaitingModeSelection)
-        drawModeSelection(window);
-    else
-        boardGame.drawTable(window);
+    {
+        if (fromLoadGame)
+        {
+            fromLoadGame = false;
+            awaitingModeSelection = false;
+            boardGame.showPlayerPanel = true;
+            boardGame.drawTable(window);
+        }
+        else drawModeSelection(window);
+
+    }
+    else boardGame.drawTable(window);
 }
 void Menu::handleLoadGame(RenderWindow& window) {
-    // draw load game here
+    LoadGameUI(window);
 }
 void Menu::handleSettings(RenderWindow& window) {
     setting.draw(window);
 }
-
 void Menu::initModeButtons(RenderWindow& window) {
     modeButtons.assign(2, Button());
 
@@ -224,33 +250,19 @@ void Menu::initModeButtons(RenderWindow& window) {
     modeButtons[0].setPosition(startX, startY, buttonWidth, buttonHeight);
     modeButtons[1].setPosition(startX, startY + buttonHeight + spacing, buttonWidth, buttonHeight);
 }
-
 void Menu::drawModeSelection(RenderWindow& window) {
     if (!modeButtons.size())
         initModeButtons(window);
 
-    RectangleShape panel(Vector2f(window.getSize().x * 0.5f, window.getSize().y * 0.5f));
+    // draw panel
+    RectangleShape panel(Vector2f(max(window.getSize().x * 0.5f, 650.0f), window.getSize().y * 0.5f));
     panel.setFillColor(Color(20, 20, 20, 200));
     panel.setOutlineColor(Color::White);
     panel.setOutlineThickness(2);
     panel.setOrigin(panel.getSize().x / 2.f, panel.getSize().y / 2.f);
     panel.setPosition(window.getSize().x / 2.f, window.getSize().y / 2.f);
-    window.draw(panel);
 
-    Text title;
-    title.setFont(font);
-    title.setString("Choose Game Mode");
-    title.setCharacterSize(48);
-    title.setFillColor(Color::White);
-    FloatRect bounds = title.getLocalBounds();
-    title.setOrigin(bounds.left + bounds.width / 2.f, bounds.top + bounds.height / 2.f);
-    title.setPosition(window.getSize().x / 2.f, panel.getPosition().y - panel.getSize().y / 2.f + 70.f);
-    window.draw(title);
-
-    for (auto& button : modeButtons) {
-        button.draw(window);
-    }
-
+    // draw hint
     Text hint;
     hint.setFont(font);
     hint.setCharacterSize(24);
@@ -259,9 +271,25 @@ void Menu::drawModeSelection(RenderWindow& window) {
     FloatRect hintBounds = hint.getLocalBounds();
     hint.setOrigin(hintBounds.left + hintBounds.width / 2.f, hintBounds.top + hintBounds.height / 2.f);
     hint.setPosition(window.getSize().x / 2.f, panel.getPosition().y + panel.getSize().y / 2.f - 40.f);
+
+    // draw title
+    Text title;
+    title.setFont(font);
+    title.setString("Choose Game Mode");
+    title.setCharacterSize(48);
+    title.setFillColor(Color::White);
+    FloatRect bounds = title.getLocalBounds();
+    title.setOrigin(bounds.left + bounds.width / 2.f, bounds.top + bounds.height / 2.f);
+    title.setPosition(window.getSize().x / 2.f, panel.getPosition().y - panel.getSize().y / 2.f + 70.f);
+
+    // final draw onto the screen
+    window.draw(panel);
+    window.draw(title);
+    for (auto& button : modeButtons) {
+        button.draw(window);
+    }
     window.draw(hint);
 }
-
 void Menu::handleModeSelection(RenderWindow& window) {
     if (!modeButtons.size())
         initModeButtons(window);

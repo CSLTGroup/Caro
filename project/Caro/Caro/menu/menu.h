@@ -10,6 +10,9 @@ struct Menu {
     vector<Button> modeButtons;
     int selectedModeButton = 0;
     bool awaitingModeSelection = false;
+    vector <RecordData> records;
+    int currentVersion = 0;
+    bool fromLoadGame = 0;
 
     // draw background image
     Sprite spriteBgImg;

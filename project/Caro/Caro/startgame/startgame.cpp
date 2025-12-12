@@ -43,7 +43,6 @@ void startGame() {
     if (confirmedSettingsFirstTime)
         stateMenu = 0;
 
-    menuGUI.handleUI(window);
     while (window.isOpen()) {
         window.clear();
         menuGUI.handleUI(window);  // update menu & smaller GUI state

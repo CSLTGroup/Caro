@@ -136,7 +136,7 @@ void BoardGame::setMove(RenderWindow& window) {
         PlaySoundClick(); // Play click sound when moving right
     }
     if (keyBoard.combineAlphabetCheck('L')) // save game
-        cerr << "";
+        SaveGame(window);
     if (keyBoard.Enter())
         setChoice(window);
     else if (keyBoard.Esc()) {
@@ -194,7 +194,6 @@ int BoardGame::checkResult() {
     // draw
     return resultGame = 3;
 }
-
 void BoardGame::drawWinnerMessage(RenderWindow& window) {
 
     RectangleShape overlay(Vector2f(window.getSize().x, window.getSize().y));
@@ -266,8 +265,6 @@ void BoardGame::drawWinnerMessage(RenderWindow& window) {
 
     window.draw(instructionText);
 }
-
-
 int BoardGame::result() {
     if (resultGame) return resultGame;
     int prev = resultGame;
@@ -278,7 +275,6 @@ int BoardGame::result() {
     }
     return res;
 }
-
 void BoardGame::setMode(GameMode newMode) {
     mode = newMode;
     reset();
@@ -300,7 +296,6 @@ void BoardGame::setMode(GameMode newMode) {
         ensurePlayerAssets();
     }
 }
-
 void BoardGame::makeBotMove() {
     if (!isPVCMode() || curPlayer != aiPlayer || resultGame)
         return;
@@ -318,7 +313,6 @@ void BoardGame::makeBotMove() {
     curPlayer = 3 - curPlayer;
     result();
 }
-
 void BoardGame::ensurePlayerAssets() {
     // set avatar player 1
     // Use saved avatar path from settings, or default if not set
@@ -335,7 +329,6 @@ void BoardGame::ensurePlayerAssets() {
     }
     player2PhotoLoaded = player2Photo.loadFromFile(avatarPath);
 }
-
 void BoardGame::drawPlayerInfoPanel(RenderWindow& window) {
     float panelX = spacingLeft + widthBoard + spacingBoardBetween;
     float panelWidth = window.getSize().x - panelX - spacingBoardBetween;
