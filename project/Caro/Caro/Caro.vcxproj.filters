@@ -180,5 +180,11 @@
     <Image Include="assets\image\snowfall.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="assets\image\leftarrow.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="assets\image\rightarrow.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

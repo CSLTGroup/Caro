@@ -388,6 +388,44 @@ void Settings::draw(RenderWindow& window) {
         winHeight / 2 + boxHeight / 2 - boxHeight * 0.07f);
     window.draw(pageText);
 
+    // draw navigation arrow
+    static Animation leftarrow("assets/image/leftarrow.png", 1125, 1040, 10, 3, 4);
+    static Sprite spriteLeft;
+    static Animation rightarrow("assets/image/rightarrow.png", 1125, 1040, 10, 3, 4);
+    static Sprite spriteRight;
+
+    static Clock clock;
+    static int currentFrame = 0;
+    static float timer = 0.f;
+    const static float fps = 8.0f;   // animation speed
+    float dt = clock.restart().asSeconds();
+
+    updateAnimation(dt, fps, leftarrow.frameCount, currentFrame, timer);
+    applyFrame(spriteLeft, leftarrow, currentFrame);
+    updateAnimation(dt, fps, rightarrow.frameCount, currentFrame, timer);
+    applyFrame(spriteRight, rightarrow, currentFrame);
+
+    float scaleX = 3.0f * boxWidth / leftarrow.texture.getSize().x * 0.15; // 15% box's width
+    float scaleY = 4.0f * boxHeight / rightarrow.texture.getSize().y * 0.23; // 23% box's height
+    if (spriteLeft.getScale().x != scaleX || spriteLeft.getScale().y != scaleY) {
+        // scale
+        spriteLeft.setScale(scaleX, scaleY);
+        spriteRight.setScale(scaleX, scaleY);
+        // position
+        spriteLeft.setOrigin(spriteLeft.getLocalBounds().getSize().x / 2,
+            spriteLeft.getLocalBounds().getSize().y / 2);
+        spriteLeft.setPosition(winWidth / 2 - boxWidth / 2, winHeight / 2);
+
+        spriteRight.setOrigin(spriteLeft.getLocalBounds().getSize().x / 2,
+            spriteRight.getLocalBounds().getSize().y / 2);
+        spriteRight.setPosition(winWidth / 2 + boxWidth / 2, winHeight / 2);
+    }
+
+    if (SelectSettings / 3 * 3 + numSettingsCurPage < totalSetButtons)
+        window.draw(spriteRight);
+    if (SelectPage > 0)
+        window.draw(spriteLeft);
+
     // draw buttons
     SettingButtons(window);
 }

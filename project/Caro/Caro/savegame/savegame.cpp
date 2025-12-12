@@ -370,23 +370,42 @@ void LoadGameUI(RenderWindow& window)
 	for (int i = 0; i < numBtn; i++)
 		RecordButtonUI(window, i, winWidth, winHeight, frameWidth, frameHeight);
 
-	//// draw navigation arrow
-	//// draw animated snow falling
-	//static Animation snowfall("assets/image/snowfall.png", 2600, 3600, 7, 2, 4);
-	//static Sprite spriteSnow;
-	//static Clock clock;
-	//static int currentFrame = 0;
-	//static float timer = 0.f;
-	//const static float fps = 5.0f;   // animation speed
-	//float dt = clock.restart().asSeconds();
-	//updateAnimation(dt, fps, snowfall.frameCount, currentFrame, timer);
-	//applyFrame(spriteSnow, snowfall, currentFrame);
-	//scaleX = 2.0f * windowSize.x / snowfall.texture.getSize().x;
-	//scaleY = 4.0f * windowSize.y / snowfall.texture.getSize().y;
-	//if (spriteSnow.getScale().x != scaleX || spriteSnow.getScale().y != scaleY)
-	//	spriteSnow.setScale(scaleX, scaleY);
+	// draw navigation arrow
+	static Animation leftarrow("assets/image/leftarrow.png", 1125, 1040, 10, 3, 4);
+	static Sprite spriteLeft;
+	static Animation rightarrow("assets/image/rightarrow.png", 1125, 1040, 10, 3, 4);
+	static Sprite spriteRight;
 
-	//window.draw(spriteSnow);
-	//initialized = true;
+	static Clock clock;
+	static int currentFrame = 0;
+	static float timer = 0.f;
+	const static float fps = 8.0f;   // animation speed
+	float dt = clock.restart().asSeconds();
+
+	updateAnimation(dt, fps, leftarrow.frameCount, currentFrame, timer);
+	applyFrame(spriteLeft, leftarrow, currentFrame);
+	updateAnimation(dt, fps, rightarrow.frameCount, currentFrame, timer);
+	applyFrame(spriteRight, rightarrow, currentFrame);
+
+	float scaleX = 3.0f * frameWidth / leftarrow.texture.getSize().x * 0.15; // 15% box's width
+	float scaleY = 4.0f * frameHeight / rightarrow.texture.getSize().y * 0.23; // 23% box's height
+	if (spriteLeft.getScale().x != scaleX || spriteLeft.getScale().y != scaleY) {
+		// scale
+		spriteLeft.setScale(scaleX, scaleY);
+		spriteRight.setScale(scaleX, scaleY);
+		// position
+		spriteLeft.setOrigin(spriteLeft.getLocalBounds().getSize().x / 2,
+			spriteLeft.getLocalBounds().getSize().y / 2);
+		spriteLeft.setPosition(winWidth / 2 - frameWidth / 2, winHeight / 2);
+
+		spriteRight.setOrigin(spriteLeft.getLocalBounds().getSize().x / 2,
+			spriteRight.getLocalBounds().getSize().y / 2);
+		spriteRight.setPosition(winWidth / 2 + frameWidth / 2, winHeight / 2);
+	}
+	
+	if (firstBtnRecord + numBtn < menuGUI.records.size())
+		window.draw(spriteRight);
+	if (firstBtnRecord > 0)
+		window.draw(spriteLeft);
 
 }

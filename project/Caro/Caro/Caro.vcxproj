@@ -170,9 +170,11 @@
     <Image Include="assets\image\backgroundapex02.png" />
     <Image Include="assets\image\background_img.png" />
     <Image Include="assets\image\focusButton.png" />
+    <Image Include="assets\image\leftarrow.png" />
     <Image Include="assets\image\penguinGOGO.png" />
     <Image Include="assets\image\player1_egg-egg-sheeran.gif" />
     <Image Include="assets\image\player2_onepunchman.jpg" />
+    <Image Include="assets\image\rightarrow.png" />
     <Image Include="assets\image\shadow.png" />
     <Image Include="assets\image\shadow2.png" />
     <Image Include="assets\image\snowfall.png" />
