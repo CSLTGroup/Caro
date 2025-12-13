@@ -84,6 +84,15 @@
     <ClCompile Include="firsttimeplaying\firsttimeplaying.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="savegame\savegame.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="others\others.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="animation\animation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="keyboard\keyboard.h">
@@ -119,6 +128,15 @@
     <ClInclude Include="firsttimeplaying\firsttimeplaying.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="savegame\savegame.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="others\others.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="animation\animation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Font Include="assets\font\arial.ttf">
@@ -139,6 +157,33 @@
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="assets\image\player2_onepunchman.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="assets\image\backgroundapex.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="assets\image\shadow.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="assets\image\focusButton.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="assets\image\unfocusButton.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="assets\image\backgroundapex02.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="assets\image\shadow2.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="assets\image\snowfall.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="assets\image\leftarrow.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="assets\image\rightarrow.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

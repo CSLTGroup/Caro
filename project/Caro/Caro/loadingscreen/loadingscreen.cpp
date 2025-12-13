@@ -19,13 +19,13 @@ void loadingScreen(RenderWindow &window)
 	const int numFrames = 8; // number of different imgs to load
 	Sprite loadingSprite(loadingTexture);
 	loadingSprite.setTextureRect(IntRect(0, 0, frameWidth, frameHeight));
-	loadingSprite.scale(5.f, 5.f); // tang kich thuoc 3 lan
+	loadingSprite.scale(5.f, 5.f); // tang kich thuoc 5 lan
 	int currentFrame = -1;
 	int frameDuration = 150000; // 0.15 seconds per frame
 	int elapsed = 0.f;
 
 	// set up text
-	const string prefixLoadText = "Loading... - ";
+	const string prefixLoadText = "Loading...  ";
 	int curSection = 0; // curSection = 0/1/2/3/4
 
 	Text loadingText;

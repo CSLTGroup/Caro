@@ -135,6 +135,8 @@ void BoardGame::setMove(RenderWindow& window) {
         ++curX;
         PlaySoundClick(); // Play click sound when moving right
     }
+    if (keyBoard.combineAlphabetCheck('L')) // save game
+        SaveGame(window);
     if (keyBoard.Enter())
         setChoice(window);
     else if (keyBoard.Esc()) {
@@ -192,7 +194,6 @@ int BoardGame::checkResult() {
     // draw
     return resultGame = 3;
 }
-
 void BoardGame::drawWinnerMessage(RenderWindow& window) {
 
     RectangleShape overlay(Vector2f(window.getSize().x, window.getSize().y));
@@ -264,8 +265,6 @@ void BoardGame::drawWinnerMessage(RenderWindow& window) {
 
     window.draw(instructionText);
 }
-
-
 int BoardGame::result() {
     if (resultGame) return resultGame;
     int prev = resultGame;
@@ -276,7 +275,6 @@ int BoardGame::result() {
     }
     return res;
 }
-
 void BoardGame::setMode(GameMode newMode) {
     mode = newMode;
     reset();
@@ -298,7 +296,6 @@ void BoardGame::setMode(GameMode newMode) {
         ensurePlayerAssets();
     }
 }
-
 void BoardGame::makeBotMove() {
     if (!isPVCMode() || curPlayer != aiPlayer || resultGame)
         return;
@@ -316,20 +313,22 @@ void BoardGame::makeBotMove() {
     curPlayer = 3 - curPlayer;
     result();
 }
-
 void BoardGame::ensurePlayerAssets() {
-    if (!player1PhotoLoaded) {
-        if (player1Photo.loadFromFile("assets/image/player1_egg-egg-sheeran.gif")) {
-            player1PhotoLoaded = true;
-        }
+    // set avatar player 1
+    // Use saved avatar path from settings, or default if not set
+    std::string avatarPath = setting.getPlayer1AvatarPath();
+    if (avatarPath.empty()) {
+        avatarPath = "assets/image/Avatar/player1_egg-egg-sheeran.gif";
     }
-    if (!player2PhotoLoaded) {
-        if (player2Photo.loadFromFile("assets/image/player2_onepunchman.jpg")) {
-            player2PhotoLoaded = true;
-        }
-    }
-}
+    player1PhotoLoaded = player1Photo.loadFromFile(avatarPath);
 
+    // set avatar player 2
+    avatarPath = setting.getPlayer2AvatarPath();
+    if (avatarPath.empty()) {
+        avatarPath = "assets/image/Avatar/player2_onepunchman.jpg";
+    }
+    player2PhotoLoaded = player2Photo.loadFromFile(avatarPath);
+}
 void BoardGame::drawPlayerInfoPanel(RenderWindow& window) {
     float panelX = spacingLeft + widthBoard + spacingBoardBetween;
     float panelWidth = window.getSize().x - panelX - spacingBoardBetween;

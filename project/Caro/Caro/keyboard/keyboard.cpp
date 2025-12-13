@@ -52,11 +52,18 @@ void KeyBoardPressed::setState(RenderWindow& window) {
 		maskINP |= BACKSPACE;
 	if (Keyboard::isKeyPressed(Keyboard::LShift) || Keyboard::isKeyPressed(Keyboard::RShift))
 		maskINP |= SHIFT;
-	mask = maskINP;
-
-    if (mask) 
+    if (Keyboard::isKeyPressed(Keyboard::Up))
+        combineAlphabetNXT['W' - 'A'] = true, anyKeyPressed = true;
+    if (Keyboard::isKeyPressed(Keyboard::Down))
+        combineAlphabetNXT['S' - 'A'] = true, anyKeyPressed = true;
+    if (Keyboard::isKeyPressed(Keyboard::Left))
+        combineAlphabetNXT['A' - 'A'] = true, anyKeyPressed = true;
+    if (Keyboard::isKeyPressed(Keyboard::Right))
+        combineAlphabetNXT['D' - 'A'] = true, anyKeyPressed = true;
+    if (maskINP) 
         anyKeyPressed = true;
-
+	
+    mask = maskINP;
     if (!anyKeyPressed) {
 		memset(combineAlphabet, 0, sizeof(combineAlphabet));
 		menuGUI.updateState(window);

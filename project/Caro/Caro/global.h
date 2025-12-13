@@ -1,23 +1,28 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
+
+using namespace sf;
+
+#include "animation/animation.h"
 #include "button/button.h"
 #include "keyboard/keyboard.h"
 #include "boardgame/boardgame.h"
+#include "savegame/savegame.h"
 #include "menu/menu.h"
 #include "startgame/startgame.h"
 #include "loadingscreen/loadingscreen.h"
 #include "sfx/sfx.h"
 #include "setting/setting.h"
 #include "firsttimeplaying/firsttimeplaying.h"
+#include "others/others.h"
 #include <vector>
 #include <iostream>
 #include <string>
 #include <fstream>
 #include <sstream>
+#include <windows.h>
 
-using namespace sf;
-//using namespace std;
 
 extern int stateMenu;
 extern Font font;
@@ -26,4 +31,6 @@ extern KeyBoardPressed keyBoard;
 extern BoardGame boardGame;
 extern Settings setting;
 extern string playerName[2];
-extern bool confirmedNameFirstTime;
+extern bool confirmedSettingsFirstTime;
+extern int idWindowSize;
+extern vector<pair<int, int> > listWindowSize;

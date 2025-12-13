@@ -3,17 +3,25 @@
 void startGame() {
     // set up window
     VideoMode desktop = VideoMode::getDesktopMode();
-    const double widthApp  = desktop.width;   // kich thuoc width toan man hinh
-    const double heightApp = desktop.height;  // kich thuoc height toan man hinh
+    const double widthRES = desktop.width;   // kich thuoc width toan man hinh
+    const double heightRES = desktop.height;  // kich thuoc height toan man hinh
+    if (idWindowSize == -1) {
+        idWindowSize = listWindowSize.size() - 1;
+        while (idWindowSize >= 0 && (listWindowSize[idWindowSize].first > widthRES
+            || listWindowSize[idWindowSize].second > heightRES)) {
+            --idWindowSize;
+        }
+    }
     RenderWindow window(
-        VideoMode(desktop.width, desktop.height),
+        VideoMode(listWindowSize[idWindowSize].first, listWindowSize[idWindowSize].second),
         "Caro Game!",
         Style::Close
     );
+    window.setFramerateLimit(60); // set 60fps
 
     // set font
     if (!font.getInfo().family.size()) {
-        if (!font.loadFromFile("assets/font/RDLatinFontPoint.otf")) {
+        if (!font.loadFromFile("assets/font/pixelGame.otf")) {
             cout << "Failed to load font!" << endl;
             return;
         }
@@ -23,31 +31,28 @@ void startGame() {
     loadingScreen(window);
 
     // load settings before starting background music
-    setting.LoadSettings();
+    setting.LoadSettings(window);
 
     // start background music after loading screen
     BackGroundMusic(window); // ham goi nhac nen
 
     // set up board game
     boardGame.setUp();
-    bool firstTime = true; // draw lan dau khi window load
+
+    // check condition required to show "firstime" menu or normal menu
+    if (confirmedSettingsFirstTime)
+        stateMenu = 0;
 
     while (window.isOpen()) {
+        window.clear();
+        menuGUI.handleUI(window);  // update menu & smaller GUI state
+        window.display();          // show menu
         Event event;
-        while (firstTime || window.pollEvent(event)) {
-            if (!firstTime && event.type == Event::Closed) {
+        while (window.pollEvent(event)) {
+            if (event.type == Event::Closed)
                 window.close();
-            } else if (firstTime ||
-                       event.type == Event::KeyPressed ||
-                       event.type == Event::KeyReleased) {
-
-                window.clear();
-
+            else if (event.type == Event::KeyPressed || event.type == Event::KeyReleased) {
                 keyBoard.setState(window); // update keyboard state
-                menuGUI.handleUI(window);  // update menu & smaller GUI state
-                window.display();          // show menu
-
-                firstTime = false;
             }
         }
     }

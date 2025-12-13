@@ -129,6 +129,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="animation\animation.cpp" />
     <ClCompile Include="boardgame\boardgame.cpp" />
     <ClCompile Include="bot_ai\bot_ai.cpp" />
     <ClCompile Include="button\button.cpp" />
@@ -137,12 +138,15 @@
     <ClCompile Include="keyboard\keyboard.cpp" />
     <ClCompile Include="loadingscreen\loadingscreen.cpp" />
     <ClCompile Include="menu\menu.cpp" />
+    <ClCompile Include="others\others.cpp" />
+    <ClCompile Include="savegame\savegame.cpp" />
     <ClCompile Include="setting\setting.cpp" />
     <ClCompile Include="setting\settingoverlay.cpp" />
     <ClCompile Include="sfx\sfx.cpp" />
     <ClCompile Include="startgame\startgame.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="animation\animation.h" />
     <ClInclude Include="boardgame\boardgame.h" />
     <ClInclude Include="bot_ai\bot_ai.h" />
     <ClInclude Include="button\button.h" />
@@ -151,6 +155,8 @@
     <ClInclude Include="keyboard\keyboard.h" />
     <ClInclude Include="loadingscreen\loadingscreen.h" />
     <ClInclude Include="menu\menu.h" />
+    <ClInclude Include="others\others.h" />
+    <ClInclude Include="savegame\savegame.h" />
     <ClInclude Include="setting\setting.h" />
     <ClInclude Include="sfx\sfx.h" />
     <ClInclude Include="startgame\startgame.h" />
@@ -160,10 +166,19 @@
     <Font Include="assets\font\RDLatinFontPoint.otf" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="assets\image\backgroundapex.png" />
+    <Image Include="assets\image\backgroundapex02.png" />
     <Image Include="assets\image\background_img.png" />
+    <Image Include="assets\image\focusButton.png" />
+    <Image Include="assets\image\leftarrow.png" />
     <Image Include="assets\image\penguinGOGO.png" />
     <Image Include="assets\image\player1_egg-egg-sheeran.gif" />
     <Image Include="assets\image\player2_onepunchman.jpg" />
+    <Image Include="assets\image\rightarrow.png" />
+    <Image Include="assets\image\shadow.png" />
+    <Image Include="assets\image\shadow2.png" />
+    <Image Include="assets\image\snowfall.png" />
+    <Image Include="assets\image\unfocusButton.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
