@@ -31,6 +31,7 @@ struct Menu {
     void handleNewGame(RenderWindow& window);
     void handleLoadGame(RenderWindow& window);
     void handleSettings(RenderWindow& window);
+    void handleHowToPlay(RenderWindow& window);
     void drawModeSelection(RenderWindow& window);
 
     // logic

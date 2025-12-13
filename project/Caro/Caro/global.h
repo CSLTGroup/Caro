@@ -14,6 +14,7 @@ using namespace sf;
 #include "loadingscreen/loadingscreen.h"
 #include "sfx/sfx.h"
 #include "setting/setting.h"
+#include "Howtoplay/Howtoplay.h"
 #include "firsttimeplaying/firsttimeplaying.h"
 #include "others/others.h"
 #include <vector>
@@ -30,6 +31,7 @@ extern Menu menuGUI;
 extern KeyBoardPressed keyBoard;
 extern BoardGame boardGame;
 extern Settings setting;
+extern HowToPlay howToPlay;
 extern string playerName[2];
 extern bool confirmedSettingsFirstTime;
 extern int idWindowSize;

@@ -138,6 +138,8 @@ void Menu::handleUI(RenderWindow& window) {
         drawBackGround(window), drawTitle(window), handleLoadGame(window);
     else if (stateMenu == listButton[settingID].ID)
         drawBackGround(window), drawTitle(window), handleSettings(window);
+    else if (stateMenu == listButton[howToPlayID].ID)
+        drawBackGround(window), drawTitle(window), handleHowToPlay(window);
 }
 void Menu::updateState(RenderWindow& window) {
     if (stateMenu == -1) { // first time playing
@@ -184,6 +186,9 @@ void Menu::updateState(RenderWindow& window) {
             else if (stateMenu == listButton[settingID].ID) {
                 setting.SettingsLogic(window);
 			}
+            else if (stateMenu == listButton[howToPlayID].ID) {
+                // How to Play screen will be handled in handleHowToPlay
+            }
         }
         else if (keyBoard.Esc()) {
             window.close();
@@ -202,6 +207,9 @@ void Menu::updateState(RenderWindow& window) {
     else if (stateMenu == listButton[settingID].ID) {
         setting.SettingsLogic(window);
 	}
+    else if (stateMenu == listButton[howToPlayID].ID) {
+        howToPlay.HowToPlayLogic(window);
+    }
 }
 void Menu::handleNewGame(RenderWindow& window) {
     if (awaitingModeSelection)
@@ -223,6 +231,9 @@ void Menu::handleLoadGame(RenderWindow& window) {
 }
 void Menu::handleSettings(RenderWindow& window) {
     setting.draw(window);
+}
+void Menu::handleHowToPlay(RenderWindow& window) {
+    howToPlay.draw(window);
 }
 void Menu::initModeButtons(RenderWindow& window) {
     modeButtons.assign(2, Button());
