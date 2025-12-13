@@ -135,6 +135,7 @@
     <ClCompile Include="button\button.cpp" />
     <ClCompile Include="caro.cpp" />
     <ClCompile Include="firsttimeplaying\firsttimeplaying.cpp" />
+    <ClCompile Include="Howtoplay\Howtoplay.cpp" />
     <ClCompile Include="keyboard\keyboard.cpp" />
     <ClCompile Include="loadingscreen\loadingscreen.cpp" />
     <ClCompile Include="menu\menu.cpp" />
@@ -152,6 +153,7 @@
     <ClInclude Include="button\button.h" />
     <ClInclude Include="firsttimeplaying\firsttimeplaying.h" />
     <ClInclude Include="global.h" />
+    <ClInclude Include="Howtoplay\Howtoplay.h" />
     <ClInclude Include="keyboard\keyboard.h" />
     <ClInclude Include="loadingscreen\loadingscreen.h" />
     <ClInclude Include="menu\menu.h" />

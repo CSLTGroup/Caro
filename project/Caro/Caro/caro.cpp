@@ -8,6 +8,7 @@ KeyBoardPressed keyBoard;
 Menu menuGUI;
 BoardGame boardGame;
 Settings setting;
+HowToPlay howToPlay;
 
 int main()
 {

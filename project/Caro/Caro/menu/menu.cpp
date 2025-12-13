@@ -138,6 +138,8 @@ void Menu::handleUI(RenderWindow& window) {
         drawBackGround(window), drawTitle(window), handleLoadGame(window);
     else if (stateMenu == listButton[settingID].ID)
         drawBackGround(window), drawTitle(window), handleSettings(window);
+    else if (stateMenu == listButton[howToPlayID].ID)
+        drawBackGround(window), drawTitle(window), handleHowToPlay(window);
 }
 void Menu::updateState(RenderWindow& window) {
     if (stateMenu == -1) { // first time playing
@@ -145,7 +147,6 @@ void Menu::updateState(RenderWindow& window) {
     }
     else if (stateMenu == ID) {
         awaitingModeSelection = true;
-        modeButtons.clear();
         initMenuButtons();
 
         if (keyBoard.Up() ^ keyBoard.Down()) {
@@ -172,8 +173,6 @@ void Menu::updateState(RenderWindow& window) {
             if (stateMenu == listButton[newGameID].ID) {
                 awaitingModeSelection = true;
                 selectedModeButton = 0;
-                modeButtons.clear();
-                initModeButtons(window);
                 boardGame.setMode(BoardGame::GameMode::None);
             }
             else if (stateMenu == listButton[loadGameID].ID) {
@@ -184,6 +183,9 @@ void Menu::updateState(RenderWindow& window) {
             else if (stateMenu == listButton[settingID].ID) {
                 setting.SettingsLogic(window);
 			}
+            else if (stateMenu == listButton[howToPlayID].ID) {
+                // How to Play's screen will be handled in handleHowToPlay
+            }
         }
         else if (keyBoard.Esc()) {
             window.close();
@@ -196,12 +198,14 @@ void Menu::updateState(RenderWindow& window) {
             boardGame.setMove(window);
     }
     else if (stateMenu == listButton[loadGameID].ID) {
-        // Load game functionality can be added here
         LoadGameLogic();
     }
     else if (stateMenu == listButton[settingID].ID) {
         setting.SettingsLogic(window);
 	}
+    else if (stateMenu == listButton[howToPlayID].ID) {
+        howToPlay.HowToPlayLogic(window);
+    }
 }
 void Menu::handleNewGame(RenderWindow& window) {
     if (awaitingModeSelection)
@@ -224,38 +228,98 @@ void Menu::handleLoadGame(RenderWindow& window) {
 void Menu::handleSettings(RenderWindow& window) {
     setting.draw(window);
 }
-void Menu::initModeButtons(RenderWindow& window) {
-    modeButtons.assign(2, Button());
+void Menu::handleHowToPlay(RenderWindow& window) {
+    howToPlay.draw(window);
+}
+void Menu::drawModeButtons(RenderWindow& window, float panelWidth, float panelHeight) {
+    const float winWidth = window.getSize().x;
+    const float winHeight = window.getSize().y;
+    const float buttonWidth = panelWidth * 0.40f;
+    const float buttonHeight = panelHeight * 0.12f;
+    const float positionY1 = winHeight / 2 - panelHeight / 2 + panelHeight * 0.37f;
+    const float positionY2 = winHeight / 2 - panelHeight / 2 + panelHeight * 0.58f;
+    const float buffYShadow = buttonHeight * 0.12f;
+    
+    // button PVP
+    RectangleShape buttonPVP(Vector2f(buttonWidth, buttonHeight));
+    buttonPVP.setPosition(winWidth / 2 - buttonWidth / 2, positionY1);
+    buttonPVP.setFillColor(Color(254, 255, 195));
 
-    modeButtons[0].context = "PVP ";
-    modeButtons[1].context = "PVE ";
-    modeButtons[0].ID = 101;
-    modeButtons[1].ID = 102;
-    modeButtons[0].setMenuTheme(true);
-    modeButtons[1].setMenuTheme(true);
+    // buttonPVPShadow
+    RectangleShape buttonPVPShadow(Vector2f(buttonWidth, buttonHeight));
+    buttonPVPShadow.setPosition(winWidth / 2 - buttonWidth / 2 + buffYShadow / 2, positionY1 + buffYShadow);
+    buttonPVPShadow.setFillColor(Color(150, 153, 1));
 
-    if (selectedModeButton < 0)
-        selectedModeButton = 0;
-    else if (selectedModeButton > 1)
-        selectedModeButton = 1;
-    modeButtons[0].selected = (selectedModeButton == 0);
-    modeButtons[1].selected = (selectedModeButton == 1);
+    // text PVP
+    Text textPVP;
+    textPVP.setString("PVP");
+    textPVP.setFont(font);
+    textPVP.setCharacterSize(getCharacterSizeForLineHeight(font, buttonHeight * 0.90f));
+    FloatRect bounds = textPVP.getLocalBounds();
+    textPVP.setOrigin(bounds.left + bounds.getSize().x / 2.0f, bounds.top + bounds.getSize().y / 2.0f);
+    textPVP.setPosition(winWidth / 2, positionY1 + buttonHeight / 2);
+    textPVP.setFillColor(Color(57, 57, 57));
 
-    int buttonWidth = static_cast<int>(window.getSize().x * 0.35f);
-    int buttonHeight = 70;
-    int spacing = 30;
-    int startX = static_cast<int>(window.getSize().x / 2.f - buttonWidth / 2.f);
-    int startY = static_cast<int>(window.getSize().y / 2.f - buttonHeight - spacing / 2.f);
+    // button PVE
+    RectangleShape buttonPVE(Vector2f(buttonWidth, buttonHeight));
+    buttonPVE.setPosition(winWidth / 2 - buttonWidth / 2, positionY2);
+    buttonPVE.setFillColor(Color(223, 252, 255));
 
-    modeButtons[0].setPosition(startX, startY, buttonWidth, buttonHeight);
-    modeButtons[1].setPosition(startX, startY + buttonHeight + spacing, buttonWidth, buttonHeight);
+    // buttonPVEShadow
+    RectangleShape buttonPVEShadow(Vector2f(buttonWidth, buttonHeight));
+    buttonPVEShadow.setPosition(winWidth / 2 - buttonWidth / 2 + buffYShadow / 2, positionY2 + buffYShadow);
+    buttonPVEShadow.setFillColor(Color(135, 163, 166));
+
+    // text PVE
+    Text textPVE;
+    textPVE.setString("PVE");
+    textPVE.setFont(font);
+    textPVE.setCharacterSize(getCharacterSizeForLineHeight(font, buttonHeight * 0.90f));
+    FloatRect bounds2 = textPVE.getLocalBounds();
+    textPVE.setOrigin(bounds2.left + bounds2.getSize().x / 2.0f, bounds2.top + bounds2.getSize().y / 2.0f);
+    textPVE.setPosition(winWidth / 2, positionY2 + buttonHeight / 2);
+    textPVE.setFillColor(Color(75, 49, 123));
+
+    // draw animated finger pointing
+    static Animation finger("assets/image/point.png", 26, 24, 2, 1, 2);
+    static Sprite spriteFinger;
+    static Clock clock;
+    static int currentFrame = 0;
+    static float timer = 0.f;
+    const static float fps = 5.0f;   // animation speed
+    float dt = clock.restart().asSeconds();
+    updateAnimation(dt, fps, finger.frameCount, currentFrame, timer);
+    applyFrame(spriteFinger, finger, currentFrame);
+    float fingerSizeWidth = (panelWidth - buttonWidth) / 2 / 3;
+    float fingerSizeHeight = buttonHeight * 0.8f;
+    float scaleX = 1.25f * fingerSizeWidth / finger.texture.getSize().x;
+    float scaleY = 2.0f * fingerSizeHeight / finger.texture.getSize().y;
+    if (spriteFinger.getScale().x != scaleX || spriteFinger.getScale().y != scaleY) {
+        spriteFinger.setScale(scaleX, scaleY);
+        FloatRect bounds3 = spriteFinger.getLocalBounds();
+        spriteFinger.setOrigin(bounds3.left + bounds3.getSize().x / 2.0f, bounds3.top + bounds3.getSize().y / 2.0f);
+    }
+    if (selectedModeButton == 0)
+        spriteFinger.setPosition(winWidth / 2 - buttonWidth / 2 - fingerSizeWidth * 1.5,
+            positionY1 + buttonHeight / 2);
+    else spriteFinger.setPosition(winWidth / 2 - buttonWidth / 2 - fingerSizeWidth * 1.5,
+            positionY2 + buttonHeight / 2);
+
+    // draw onto screen
+    window.draw(buttonPVPShadow);
+    window.draw(buttonPVEShadow);
+    window.draw(buttonPVP);
+    window.draw(buttonPVE);
+    window.draw(textPVP);
+    window.draw(textPVE);
+    window.draw(spriteFinger);
 }
 void Menu::drawModeSelection(RenderWindow& window) {
-    if (!modeButtons.size())
-        initModeButtons(window);
 
     // draw panel
-    RectangleShape panel(Vector2f(max(window.getSize().x * 0.5f, 650.0f), window.getSize().y * 0.5f));
+    const float panelWidth = max(window.getSize().x * 0.5f, 650.0f);
+    const float panelHeight = window.getSize().y * 0.5f;
+    RectangleShape panel(Vector2f(panelWidth, panelHeight));
     panel.setFillColor(Color(20, 20, 20, 200));
     panel.setOutlineColor(Color::White);
     panel.setOutlineThickness(2);
@@ -285,30 +349,24 @@ void Menu::drawModeSelection(RenderWindow& window) {
     // final draw onto the screen
     window.draw(panel);
     window.draw(title);
-    for (auto& button : modeButtons) {
-        button.draw(window);
-    }
+    drawModeButtons(window, panelWidth, panelHeight);
     window.draw(hint);
 }
 void Menu::handleModeSelection(RenderWindow& window) {
-    if (!modeButtons.size())
-        initModeButtons(window);
 
     if (keyBoard.Up() ^ keyBoard.Down()) {
-        modeButtons[selectedModeButton].selected = false;
 
         if (keyBoard.Up()) {
             --selectedModeButton;
             if (selectedModeButton < 0)
-                selectedModeButton = modeButtons.size() - 1;
+                selectedModeButton = 1;
         }
         else {
             ++selectedModeButton;
-            if (selectedModeButton >= modeButtons.size())
+            if (selectedModeButton > 1)
                 selectedModeButton = 0;
         }
 
-        modeButtons[selectedModeButton].selected = true;
         PlaySoundClick();
     }
     else if (keyBoard.Enter()) {
@@ -319,13 +377,11 @@ void Menu::handleModeSelection(RenderWindow& window) {
         else {
             boardGame.setMode(BoardGame::GameMode::PVC);
         }
-        modeButtons.clear();
     }
     else if (keyBoard.Esc()) {
         stateMenu = ID;
         awaitingModeSelection = false;
         boardGame.setMode(BoardGame::GameMode::None);
-        modeButtons.clear();
     }
 }
 void Menu::initMenuButtons() {

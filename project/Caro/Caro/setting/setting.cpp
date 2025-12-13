@@ -516,13 +516,18 @@ void Settings::SettingButtons(RenderWindow& window) {
 
 void Settings::generalSettingsBox(RenderWindow& window, int IDButton, int row, string contextString, int selectedC) {
     bool selected = false;
-    if ((selectedC != -1 && selectedC == 1) ||
-        (selectedC == -1 && SelectSettings == IDButton))
+    if (selectedC == 1 || (selectedC == -1 && SelectSettings == IDButton))
         selected = true;
 
     // window size
     float winWidth = window.getSize().x;
     float winHeight = window.getSize().y;
+
+    if (!boxHeight) {
+        boxWidth = winWidth * 0.6f;
+        boxHeight = winHeight * 0.5f;
+    }
+
 
     // fixed size and indentations
     float startY = winHeight / 2 - boxHeight / 2 + winHeight * 0.12f;

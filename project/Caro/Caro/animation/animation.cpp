@@ -24,8 +24,8 @@ void updateAnimation(float dt, float fps, int frameCount, int& currentFrame, flo
 }
 void applyFrame(sf::Sprite& sprite, const Animation& anim, int frame)
 {
-    int col = frame % anim.columns;   // 0 or 1
-    int row = frame / anim.columns;   // 0 to 3
+    int col = frame % anim.columns;
+    int row = frame / anim.columns;
 
     sprite.setTexture(anim.texture);
     sprite.setTextureRect({
