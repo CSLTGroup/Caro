@@ -210,11 +210,11 @@ void BoardGame::drawWinnerMessage(RenderWindow& window) {
     Color textColor;
 
     if (resultGame == 1) {
-        message = "Player 1 Wins!";
+        message = boardGame.player1Name + " Wins!";
         textColor = Color::Blue;
     }
     else if (resultGame == 2) {
-        message = "Player 2 Wins!";
+        message = boardGame.player2Name + " Wins!";
         textColor = Color::Red;
     }
     else if (resultGame == 3) {
