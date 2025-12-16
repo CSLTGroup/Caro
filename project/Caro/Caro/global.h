@@ -4,6 +4,7 @@
 
 using namespace sf;
 
+#include "credit/credit.h"
 #include "animation/animation.h"
 #include "button/button.h"
 #include "keyboard/keyboard.h"
@@ -32,6 +33,7 @@ extern KeyBoardPressed keyBoard;
 extern BoardGame boardGame;
 extern Settings setting;
 extern HowToPlay howToPlay;
+extern Credit credit;
 extern string playerName[2];
 extern bool confirmedSettingsFirstTime;
 extern int idWindowSize;

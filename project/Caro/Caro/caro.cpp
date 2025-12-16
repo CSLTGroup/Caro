@@ -9,6 +9,7 @@ Menu menuGUI;
 BoardGame boardGame;
 Settings setting;
 HowToPlay howToPlay;
+Credit credit;
 
 int main()
 {

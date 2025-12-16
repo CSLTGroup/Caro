@@ -33,6 +33,7 @@ struct Menu {
     void drawModeButtons(RenderWindow& window, float, float);
     void drawModeSelection(RenderWindow& window);
     void handleHowToPlay(RenderWindow& window);
+	void handleCreditScreen(RenderWindow& window);
 
     // logic
     void updateState(RenderWindow& window);

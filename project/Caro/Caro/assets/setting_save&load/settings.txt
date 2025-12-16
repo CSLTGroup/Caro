@@ -4,6 +4,6 @@ EffectVolumeLevel=20
 confirmedSettingsFirstTime=1
 Player1Name=iamthebest
 Player2Name=nou
-ResolutionID=0
+ResolutionID=7
 Player1Avatar=assets/image/Avatar/avatar_1.png
 Player2Avatar=assets/image/Avatar/player2_onepunchman.jpg

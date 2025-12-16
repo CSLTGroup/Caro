@@ -96,6 +96,9 @@
     <ClCompile Include="Howtoplay\Howtoplay.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="credit\credit.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="keyboard\keyboard.h">
@@ -141,6 +144,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Howtoplay\Howtoplay.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="credit\credit.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
