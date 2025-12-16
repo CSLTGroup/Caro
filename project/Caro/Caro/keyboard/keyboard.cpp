@@ -60,24 +60,31 @@ void KeyBoardPressed::setState(RenderWindow& window) {
         combineAlphabetNXT['A' - 'A'] = true, anyKeyPressed = true;
     if (Keyboard::isKeyPressed(Keyboard::Right))
         combineAlphabetNXT['D' - 'A'] = true, anyKeyPressed = true;
+	
     if (maskINP) 
         anyKeyPressed = true;
-	
-    mask = maskINP;
+
     if (!anyKeyPressed) {
+        mask = 0;
 		memset(combineAlphabet, 0, sizeof(combineAlphabet));
 		menuGUI.updateState(window);
     }
     else {
         for (int c = 0; c < 26; c++) {
-            if (!(combineAlphabet[c]))
-                if (combineAlphabetNXT[c])
-					combineAlphabetpreNXT[c] = true;
+            if (!(combineAlphabet[c]) && combineAlphabetNXT[c])
+				combineAlphabetpreNXT[c] = true;
         }
+		int maskpreNXT = 0;
+        for (int i = 0; i <= 3; i++) {
+            if (!(mask & (1 << i)) && (maskINP & (1 << i)))
+                maskpreNXT |= (1 << i); // set premask bit
+		}
 
         // premask -> nxtmask
+		mask = maskpreNXT;
 		memcpy(combineAlphabet, combineAlphabetpreNXT, sizeof(combineAlphabet));
         menuGUI.updateState(window);
+		mask = maskINP;
 		memcpy(combineAlphabet, combineAlphabetNXT, sizeof(combineAlphabet));
     }
 

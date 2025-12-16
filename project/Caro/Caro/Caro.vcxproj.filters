@@ -96,6 +96,9 @@
     <ClCompile Include="Howtoplay\Howtoplay.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="credit\credit.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="keyboard\keyboard.h">
@@ -143,6 +146,9 @@
     <ClInclude Include="Howtoplay\Howtoplay.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="credit\credit.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Font Include="assets\font\arial.ttf">
@@ -151,6 +157,8 @@
     <Font Include="assets\font\RDLatinFontPoint.otf">
       <Filter>Source Files\assets\font</Filter>
     </Font>
+    <Font Include="assets\font\pixelGame.otf" />
+    <Font Include="assets\font\ka1.ttf" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="assets\image\background_img.png">
@@ -190,6 +198,33 @@
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="assets\image\rightarrow.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="assets\image\point.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="assets\image\Avatar\avatar_1.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="assets\image\Avatar\avatar_2.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="assets\image\Avatar\avatar_3.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="assets\image\Avatar\avatar_4.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="assets\image\Avatar\avatar_5.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="assets\image\playerFrame.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="assets\image\Avatar\player1_egg-egg-sheeran.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="assets\image\Avatar\player2_onepunchman.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

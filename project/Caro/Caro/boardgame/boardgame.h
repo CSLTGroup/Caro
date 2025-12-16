@@ -17,16 +17,6 @@ struct BoardGame {
     GameMode mode = GameMode::None;
     int aiPlayer = 2;
 
-    float spacingTop = 0;
-    float spacingLeft = 0;
-    float spacingBoardBetween = 0;
-    float widthBoard = 0;
-    float heightBoard = 0;
-    float spacingCellX = 0;
-    float spacingCellY = 0;
-    float cellLenX = 0;
-    float cellLenY = 0;
-
     // Player info panel (shared by PVP / PVC)
     string player1Name = "Player 1";
     string player2Name = "Player 2";
@@ -38,6 +28,19 @@ struct BoardGame {
     bool player2PhotoLoaded = false;
     bool showPlayerPanel = false;
 
+    // UI
+    float spacingLeft;
+    float spacingTop;
+    float spacingCellX;
+    float spacingCellY;
+	float cellLenX;
+	float cellLenY;
+
+    // player photo
+    Sprite spritePlayer1Photo;
+    Sprite spritePlayer2Photo;
+
+	// functions
     void setUp();
     void reset();
     void drawTable(RenderWindow& window);

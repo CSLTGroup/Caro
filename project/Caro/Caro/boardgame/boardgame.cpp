@@ -14,21 +14,25 @@ void BoardGame::reset() {
 void BoardGame::drawTable(RenderWindow& window) {
 
     // set up size
-    spacingTop = window.getSize().y * 20.f / 100;
-    spacingLeft = window.getSize().y * 10.f / 100;
-    spacingBoardBetween = window.getSize().y * 5.f / 100; // 1 nua khoang cach giua board va ty so
-    widthBoard = window.getSize().x / 2.f - spacingLeft - spacingBoardBetween;
-    heightBoard = window.getSize().y - 2.f * spacingTop;
-    spacingCellX = widthBoard * 2.f / 100;
-    spacingCellY = heightBoard * 2.f / 100;
-    cellLenX = (widthBoard - spacingCellX * (size + 1)) / size;
-    cellLenY = (heightBoard - spacingCellY * (size + 1)) / size;
+    const float winWidth = window.getSize().x;
+    const float winHeight = window.getSize().y;
 
-    // bg
-    RectangleShape boardBG = RectangleShape(Vector2f(widthBoard, heightBoard));
-    boardBG.setPosition(Vector2f(spacingLeft, spacingTop));
-    boardBG.setFillColor(Color(206, 201, 194));
-    window.draw(boardBG);
+    float widthBoard = min(winWidth * 48 / 100, winHeight * 68 / 100);
+    float heightBoard = widthBoard;  // square board
+    spacingLeft = (winWidth - widthBoard) / 2.f;
+    spacingTop = (winHeight - heightBoard) / 2.f;
+    cellLenX = widthBoard / size * 90 / 100;
+    cellLenY = heightBoard / size * 90 / 100;
+    spacingCellX = (widthBoard - cellLenX * size) / (size + 1);
+    spacingCellY = (heightBoard - cellLenY * size) / (size + 1);
+
+    // draw transparent board
+    RectangleShape boardShape(Vector2f(widthBoard, heightBoard));
+    boardShape.setPosition(spacingLeft, spacingTop);
+    boardShape.setFillColor(Color(0, 0, 0, 150));
+    boardShape.setOutlineColor(Color(0, 0, 0)); // black outline
+    boardShape.setOutlineThickness(3);
+    window.draw(boardShape);
 
     // cell
     for (int i = 0; i < size; i++) {
@@ -37,18 +41,36 @@ void BoardGame::drawTable(RenderWindow& window) {
         }
     }
 
+    // draw player info panel
     if (showPlayerPanel) {
         drawPlayerInfoPanel(window);
     }
 
+    // draw transparent box's tip
+	RectangleShape tipBox(Vector2f(widthBoard, (winHeight - heightBoard) / 3.5f));
+	tipBox.setPosition(spacingLeft, winHeight - (winHeight - heightBoard) / 3.5f);
+	tipBox.setFillColor(Color(0, 0, 0, 150));
+    window.draw(tipBox);
+
+    // draw text tip
+	Text tipText;
+	tipText.setFont(font);
+	float sizeTipText = max((winWidth - heightBoard) / 25, 50.0f);
+    tipText.setCharacterSize(getCharacterSizeForLineHeight(font, sizeTipText));
+	tipText.setFillColor(Color::Yellow); // light gray
+	tipText.setString("Press L to save game");
+	FloatRect bounds = tipText.getLocalBounds();
+	tipText.setOrigin(bounds.left + bounds.width / 2, bounds.top + bounds.height / 2);
+	float posY = winHeight - (winHeight - heightBoard) / 3.5f + ((winHeight - heightBoard) / 3.5f) / 2;
+	tipText.setPosition(winWidth / 2, posY);
+	window.draw(tipText);
+
     // ve man hinh thang
     if (resultGame == 1 || resultGame == 2) {
         drawWinnerMessage(window);
-        PlaySoundWin();
     }
     else if (resultGame == 3) {
         drawWinnerMessage(window);
-        PlaySoundDraw();
     }
 }
 void BoardGame::drawPosition(int x, int y, RenderWindow& window) {
@@ -59,8 +81,18 @@ void BoardGame::drawPosition(int x, int y, RenderWindow& window) {
         spacingLeft + spacingCellX + x * (cellLenX + spacingCellX),
         spacingTop + spacingCellY + y * (cellLenY + spacingCellY)
     );
-    if (x == curX && y == curY)
-        cell.setFillColor(Color::Cyan);
+    if (x == curX && y == curY) {
+        if (curPlayer == 1) {
+            cell.setFillColor(Color(0, 255, 0, 0.8 * 255)); // green
+        }
+        else {
+			cell.setFillColor(Color(255, 0, 0, 0.8 * 255)); // red
+        }
+    }
+    else if ((x + y) % 2 == 0)
+        cell.setFillColor(Color(240, 224, 125, 120)); // light yellow
+    else
+		cell.setFillColor(Color(0, 0, 0, 180)); // black
     window.draw(cell);
 
     // text 
@@ -68,23 +100,23 @@ void BoardGame::drawPosition(int x, int y, RenderWindow& window) {
     Text text;
     text.setFont(font);
     text.setCharacterSize(heightText);
-    FloatRect textBounds = text.getLocalBounds();
-    text.setOrigin(
-        textBounds.width / 2.f,
-        textBounds.height / 2.f
-    );
-    text.setPosition(
-        spacingLeft + spacingCellX + x * (cellLenX + spacingCellX) + cellLenX / 4.f,
-        spacingTop + spacingCellY + y * (cellLenY + spacingCellY)
-    );
     if (board[x][y] == 1) {
-        text.setFillColor(Color::Blue);
-        text.setString("O");
+        text.setFillColor(Color::Green);
+		text.setString("O");
     }
     else if (board[x][y] == 2) {
-        text.setFillColor(Color::Red);
+		text.setFillColor(Color::Red);
         text.setString("X");
     }
+    FloatRect textBounds = text.getLocalBounds();
+    text.setOrigin(
+        textBounds.left + textBounds.width / 2.f,
+        textBounds.top + textBounds.height / 2.f
+    );
+    text.setPosition(
+        spacingLeft + spacingCellX + x * (cellLenX + spacingCellX) + cellLenX / 2.f,
+        spacingTop + spacingCellY + y * (cellLenY + spacingCellY) + cellLenY / 2.f
+    );
     window.draw(text);
 }
 void BoardGame::setChoice(RenderWindow& window) {
@@ -97,6 +129,11 @@ void BoardGame::setChoice(RenderWindow& window) {
 
     if (isPVCMode() && curPlayer == aiPlayer && resultGame == 0) {
         makeBotMove();
+    }
+    if (resultGame) {
+        if (resultGame == 1 || resultGame == 2)
+            PlaySoundWin();
+        else PlaySoundDraw();
     }
 }
 void BoardGame::setMove(RenderWindow& window) {
@@ -210,11 +247,11 @@ void BoardGame::drawWinnerMessage(RenderWindow& window) {
     Color textColor;
 
     if (resultGame == 1) {
-        message = boardGame.player1Name + " Wins!";
+        message = player1Name + " Wins!";
         textColor = Color::Blue;
     }
     else if (resultGame == 2) {
-        message = boardGame.player2Name + " Wins!";
+        message = ((mode == GameMode::PVC) ? player2Name : "Computer") + " Wins!";
         textColor = Color::Red;
     }
     else if (resultGame == 3) {
@@ -283,12 +320,14 @@ void BoardGame::setMode(GameMode newMode) {
 
     if (mode == GameMode::PVC) {
         curPlayer = 1; // human starts
-        player1Name = "You";
+        player1Name = playerName[0];
         player2Name = "Computer";
     }
     else if (mode == GameMode::PVP) {
-        player1Name = "Player 1";
-        player2Name = "Player 2";
+        player1Name = playerName[0];
+        player2Name = playerName[1];
+        if (player2Name.empty())
+			player2Name = "Player 2";
     }
 
     showPlayerPanel = (mode == GameMode::PVP || mode == GameMode::PVC);
@@ -318,91 +357,115 @@ void BoardGame::ensurePlayerAssets() {
     // Use saved avatar path from settings, or default if not set
     std::string avatarPath = setting.getPlayer1AvatarPath();
     if (avatarPath.empty()) {
-        avatarPath = "assets/image/Avatar/player1_egg-egg-sheeran.gif";
+        avatarPath = "assets/image/Avatar/player1_egg-egg-sheeran.png";
     }
     player1PhotoLoaded = player1Photo.loadFromFile(avatarPath);
 
     // set avatar player 2
     avatarPath = setting.getPlayer2AvatarPath();
     if (avatarPath.empty()) {
-        avatarPath = "assets/image/Avatar/player2_onepunchman.jpg";
+        avatarPath = "assets/image/Avatar/player2_onepunchman.png";
     }
     player2PhotoLoaded = player2Photo.loadFromFile(avatarPath);
 }
 void BoardGame::drawPlayerInfoPanel(RenderWindow& window) {
-    float panelX = spacingLeft + widthBoard + spacingBoardBetween;
-    float panelWidth = window.getSize().x - panelX - spacingBoardBetween;
-    float panelY = spacingTop;
-    float panelHeight = heightBoard;
-    if (panelWidth <= 0) return;
+    const float winWidth = window.getSize().x;
+    const float winHeight = window.getSize().y;
+    float indentLeft = winWidth * 4 / 100;
+    float indentRight = indentLeft;
+    float boxWidth = winWidth * 17 / 100;
 
-    RectangleShape panel(Vector2f(panelWidth, panelHeight));
-    panel.setPosition(panelX, panelY);
-    panel.setFillColor(Color(255, 241, 118)); // menu yellow
-    panel.setOutlineColor(Color(50, 150, 50)); // menu green accent
-    panel.setOutlineThickness(4);
-    window.draw(panel);
+    // draw player 1 & 2's box
+    static Texture playerFrame;
+	static Sprite spritePlayer1Frame;
+	static Sprite spritePlayer2Frame;
+	static bool initialized = false;
+    if (!initialized) {
+        playerFrame.loadFromFile("assets/image/playerFrame.png");
+		spritePlayer1Frame.setTexture(playerFrame);
+		spritePlayer2Frame.setTexture(playerFrame);
+	}
+	float scaleX = boxWidth / playerFrame.getSize().x;
+    if (spritePlayer1Frame.getScale().x != scaleX) {
+        spritePlayer1Frame.setScale(scaleX, scaleX);
+        spritePlayer2Frame.setScale(scaleX, scaleX);
+    }
+	spritePlayer1Frame.setPosition(indentLeft, (winHeight - spritePlayer1Frame.getGlobalBounds().height) / 2);
+	spritePlayer2Frame.setPosition(winWidth - indentRight - spritePlayer2Frame.getGlobalBounds().width, 
+        (winHeight - spritePlayer2Frame.getGlobalBounds().height) / 2);
 
-    Text title;
-    title.setFont(font);
-    title.setString("CARO");
-    title.setCharacterSize(64);
-    title.setFillColor(Color::Black);
-    FloatRect titleBounds = title.getLocalBounds();
-    title.setOrigin(titleBounds.left + titleBounds.width / 2.f, titleBounds.top + titleBounds.height / 2.f);
-    title.setPosition(panelX + panelWidth / 2.f, panelY + 60);
-    window.draw(title);
+    float boxHeight = spritePlayer1Frame.getGlobalBounds().height;
 
-    auto drawPlayerSection = [&](int index, float topY, const string& name, int score, bool isActive, const Texture& photo, bool photoLoaded, Color accentColor) {
-        float sectionHeight = (panelHeight - 160) / 2.f;
-        RectangleShape section(Vector2f(panelWidth - 40, sectionHeight));
-        section.setPosition(panelX + 20, topY);
-        section.setFillColor(isActive ? Color(181, 255, 199) : Color(255, 252, 232));
-        section.setOutlineColor(accentColor);
-        section.setOutlineThickness(3);
-        window.draw(section);
 
-        float photoSize = min(sectionHeight - 40, 120.f);
-        float photoX = section.getPosition().x + 20;
-        float photoY = topY + sectionHeight / 2.f - photoSize / 2.f;
-        if (photoLoaded) {
-            Sprite sprite;
-            sprite.setTexture(photo);
-            float scale = min(photoSize / photo.getSize().x, photoSize / photo.getSize().y);
-            sprite.setScale(scale, scale);
-            FloatRect spriteBounds = sprite.getLocalBounds();
-            sprite.setOrigin(spriteBounds.width / 2.f, spriteBounds.height / 2.f);
-            sprite.setPosition(photoX + photoSize / 2.f, photoY + photoSize / 2.f);
-            window.draw(sprite);
-        }
-        else {
-            CircleShape placeholder(photoSize / 2.f);
-            placeholder.setFillColor(Color(200, 200, 200));
-            placeholder.setPosition(photoX, photoY);
-            window.draw(placeholder);
-        }
+	// draw player avatar photo
+	if (player1PhotoLoaded) {
+		spritePlayer1Photo.setTexture(player1Photo, true);
+	}
+	if (player2PhotoLoaded) {
+		spritePlayer2Photo.setTexture(player2Photo, true);
+	}
+	float scalePhoto1X = boxWidth * 80 / 100 / player1Photo.getSize().x;
+	float scalePhoto2X = boxWidth * 80 / 100 / player2Photo.getSize().x;
+	float scalePhoto1Y = boxHeight * 60 / 100 / player1Photo.getSize().y;
+	float scalePhoto2Y = boxHeight * 60 / 100 / player2Photo.getSize().y;
+    spritePlayer1Photo.setScale(scalePhoto1X, scalePhoto1Y);
+    spritePlayer2Photo.setScale(scalePhoto2X, scalePhoto2Y);
+    spritePlayer1Photo.setPosition(indentLeft + boxWidth * 10 / 100, 
+		(winHeight - spritePlayer1Photo.getGlobalBounds().height) / 2 - winHeight * 3 / 100) ;
+	spritePlayer2Photo.setPosition(winWidth - indentRight - boxWidth + boxWidth * 10 / 100,
+		(winHeight - spritePlayer2Photo.getGlobalBounds().height) / 2 - winHeight * 3 / 100) ;
+	window.draw(spritePlayer1Photo);
+	window.draw(spritePlayer2Photo);
+    window.draw(spritePlayer1Frame);
+    window.draw(spritePlayer2Frame);
 
-        Text nameText;
-        nameText.setFont(font);
-        nameText.setString(name);
-        nameText.setCharacterSize(32);
-        nameText.setFillColor(Color::Black);
-        nameText.setStyle(Text::Bold);
-        nameText.setPosition(photoX + photoSize + 20, topY + 25);
-        window.draw(nameText);
+    // draw text info
+    // player 1 name
+    float textHeight = boxWidth * 12 / 100;
+    float posX = indentLeft + boxWidth / 2;
+    float indentTextY = (winHeight - boxHeight) / 2 + boxHeight * 72 / 100;
+	static Text text;
+    static Font fontInfo;
+    if (!initialized) {
+	    fontInfo.loadFromFile("assets/font/PixelPurl.ttf");
+        text.setFont(fontInfo);
+    }
+    text.setString(playerName[0]);
+	text.setCharacterSize(getCharacterSizeForLineHeight(fontInfo, textHeight));
+    text.setFillColor(Color::Yellow);
+    FloatRect bounds = text.getLocalBounds();
+    text.setOrigin(bounds.left + bounds.width / 2, bounds.top);
+	text.setPosition(posX, indentTextY);
+    window.draw(text);
 
-        Text scoreText;
-        scoreText.setFont(font);
-        scoreText.setString("Score: " + to_string(score));
-        scoreText.setCharacterSize(28);
-        scoreText.setFillColor(Color(80, 80, 80));
-        scoreText.setPosition(photoX + photoSize + 20, topY + 70);
-        window.draw(scoreText);
-        };
+    // player 2 name
+	posX = winWidth - indentRight - boxWidth / 2;
+	text.setString(mode == GameMode::PVC ? "Computer" : playerName[1]);
+	text.setCharacterSize(getCharacterSizeForLineHeight(fontInfo, textHeight));
+	bounds = text.getLocalBounds();
+	text.setOrigin(bounds.left + bounds.width / 2, bounds.top);
+	text.setPosition(posX, indentTextY);
+	window.draw(text);
 
-    float firstSectionTop = panelY + 120;
-    float secondSectionTop = firstSectionTop + (panelHeight - 160) / 2.f + 40;
+    // player 1 score
+	float scoreHeight = boxWidth * 15 / 100;
+	posX = indentLeft + boxWidth / 2;
+	text.setString("Score: " + to_string(player1Score));
+	text.setCharacterSize(getCharacterSizeForLineHeight(fontInfo, scoreHeight));
+	bounds = text.getLocalBounds();
+	text.setOrigin(bounds.left + bounds.width / 2, bounds.top);
+	text.setPosition(posX, indentTextY + boxHeight * 10 / 100);
+	text.setFillColor(Color::White);
+	window.draw(text);
 
-    drawPlayerSection(1, firstSectionTop, player1Name = playerName[0], player1Score, curPlayer == 1, player1Photo, player1PhotoLoaded, Color(50, 150, 50));
-    drawPlayerSection(2, secondSectionTop, player2Name = (mode == GameMode::PVC ? "Computer" : playerName[1]), player2Score, curPlayer == 2, player2Photo, player2PhotoLoaded, Color(200, 70, 70));
+    // player 2 score
+	posX = (winWidth - indentRight) - boxWidth / 2;
+	text.setString("Score: " + to_string(player2Score));
+	text.setCharacterSize(getCharacterSizeForLineHeight(fontInfo, scoreHeight));
+	bounds = text.getLocalBounds();
+	text.setOrigin(bounds.left + bounds.width / 2, bounds.top);
+	text.setPosition(posX, indentTextY + boxHeight * 10 / 100);
+	window.draw(text);
+    
+    initialized = true;
 }

@@ -134,6 +134,7 @@
     <ClCompile Include="bot_ai\bot_ai.cpp" />
     <ClCompile Include="button\button.cpp" />
     <ClCompile Include="caro.cpp" />
+    <ClCompile Include="credit\credit.cpp" />
     <ClCompile Include="firsttimeplaying\firsttimeplaying.cpp" />
     <ClCompile Include="Howtoplay\Howtoplay.cpp" />
     <ClCompile Include="keyboard\keyboard.cpp" />
@@ -151,6 +152,7 @@
     <ClInclude Include="boardgame\boardgame.h" />
     <ClInclude Include="bot_ai\bot_ai.h" />
     <ClInclude Include="button\button.h" />
+    <ClInclude Include="credit\credit.h" />
     <ClInclude Include="firsttimeplaying\firsttimeplaying.h" />
     <ClInclude Include="global.h" />
     <ClInclude Include="Howtoplay\Howtoplay.h" />
@@ -165,9 +167,18 @@
   </ItemGroup>
   <ItemGroup>
     <Font Include="assets\font\arial.ttf" />
+    <Font Include="assets\font\ka1.ttf" />
+    <Font Include="assets\font\pixelGame.otf" />
     <Font Include="assets\font\RDLatinFontPoint.otf" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="assets\image\Avatar\avatar_1.png" />
+    <Image Include="assets\image\Avatar\avatar_2.png" />
+    <Image Include="assets\image\Avatar\avatar_3.png" />
+    <Image Include="assets\image\Avatar\avatar_4.png" />
+    <Image Include="assets\image\Avatar\avatar_5.png" />
+    <Image Include="assets\image\Avatar\player1_egg-egg-sheeran.png" />
+    <Image Include="assets\image\Avatar\player2_onepunchman.png" />
     <Image Include="assets\image\backgroundapex.png" />
     <Image Include="assets\image\backgroundapex02.png" />
     <Image Include="assets\image\background_img.png" />
@@ -176,6 +187,8 @@
     <Image Include="assets\image\penguinGOGO.png" />
     <Image Include="assets\image\player1_egg-egg-sheeran.gif" />
     <Image Include="assets\image\player2_onepunchman.jpg" />
+    <Image Include="assets\image\playerFrame.png" />
+    <Image Include="assets\image\point.png" />
     <Image Include="assets\image\rightarrow.png" />
     <Image Include="assets\image\shadow.png" />
     <Image Include="assets\image\shadow2.png" />

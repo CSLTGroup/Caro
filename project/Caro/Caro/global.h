@@ -4,6 +4,7 @@
 
 using namespace sf;
 
+#include "credit/credit.h"
 #include "animation/animation.h"
 #include "button/button.h"
 #include "keyboard/keyboard.h"
@@ -35,4 +36,5 @@ extern HowToPlay howToPlay;
 extern string playerName[2];
 extern bool confirmedSettingsFirstTime;
 extern int idWindowSize;
+extern Credit credit;
 extern vector<pair<int, int> > listWindowSize;

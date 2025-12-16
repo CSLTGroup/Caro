@@ -133,13 +133,15 @@ void Menu::handleUI(RenderWindow& window) {
     else if (stateMenu == 0)
         drawBackGround(window), drawMenu(window);
     else if (stateMenu == listButton[newGameID].ID)
-        drawBackGround(window), drawTitle(window), handleNewGame(window);
+        drawBackGround(window), handleNewGame(window);
     else if (stateMenu == listButton[loadGameID].ID)
         drawBackGround(window), drawTitle(window), handleLoadGame(window);
     else if (stateMenu == listButton[settingID].ID)
         drawBackGround(window), drawTitle(window), handleSettings(window);
     else if (stateMenu == listButton[howToPlayID].ID)
         drawBackGround(window), drawTitle(window), handleHowToPlay(window);
+    else if (stateMenu == listButton[creditsID].ID)
+        drawBackGround(window), drawTitle(window), handleCreditScreen(window);
 }
 void Menu::updateState(RenderWindow& window) {
     if (stateMenu == -1) { // first time playing
@@ -173,6 +175,7 @@ void Menu::updateState(RenderWindow& window) {
             if (stateMenu == listButton[newGameID].ID) {
                 awaitingModeSelection = true;
                 selectedModeButton = 0;
+                boardGame.setUp();
                 boardGame.setMode(BoardGame::GameMode::None);
             }
             else if (stateMenu == listButton[loadGameID].ID) {
@@ -206,6 +209,9 @@ void Menu::updateState(RenderWindow& window) {
     else if (stateMenu == listButton[howToPlayID].ID) {
         howToPlay.HowToPlayLogic(window);
     }
+    else if (stateMenu == listButton[creditsID].ID) {
+        credit.CreditLogic(window);
+    }
 }
 void Menu::handleNewGame(RenderWindow& window) {
     if (awaitingModeSelection)
@@ -230,6 +236,9 @@ void Menu::handleSettings(RenderWindow& window) {
 }
 void Menu::handleHowToPlay(RenderWindow& window) {
     howToPlay.draw(window);
+}
+void Menu::handleCreditScreen(RenderWindow& window) {
+    credit.draw(window);
 }
 void Menu::drawModeButtons(RenderWindow& window, float panelWidth, float panelHeight) {
     const float winWidth = window.getSize().x;

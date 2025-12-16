@@ -746,8 +746,8 @@ void Settings::changeAvatar() {
             }
         }
 
-        // Enter avatar browsing mode with Enter
-        if (keyBoard.Enter()) {
+        // Enter avatar browsing mode with Enter/Right
+        if (keyBoard.Enter() || keyBoard.Right()) {
             inAvatarBrowsingMode = true;
             PlaySoundClick();
         }
