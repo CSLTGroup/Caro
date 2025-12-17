@@ -4,6 +4,6 @@ EffectVolumeLevel=20
 confirmedSettingsFirstTime=1
 Player1Name=nghiaaa
 Player2Name=xd
-ResolutionID=3
+ResolutionID=0
 Player1Avatar=assets/image/Avatar/avatar_5.png
 Player2Avatar=assets/image/Avatar/avatar_2.png

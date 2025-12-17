@@ -117,6 +117,8 @@ void BoardGame::drawPosition(int x, int y, RenderWindow& window) {
         spacingLeft + spacingCellX + x * (cellLenX + spacingCellX) + cellLenX / 2.f,
         spacingTop + spacingCellY + y * (cellLenY + spacingCellY) + cellLenY / 2.f
     );
+    text.setOutlineThickness(2.0f);
+    text.setOutlineColor(Color(20, 20, 20));
     window.draw(text);
 }
 void BoardGame::setChoice(RenderWindow& window) {
