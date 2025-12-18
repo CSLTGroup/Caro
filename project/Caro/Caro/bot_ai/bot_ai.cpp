@@ -29,75 +29,46 @@ namespace {
     // Hàm tính điểm cho một hướng cụ thể tại vị trí (x, y) nếu đặt quân của 'player'
     long long getScoreForDirection(const vector<vector<int>>& board, int player, int x, int y, int dx, int dy) {
         int size = static_cast<int>(board.size());
-
-        int count = 1;          // Số quân liên tiếp của mình (tính cả quân định đặt tại x,y)
-        int block = 0;          // Số đầu bị chặn (bởi biên hoặc quân địch)
-
-        // Duyệt hướng dương (tới)
-        int i = 1;
-        while (true) {
-            int nx = x + dx * i;
-            int ny = y + dy * i;
-            if (!isValid(nx, ny, size)) {
-                block++;
-                break;
+        int count = 1;  // Số quân liên tiếp của mình (tính cả quân định đặt tại x,y)
+        int block = 0;  // Số đầu bị chặn (bởi biên hoặc quân địch)
+		// Duyệt hướng dương (tới) và hướng âm (lùi)
+        for (int sign = 1; sign >= -1; sign -= 2) {
+            int i = 1;
+            while (true) {
+                int nx = x + dx * i * sign;
+                int ny = y + dy * i * sign;
+                if (!isValid(nx, ny, size)) {
+                    block++;
+                    break;
+                }
+                if (board[nx][ny] == player) {
+                    count++;
+                }
+                else if (board[nx][ny] == 0) {
+                    break; // Gặp ô trống thì dừng đếm chuỗi
+                }
+                else {
+                    block++; // Gặp quân địch
+                    break;
+                }
+                i++;
             }
-            if (board[nx][ny] == player) {
-                count++;
-            }
-            else if (board[nx][ny] == 0) {
-                break; // Gặp ô trống thì dừng đếm chuỗi
-            }
-            else {
-                block++; // Gặp quân địch
-                break;
-            }
-            i++;
-        }
-
-        // Duyệt hướng âm (lùi)
-        i = 1;
-        while (true) {
-            int nx = x - dx * i;
-            int ny = y - dy * i;
-            if (!isValid(nx, ny, size)) {
-                block++;
-                break;
-            }
-            if (board[nx][ny] == player) {
-                count++;
-            }
-            else if (board[nx][ny] == 0) {
-                break;
-            }
-            else {
-                block++;
-                break;
-            }
-            i++;
-        }
-
+		}
         // --- TÍNH ĐIỂM DỰA TRÊN SỐ QUÂN VÀ SỐ ĐẦU BỊ CHẶN ---
-
         if (count >= 5) return SCORE_WIN;
-
         if (block >= 2) return 0; // Bị chặn 2 đầu thì chuỗi này vô dụng
-
         if (count == 4) {
             if (block == 0) return SCORE_OPEN_4; // .XXXX. -> Thắng chắc
             return SCORE_CLOSED_4;               // OXXXX. -> Phải chặn
         }
-
         if (count == 3) {
             if (block == 0) return SCORE_OPEN_3; // .XXX.
             return SCORE_CLOSED_3;               // OXXX..
         }
-
         if (count == 2) {
             if (block == 0) return SCORE_OPEN_2;
             return SCORE_CLOSED_2;
         }
-
         return 1; // Điểm khuyến khích
     }
 
@@ -116,7 +87,6 @@ namespace {
 pair<int, int> CalculateBotMove(const vector<vector<int>>& board, int aiPlayer) {
     if (board.empty()) return { -1, -1 };
     int size = static_cast<int>(board.size());
-
     // Nếu bàn cờ trống, đánh vào giữa (tốt nhất)
     bool isEmpty = true;
     for (const auto& row : board) {
@@ -140,9 +110,6 @@ pair<int, int> CalculateBotMove(const vector<vector<int>>& board, int aiPlayer) 
 
                 // 2. Điểm Phòng Thủ: Nếu Người đánh vào đây, Người được lợi gì? (Bot cần chặn)
                 long long defenseScore = evaluatePoint(board, humanPlayer, i, j);
-				cerr << "(" << i << ", " << j << "): " << attackScore << " ";
-				cerr << defenseScore << " ";
-                cerr << endl;
 
                 // Tổng hợp điểm
                 // Bot ưu tiên tấn công hơn một chút nếu ngang nhau, 
@@ -161,6 +128,5 @@ pair<int, int> CalculateBotMove(const vector<vector<int>>& board, int aiPlayer) 
             }
         }
     }
-	cerr << bestMove.first << ", " << bestMove.second << " with score " << maxScore << endl;
     return bestMove;
 }

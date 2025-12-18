@@ -19,7 +19,7 @@ void startGame() {
     );
     window.setFramerateLimit(60); // set 60fps
 
-    // set font
+    // set general font
     if (!font.getInfo().family.size()) {
         if (!font.loadFromFile("assets/font/pixelGame.otf")) {
             cout << "Failed to load font!" << endl;
@@ -30,11 +30,11 @@ void startGame() {
     // loading screen
     loadingScreen(window);
 
-    // load settings before starting background music
+    // load settings
     setting.LoadSettings(window);
 
-    // start background music after loading screen
-    BackGroundMusic(window); // ham goi nhac nen
+    // start background music
+    BackGroundMusic(window);
 
     // set up board game
     boardGame.setUp();
@@ -44,15 +44,15 @@ void startGame() {
         stateMenu = 0;
 
     while (window.isOpen()) {
-        window.clear();
-        menuGUI.handleUI(window);  // update menu & smaller GUI state
+        window.clear();             // clear previous frame
+        menuGUI.handleUI(window);  // update UI
         window.display();          // show menu
         Event event;
         while (window.pollEvent(event)) {
             if (event.type == Event::Closed)
                 window.close();
             else if (event.type == Event::KeyPressed || event.type == Event::KeyReleased) {
-                keyBoard.setState(window); // update keyboard state
+                keyBoard.setState(window); // update input
             }
         }
     }
