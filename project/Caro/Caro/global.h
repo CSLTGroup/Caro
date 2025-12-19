@@ -39,3 +39,4 @@ extern int idWindowSize;
 extern Credit credit;
 extern vector<pair<int, int> > listWindowSize;
 extern int lastState;
+extern bool inGeneralSettings;

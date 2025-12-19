@@ -21,7 +21,7 @@ bool hoverSetButtons[totalSetButtons] = { false }; // hover button settings
 bool inSetButtons[totalSetButtons] = { false };    // check in button settings
 bool initialized = false;
 static bool inSettings = false;
-static bool inGeneralSettings = false; // to ignore first enter key
+bool inGeneralSettings = false; // to ignore first enter key
 
 // id buttons in settings
 const int IDSFX = 0;
@@ -965,6 +965,8 @@ void Settings::SaveSettings() {
     file << "Player2Avatar=" << player2AvatarPath << std::endl;
 
     file.close();
+
+    boardGame.ensurePlayerAssets();
 }
 void Settings::LoadSettings(RenderWindow& window) {
     std::ifstream file("assets/setting_save&load/settings.txt");

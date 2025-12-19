@@ -222,34 +222,17 @@ void Menu::updateState(RenderWindow& window) {
 
     // 5. Trạng thái màn hình Cài đặt (State 3)
     else if (stateMenu == listButton[settingID].ID) {
-        setting.SettingsLogic(window);
-
         // Nhấn ESC để quay lại
-        if (keyBoard.Esc()) {
+        if (inGeneralSettings && keyBoard.Esc()) {
             stateMenu = lastState; // Quay về Menu chính (0) hoặc Game (1)
             if (lastState == 1) {
                 boardGame.showExitDialog = true; // Hiện lại bảng Pause nếu đang trong game
             }
             PlaySoundClick();
+            return;
         }
+        setting.SettingsLogic(window);
     }
-
-    //else if (stateMenu == listButton[settingID].ID) { // State 3: Màn hình Setting
-    //    setting.SettingsLogic(window);
-
-    //    if (keyBoard.Esc()) {
-    //        stateMenu = lastState; // Quay về Menu chính (0) hoặc Game (1)
-
-    //        if (lastState == 1) {
-    //            // NẾU QUAY VỀ GAME: Cập nhật lại Avatar ngay lập tức
-    //            boardGame.ensurePlayerAssets();
-    //            boardGame.showExitDialog = true;
-    //        }
-
-    //        PlaySoundClick();
-    //    }
-    //}
-    // 6. Trạng thái Hướng dẫn (State 4)
     else if (stateMenu == listButton[howToPlayID].ID) {
         howToPlay.HowToPlayLogic(window);
         if (keyBoard.Esc()) {
