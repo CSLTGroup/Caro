@@ -16,6 +16,8 @@ struct RecordData
 	int boardsize = 12;
 	vector < vector <int> > boardGame;
 	int resultGame = 0;
+	string player1AvatarPath;
+	string player2AvatarPath;
 	RecordData() {}
 };
 
