@@ -144,7 +144,6 @@ void Menu::handleUI(RenderWindow& window) {
         drawBackGround(window), drawTitle(window), handleCreditScreen(window);
 }
 
-
 int lastState = 0;
 
 void Menu::updateState(RenderWindow& window) {
@@ -190,6 +189,8 @@ void Menu::updateState(RenderWindow& window) {
                 LoadGameLogic();
             }
             else if (stateMenu == listButton[settingID].ID) { // Vào Settings
+                inGeneralSettings = false;
+                inSettings = false;
                 setting.SettingsLogic(window);
             }
         }

@@ -20,7 +20,7 @@ const int totalPage = (totalSetButtons + 2) / 3;
 bool hoverSetButtons[totalSetButtons] = { false }; // hover button settings
 bool inSetButtons[totalSetButtons] = { false };    // check in button settings
 bool initialized = false;
-static bool inSettings = false;
+bool inSettings = false;
 bool inGeneralSettings = false; // to ignore first enter key
 
 // id buttons in settings
