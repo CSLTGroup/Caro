@@ -129,7 +129,6 @@ void Settings::sfx() {
         }
     }
 }
-
 void Settings::SettingsLogic(RenderWindow& window) {
     if (!initialized) {
         // music part
@@ -346,7 +345,6 @@ void Settings::SettingsLogic(RenderWindow& window) {
             changeAvatar();
         }
 }
-
 void Settings::draw(RenderWindow& window) {
     // pre set up
     float winWidth = window.getSize().x;
@@ -431,7 +429,6 @@ void Settings::draw(RenderWindow& window) {
     // draw buttons
     SettingButtons(window);
 }
-
 void Settings::SettingButtons(RenderWindow& window) {
     // window size
     float winWidth = window.getSize().x;
@@ -515,7 +512,6 @@ void Settings::SettingButtons(RenderWindow& window) {
         window.draw(muteText);
     }
 }
-
 void Settings::generalSettingsBox(RenderWindow& window, int IDButton, int row, string contextString, int selectedC) {
     bool selected = false;
     if (selectedC == 1 || (selectedC == -1 && SelectSettings == IDButton))
@@ -563,7 +559,6 @@ void Settings::generalSettingsBox(RenderWindow& window, int IDButton, int row, s
     window.draw(buttonBox);
     window.draw(buttonText);
 }
-
 void Settings::subSoundSettingBox(RenderWindow& window) {
     float winHeight = window.getSize().y;
     float winWidth = window.getSize().x;
@@ -665,7 +660,6 @@ void Settings::subSoundSettingBox(RenderWindow& window) {
     effectBarFill.setPosition(barX, effectBoxY + winHeight * 0.035f);
     window.draw(effectBarFill);
 }
-
 void Settings::loadAllAvatars() {
     avatarTextures.clear();
     avatarSprites.clear();
@@ -715,7 +709,6 @@ void Settings::loadAllAvatars() {
 
     numberAvatar = avatarTextures.size(); // Update total number of avatars
 }
-
 void Settings::changeAvatar() {
     // Load avatars if not already loaded
     if (avatarTextures.empty()) {
@@ -805,7 +798,6 @@ void Settings::changeAvatar() {
         }
     }
 }
-
 void Settings::drawAvatarChangeBox(RenderWindow& window) {
     float winWidth = window.getSize().x;
     float winHeight = window.getSize().y;
@@ -954,7 +946,6 @@ void Settings::drawAvatarChangeBox(RenderWindow& window) {
         }
     }
 }
-
 void Settings::SaveSettings() {
     std::ofstream file("assets/setting_save&load/settings.txt");
     if (!file.is_open()) {
@@ -975,7 +966,6 @@ void Settings::SaveSettings() {
 
     file.close();
 }
-
 void Settings::LoadSettings(RenderWindow& window) {
     std::ifstream file("assets/setting_save&load/settings.txt");
     if (!file.is_open()) {

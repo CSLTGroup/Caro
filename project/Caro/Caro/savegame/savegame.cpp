@@ -55,7 +55,7 @@ void SaveGame(RenderWindow& window)
 	std::string record_name = curTime; // default value of record name, can be changed in later update
 	file << record_name << "\n";
 
-	std::string components[] = { "TIME", "MODE", "P1_NAME", "P2_NAME", "P1_SCORE", "P2_SCORE", "TURN", "BOARD_SIZE", "BOARDGAME", "RESULT" }; // components need to be saved
+	std::string components[] = { "TIME", "MODE", "P1_NAME", "P2_NAME", "P1_SCORE", "P2_SCORE", "TURN", "BOARD_SIZE", "BOARDGAME", "RESULT", "P1_AVT", "P2_AVT" }; // components need to be saved
 	int nCOMP = sizeof(components) / sizeof(components[0]); // number of components need to be saved
 	file << nCOMP << "\n";
 
@@ -99,6 +99,10 @@ void SaveGame(RenderWindow& window)
 		}
 		else if (component == 9)
 			file << boardGame.resultGame;
+		else if (component == 10)
+			file << setting.player1AvatarPath;
+		else if (component == 11)
+			file << setting.player2AvatarPath;
 		file << "\n";
 	}
 
@@ -179,6 +183,16 @@ void LoadGameFetch()
 			}
 			else if (content == "RESULT")
 				file >> menuGUI.records.back().resultGame;
+			else if (content == "P1_AVT")
+			{
+				file.ignore();
+				getline(file, menuGUI.records.back().player1AvatarPath);
+			}
+			else if (content == "P2_AVT")
+			{
+				file.ignore();
+				getline(file, menuGUI.records.back().player2AvatarPath);
+			}
 		}
 	}
 
@@ -275,6 +289,16 @@ void LoadGameLogic()
 			}
 			else if (record.components[COMP] == "RESULT")
 				boardGame.resultGame = record.resultGame;
+			else if (record.components[COMP] == "P1_AVT")
+			{
+				setting.player1AvatarPath = record.player1AvatarPath;
+				boardGame.player1Photo.loadFromFile(setting.player1AvatarPath);
+			}
+			else if (record.components[COMP] == "P2_AVT")
+			{
+				setting.player2AvatarPath = record.player2AvatarPath;
+				boardGame.player2Photo.loadFromFile(setting.player2AvatarPath);
+			}
 		}
 		menuGUI.fromLoadGame = true;
 		stateMenu = 1;
@@ -402,7 +426,7 @@ void LoadGameUI(RenderWindow& window)
 			spriteRight.getLocalBounds().getSize().y / 2);
 		spriteRight.setPosition(winWidth / 2 + frameWidth / 2, winHeight / 2);
 	}
-	
+
 	if (firstBtnRecord + numBtn < menuGUI.records.size())
 		window.draw(spriteRight);
 	if (firstBtnRecord > 0)

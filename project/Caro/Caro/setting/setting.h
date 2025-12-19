@@ -31,7 +31,6 @@ struct Settings {
     std::vector<std::string> avatarPaths;   // store avatar file paths
     void loadAllAvatars(); // load images automatically
     std::string player1AvatarPath = "assets/image/Avatar/player1_egg-egg-sheeran.png"; // Default avatar paths
-private:
     std::vector<sf::Texture> avatarTextures; // image data
     std::vector<sf::Sprite> avatarSprites;   // up the image for drawing
     int selectedAvatarIndex = -1;            // currently selected avatar index

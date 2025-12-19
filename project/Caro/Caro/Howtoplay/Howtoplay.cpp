@@ -91,8 +91,7 @@ void HowToPlay::draw(RenderWindow& window) {
     drawLine("GAME RULES:", headerSize, Color(255, 180, 0), true);
     drawLine("1. Black (X) goes first.", textSize, Color::White);
     drawLine("2. First to 5 in a row wins.", textSize, Color::White);
-    drawLine("3. Blocked 2 ends = NO WIN.", textSize, Color(255, 80, 80));
-    drawLine("4. Full board = Draw.", textSize, Color::White);
+    drawLine("3. Full board = Draw.", textSize, Color::White);
 
 
     Text hintText;

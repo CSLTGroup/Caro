@@ -1,4 +1,4 @@
-#include "../global.h"
+﻿#include "../global.h"
 #include "../bot_ai/bot_ai.h"
 
 void BoardGame::setUp() {
@@ -10,6 +10,8 @@ void BoardGame::reset() {
     curX = curY = 0;
     curPlayer = 1;
     resultGame = 0;
+    showExitDialog = false;
+    selectedExitOption = 0;
 }
 void BoardGame::drawTable(RenderWindow& window) {
 
@@ -47,23 +49,23 @@ void BoardGame::drawTable(RenderWindow& window) {
     }
 
     // draw transparent box's tip
-	RectangleShape tipBox(Vector2f(widthBoard, (winHeight - heightBoard) / 3.5f));
-	tipBox.setPosition(spacingLeft, winHeight - (winHeight - heightBoard) / 3.5f);
-	tipBox.setFillColor(Color(0, 0, 0, 150));
+    RectangleShape tipBox(Vector2f(widthBoard, (winHeight - heightBoard) / 3.5f));
+    tipBox.setPosition(spacingLeft, winHeight - (winHeight - heightBoard) / 3.5f);
+    tipBox.setFillColor(Color(0, 0, 0, 150));
     window.draw(tipBox);
 
     // draw text tip
-	Text tipText;
-	tipText.setFont(font);
-	float sizeTipText = max((winWidth - heightBoard) / 25, 50.0f);
+    Text tipText;
+    tipText.setFont(font);
+    float sizeTipText = max((winWidth - heightBoard) / 25, 50.0f);
     tipText.setCharacterSize(getCharacterSizeForLineHeight(font, sizeTipText));
-	tipText.setFillColor(Color::Yellow); // light gray
-	tipText.setString("Press L to save game");
-	FloatRect bounds = tipText.getLocalBounds();
-	tipText.setOrigin(bounds.left + bounds.width / 2, bounds.top + bounds.height / 2);
-	float posY = winHeight - (winHeight - heightBoard) / 3.5f + ((winHeight - heightBoard) / 3.5f) / 2;
-	tipText.setPosition(winWidth / 2, posY);
-	window.draw(tipText);
+    tipText.setFillColor(Color::Yellow); // light gray
+    tipText.setString("Press L to save game");
+    FloatRect bounds = tipText.getLocalBounds();
+    tipText.setOrigin(bounds.left + bounds.width / 2, bounds.top + bounds.height / 2);
+    float posY = winHeight - (winHeight - heightBoard) / 3.5f + ((winHeight - heightBoard) / 3.5f) / 2;
+    tipText.setPosition(winWidth / 2, posY);
+    window.draw(tipText);
 
     // ve man hinh thang
     if (resultGame == 1 || resultGame == 2) {
@@ -71,6 +73,11 @@ void BoardGame::drawTable(RenderWindow& window) {
     }
     else if (resultGame == 3) {
         drawWinnerMessage(window);
+    }
+
+    // Draw exit confirmation dialog if active
+    if (showExitDialog) {
+        drawExitConfirmationDialog(window);
     }
 }
 void BoardGame::drawPosition(int x, int y, RenderWindow& window) {
@@ -86,13 +93,13 @@ void BoardGame::drawPosition(int x, int y, RenderWindow& window) {
             cell.setFillColor(Color(0, 255, 0, 0.8 * 255)); // green
         }
         else {
-			cell.setFillColor(Color(255, 0, 0, 0.8 * 255)); // red
+            cell.setFillColor(Color(255, 0, 0, 0.8 * 255)); // red
         }
     }
     else if ((x + y) % 2 == 0)
         cell.setFillColor(Color(240, 224, 125, 120)); // light yellow
     else
-		cell.setFillColor(Color(0, 0, 0, 180)); // black
+        cell.setFillColor(Color(0, 0, 0, 180)); // black
     window.draw(cell);
 
     // text 
@@ -102,10 +109,10 @@ void BoardGame::drawPosition(int x, int y, RenderWindow& window) {
     text.setCharacterSize(heightText);
     if (board[x][y] == 1) {
         text.setFillColor(Color::Green);
-		text.setString("O");
+        text.setString("O");
     }
     else if (board[x][y] == 2) {
-		text.setFillColor(Color::Red);
+        text.setFillColor(Color::Red);
         text.setString("X");
     }
     FloatRect textBounds = text.getLocalBounds();
@@ -139,6 +146,12 @@ void BoardGame::setChoice(RenderWindow& window) {
     }
 }
 void BoardGame::setMove(RenderWindow& window) {
+    // Handle exit confirmation dialog first (works for both active game and game over)
+    if (showExitDialog) {
+        handleExitConfirmationDialog(window);
+        return;
+    }
+
     if (resultGame) {
         if (keyBoard.Enter()) {
             reset();
@@ -147,8 +160,9 @@ void BoardGame::setMove(RenderWindow& window) {
             return;
         }
         else if (keyBoard.Esc()) {
-            reset();
-            stateMenu = 0;
+            showExitDialog = true;
+            selectedExitOption = 0;
+            PlaySoundClick();
         }
         return;
     }
@@ -176,11 +190,13 @@ void BoardGame::setMove(RenderWindow& window) {
     }
     if (keyBoard.combineAlphabetCheck('L')) // save game
         SaveGame(window);
+
     if (keyBoard.Enter())
         setChoice(window);
     else if (keyBoard.Esc()) {
-        reset();
-        stateMenu = 0;
+        showExitDialog = true;
+        selectedExitOption = 0;
+        PlaySoundClick();
     }
 }
 bool BoardGame::checkTheSame(vector<int> listCheck) {
@@ -329,7 +345,7 @@ void BoardGame::setMode(GameMode newMode) {
         player1Name = playerName[0];
         player2Name = playerName[1];
         if (player2Name.empty())
-			player2Name = "Player 2";
+            player2Name = "Player 2";
     }
 
     showPlayerPanel = (mode == GameMode::PVP || mode == GameMode::PVC);
@@ -379,45 +395,45 @@ void BoardGame::drawPlayerInfoPanel(RenderWindow& window) {
 
     // draw player 1 & 2's box
     static Texture playerFrame;
-	static Sprite spritePlayer1Frame;
-	static Sprite spritePlayer2Frame;
-	static bool initialized = false;
+    static Sprite spritePlayer1Frame;
+    static Sprite spritePlayer2Frame;
+    static bool initialized = false;
     if (!initialized) {
         playerFrame.loadFromFile("assets/image/playerFrame.png");
-		spritePlayer1Frame.setTexture(playerFrame);
-		spritePlayer2Frame.setTexture(playerFrame);
-	}
-	float scaleX = boxWidth / playerFrame.getSize().x;
+        spritePlayer1Frame.setTexture(playerFrame);
+        spritePlayer2Frame.setTexture(playerFrame);
+    }
+    float scaleX = boxWidth / playerFrame.getSize().x;
     if (spritePlayer1Frame.getScale().x != scaleX) {
         spritePlayer1Frame.setScale(scaleX, scaleX);
         spritePlayer2Frame.setScale(scaleX, scaleX);
     }
-	spritePlayer1Frame.setPosition(indentLeft, (winHeight - spritePlayer1Frame.getGlobalBounds().height) / 2);
-	spritePlayer2Frame.setPosition(winWidth - indentRight - spritePlayer2Frame.getGlobalBounds().width, 
+    spritePlayer1Frame.setPosition(indentLeft, (winHeight - spritePlayer1Frame.getGlobalBounds().height) / 2);
+    spritePlayer2Frame.setPosition(winWidth - indentRight - spritePlayer2Frame.getGlobalBounds().width,
         (winHeight - spritePlayer2Frame.getGlobalBounds().height) / 2);
 
     float boxHeight = spritePlayer1Frame.getGlobalBounds().height;
 
 
-	// draw player avatar photo
-	if (player1PhotoLoaded) {
-		spritePlayer1Photo.setTexture(player1Photo, true);
-	}
-	if (player2PhotoLoaded) {
-		spritePlayer2Photo.setTexture(player2Photo, true);
-	}
-	float scalePhoto1X = boxWidth * 80 / 100 / player1Photo.getSize().x;
-	float scalePhoto2X = boxWidth * 80 / 100 / player2Photo.getSize().x;
-	float scalePhoto1Y = boxHeight * 60 / 100 / player1Photo.getSize().y;
-	float scalePhoto2Y = boxHeight * 60 / 100 / player2Photo.getSize().y;
+    // draw player avatar photo
+    if (player1PhotoLoaded) {
+        spritePlayer1Photo.setTexture(player1Photo, true);
+    }
+    if (player2PhotoLoaded) {
+        spritePlayer2Photo.setTexture(player2Photo, true);
+    }
+    float scalePhoto1X = boxWidth * 80 / 100 / player1Photo.getSize().x;
+    float scalePhoto2X = boxWidth * 80 / 100 / player2Photo.getSize().x;
+    float scalePhoto1Y = boxHeight * 60 / 100 / player1Photo.getSize().y;
+    float scalePhoto2Y = boxHeight * 60 / 100 / player2Photo.getSize().y;
     spritePlayer1Photo.setScale(scalePhoto1X, scalePhoto1Y);
     spritePlayer2Photo.setScale(scalePhoto2X, scalePhoto2Y);
-    spritePlayer1Photo.setPosition(indentLeft + boxWidth * 10 / 100, 
-		(winHeight - spritePlayer1Photo.getGlobalBounds().height) / 2 - winHeight * 3 / 100) ;
-	spritePlayer2Photo.setPosition(winWidth - indentRight - boxWidth + boxWidth * 10 / 100,
-		(winHeight - spritePlayer2Photo.getGlobalBounds().height) / 2 - winHeight * 3 / 100) ;
-	window.draw(spritePlayer1Photo);
-	window.draw(spritePlayer2Photo);
+    spritePlayer1Photo.setPosition(indentLeft + boxWidth * 10 / 100,
+        (winHeight - spritePlayer1Photo.getGlobalBounds().height) / 2 - winHeight * 3 / 100);
+    spritePlayer2Photo.setPosition(winWidth - indentRight - boxWidth + boxWidth * 10 / 100,
+        (winHeight - spritePlayer2Photo.getGlobalBounds().height) / 2 - winHeight * 3 / 100);
+    window.draw(spritePlayer1Photo);
+    window.draw(spritePlayer2Photo);
     window.draw(spritePlayer1Frame);
     window.draw(spritePlayer2Frame);
 
@@ -426,48 +442,179 @@ void BoardGame::drawPlayerInfoPanel(RenderWindow& window) {
     float textHeight = boxWidth * 12 / 100;
     float posX = indentLeft + boxWidth / 2;
     float indentTextY = (winHeight - boxHeight) / 2 + boxHeight * 72 / 100;
-	static Text text;
+    static Text text;
     static Font fontInfo;
     if (!initialized) {
-	    fontInfo.loadFromFile("assets/font/PixelPurl.ttf");
+        fontInfo.loadFromFile("assets/font/PixelPurl.ttf");
         text.setFont(fontInfo);
     }
     text.setString(playerName[0]);
-	text.setCharacterSize(getCharacterSizeForLineHeight(fontInfo, textHeight));
+    text.setCharacterSize(getCharacterSizeForLineHeight(fontInfo, textHeight));
     text.setFillColor(Color::Yellow);
     FloatRect bounds = text.getLocalBounds();
     text.setOrigin(bounds.left + bounds.width / 2, bounds.top);
-	text.setPosition(posX, indentTextY);
+    text.setPosition(posX, indentTextY);
     window.draw(text);
 
     // player 2 name
-	posX = winWidth - indentRight - boxWidth / 2;
-	text.setString(mode == GameMode::PVC ? "Computer" : playerName[1]);
-	text.setCharacterSize(getCharacterSizeForLineHeight(fontInfo, textHeight));
-	bounds = text.getLocalBounds();
-	text.setOrigin(bounds.left + bounds.width / 2, bounds.top);
-	text.setPosition(posX, indentTextY);
-	window.draw(text);
+    posX = winWidth - indentRight - boxWidth / 2;
+    text.setString(mode == GameMode::PVC ? "Computer" : playerName[1]);
+    text.setCharacterSize(getCharacterSizeForLineHeight(fontInfo, textHeight));
+    bounds = text.getLocalBounds();
+    text.setOrigin(bounds.left + bounds.width / 2, bounds.top);
+    text.setPosition(posX, indentTextY);
+    window.draw(text);
 
     // player 1 score
-	float scoreHeight = boxWidth * 15 / 100;
-	posX = indentLeft + boxWidth / 2;
-	text.setString("Score: " + to_string(player1Score));
-	text.setCharacterSize(getCharacterSizeForLineHeight(fontInfo, scoreHeight));
-	bounds = text.getLocalBounds();
-	text.setOrigin(bounds.left + bounds.width / 2, bounds.top);
-	text.setPosition(posX, indentTextY + boxHeight * 10 / 100);
-	text.setFillColor(Color::White);
-	window.draw(text);
+    float scoreHeight = boxWidth * 15 / 100;
+    posX = indentLeft + boxWidth / 2;
+    text.setString("Score: " + to_string(player1Score));
+    text.setCharacterSize(getCharacterSizeForLineHeight(fontInfo, scoreHeight));
+    bounds = text.getLocalBounds();
+    text.setOrigin(bounds.left + bounds.width / 2, bounds.top);
+    text.setPosition(posX, indentTextY + boxHeight * 10 / 100);
+    text.setFillColor(Color::White);
+    window.draw(text);
 
     // player 2 score
-	posX = (winWidth - indentRight) - boxWidth / 2;
-	text.setString("Score: " + to_string(player2Score));
-	text.setCharacterSize(getCharacterSizeForLineHeight(fontInfo, scoreHeight));
-	bounds = text.getLocalBounds();
-	text.setOrigin(bounds.left + bounds.width / 2, bounds.top);
-	text.setPosition(posX, indentTextY + boxHeight * 10 / 100);
-	window.draw(text);
-    
+    posX = (winWidth - indentRight) - boxWidth / 2;
+    text.setString("Score: " + to_string(player2Score));
+    text.setCharacterSize(getCharacterSizeForLineHeight(fontInfo, scoreHeight));
+    bounds = text.getLocalBounds();
+    text.setOrigin(bounds.left + bounds.width / 2, bounds.top);
+    text.setPosition(posX, indentTextY + boxHeight * 10 / 100);
+    window.draw(text);
+
     initialized = true;
+}
+
+void BoardGame::drawExitConfirmationDialog(RenderWindow& window) {
+    float winWidth = (float)window.getSize().x;
+    float winHeight = (float)window.getSize().y;
+
+    // Vẽ lớp phủ mờ
+    RectangleShape overlay(Vector2f(winWidth, winHeight));
+    overlay.setFillColor(Color(0, 0, 0, 180));
+    window.draw(overlay);
+
+    // Tăng kích thước Box (từ 0.35f lên 0.55f để đủ chỗ cho 4 nút)
+    float boxWidth = winWidth * 0.5f;
+    float boxHeight = winHeight * 0.55f;
+    float boxX = (winWidth - boxWidth) / 2.0f;
+    float boxY = (winHeight - boxHeight) / 2.0f;
+
+    RectangleShape dialogBox(Vector2f(boxWidth, boxHeight));
+    dialogBox.setFillColor(Color(40, 40, 40, 250));
+    dialogBox.setOutlineColor(Color::White);
+    dialogBox.setOutlineThickness(winHeight * 0.005f);
+    dialogBox.setPosition(boxX, boxY);
+    window.draw(dialogBox);
+
+    // Tiêu đề
+    Text title;
+    title.setFont(font);
+    title.setString("PAUSE MENU"); // Đổi tên thành Pause Menu cho hợp lý
+    title.setCharacterSize((int)(winHeight * 0.06f));
+    title.setFillColor(Color::Yellow);
+    title.setStyle(Text::Bold);
+    FloatRect titleBounds = title.getLocalBounds();
+    title.setPosition(boxX + (boxWidth - titleBounds.width) / 2.0f, boxY + winHeight * 0.03f);
+    window.draw(title);
+
+    // Danh sách 4 lựa chọn
+    vector<string> options = { "SAVE & EXIT", "LOAD GAME", "SETTING", "EXIT TO MENU" };
+
+    float optionStartY = boxY + winHeight * 0.12f;
+    float optionSpacing = winHeight * 0.085f; // Khoảng cách giữa các nút
+    float optionHeight = winHeight * 0.065f;
+    float optionWidth = boxWidth * 0.75f;
+    float optionX = boxX + (boxWidth - optionWidth) / 2.0f;
+
+    for (int i = 0; i < (int)options.size(); i++) {
+        float optionY = optionStartY + i * optionSpacing;
+
+        // Hộp cho từng option
+        RectangleShape optionBox(Vector2f(optionWidth, optionHeight));
+        if (selectedExitOption == i) {
+            optionBox.setFillColor(Color(100, 150, 200));
+            optionBox.setOutlineColor(Color::Yellow);
+            optionBox.setOutlineThickness(winHeight * 0.004f);
+        }
+        else {
+            optionBox.setFillColor(Color(60, 60, 60));
+            optionBox.setOutlineColor(Color::White);
+            optionBox.setOutlineThickness(winHeight * 0.002f);
+        }
+        optionBox.setPosition(optionX, optionY);
+        window.draw(optionBox);
+
+        // Chữ cho option
+        Text optionText;
+        optionText.setFont(font);
+        optionText.setString(options[i]);
+        optionText.setCharacterSize((int)(winHeight * 0.04f));
+        optionText.setFillColor(selectedExitOption == i ? Color::Yellow : Color::White);
+        if (selectedExitOption == i) optionText.setStyle(Text::Bold);
+        FloatRect optionBounds = optionText.getLocalBounds();
+        optionText.setOrigin(optionBounds.left + optionBounds.width / 2.0f,
+            optionBounds.top + optionBounds.height / 2.0f);
+        optionText.setPosition(optionX + optionWidth / 2.0f, optionY + optionHeight / 2.0f);
+        window.draw(optionText);
+    }
+
+    // Hint text
+    Text hint;
+    hint.setFont(font);
+    hint.setString("Use [W]/[S] to navigate, [ENTER] to confirm, [ESC] to resume");
+    hint.setCharacterSize((int)(winHeight * 0.025f));
+    hint.setFillColor(Color(180, 180, 180));
+    hint.setStyle(Text::Italic);
+    FloatRect hintBounds = hint.getLocalBounds();
+    hint.setPosition(boxX + (boxWidth - hintBounds.width) / 2.0f,
+        boxY + boxHeight - winHeight * 0.04f);
+    window.draw(hint);
+}
+
+void BoardGame::handleExitConfirmationDialog(RenderWindow& window) {
+    int numOptions = 4;
+
+    if (keyBoard.Up()) {
+        selectedExitOption = (selectedExitOption - 1 + numOptions) % numOptions;
+        PlaySoundClick();
+    }
+    if (keyBoard.Down()) {
+        selectedExitOption = (selectedExitOption + 1) % numOptions;
+        PlaySoundClick();
+    }
+
+    if (keyBoard.Enter()) {
+        PlaySoundClick();
+
+        if (selectedExitOption == 0) { // SAVE & EXIT
+            SaveGame(window);
+            reset();
+            stateMenu = 0;
+            showExitDialog = false;
+        }
+        else if (selectedExitOption == 1) { // LOAD GAME
+            LoadGameFetch();
+            lastState = 1;      // Ghi nhớ là đang ở trong Game (State 1)
+            stateMenu = 2;      // Chuyển sang màn hình Load Game
+            // Lưu ý: KHÔNG tắt showExitDialog ở đây để khi quay lại bảng này vẫn hiện
+        }
+        else if (selectedExitOption == 2) { // SETTING
+            lastState = 1;      // Ghi nhớ là đang ở trong Game (State 1)
+            stateMenu = 3;      // Chuyển sang màn hình Setting
+        }
+        else if (selectedExitOption == 3) { // EXIT TO MENU
+            reset();
+            stateMenu = 0;
+            showExitDialog = false;
+        }
+    }
+
+    if (keyBoard.Esc()) {
+        PlaySoundClick();
+        showExitDialog = false; // Quay lại chơi tiếp
+    }
 }

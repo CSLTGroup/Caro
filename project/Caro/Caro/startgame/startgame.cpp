@@ -52,7 +52,9 @@ void startGame() {
             if (event.type == Event::Closed)
                 window.close();
             else if (event.type == Event::KeyPressed || event.type == Event::KeyReleased) {
-                keyBoard.setState(window); // update input
+                // update input
+				// updateState of Menu and others will be navigated through keyBoard.setState
+                keyBoard.setState(window); 
             }
         }
     }

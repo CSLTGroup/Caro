@@ -1,4 +1,4 @@
-#include "../global.h"
+﻿#include "../global.h"
 
 
 void Menu::drawBackGround(RenderWindow& window) {
@@ -30,7 +30,7 @@ void Menu::drawBackGround(RenderWindow& window) {
     scaleY = 4.0f * windowSize.y / snowfall.texture.getSize().y;
     if (spriteSnow.getScale().x != scaleX || spriteSnow.getScale().y != scaleY)
         spriteSnow.setScale(scaleX, scaleY);
-    
+
     window.draw(spriteSnow);
     initialized = true;
 }
@@ -43,7 +43,7 @@ void Menu::drawTitle(RenderWindow& window) {
     float distancePerText[] = { winWidth / 300.0f, winHeight / 200.0f };
     float positionYText = winHeight * 34 * 33 / 10000.0f;
     float heightText = winHeight * 44 * 30 / 10000.0f;
-    
+
     // draw 3 layer text
     static bool initialized = false;
     if (!initialized) {
@@ -78,8 +78,8 @@ void Menu::drawTitle(RenderWindow& window) {
         FloatRect bounds = shadowSpriteTitle.getLocalBounds();
         shadowSpriteTitle.setOrigin(bounds.width / 2.0f, bounds.height / 2.0f);
     }
-    float scaleX = 3.0f * titleGame[0].getLocalBounds().width/ shadowSpriteTitle.getLocalBounds().width;
-    float scaleY = 5.0f * titleGame[0].getLocalBounds().height/ shadowSpriteTitle.getLocalBounds().height;
+    float scaleX = 3.0f * titleGame[0].getLocalBounds().width / shadowSpriteTitle.getLocalBounds().width;
+    float scaleY = 5.0f * titleGame[0].getLocalBounds().height / shadowSpriteTitle.getLocalBounds().height;
     if (shadowSpriteTitle.getScale().x != scaleX || shadowSpriteTitle.getScale().y != scaleY)
         shadowSpriteTitle.setScale(scaleX, scaleY);
     shadowSpriteTitle.setPosition(titleGame[0].getPosition().x, titleGame[0].getPosition().y + heightText / 2.0f); // set in the middle
@@ -143,88 +143,139 @@ void Menu::handleUI(RenderWindow& window) {
     else if (stateMenu == listButton[creditsID].ID)
         drawBackGround(window), drawTitle(window), handleCreditScreen(window);
 }
+
+
+int lastState = 0;
+
 void Menu::updateState(RenderWindow& window) {
-    if (stateMenu == -1) { // first time playing
+    // 1. Trạng thái nhập tên lần đầu
+    if (stateMenu == -1) {
         menuName_for_firstTimeLogic(window);
     }
+
+    // 2. Trạng thái Menu chính (ID = 0)
     else if (stateMenu == ID) {
         awaitingModeSelection = true;
         initMenuButtons();
 
+        // Di chuyển giữa các nút Menu
         if (keyBoard.Up() ^ keyBoard.Down()) {
             listButton[selectedButton].selected = false;
             listButton[selectedButton].needUpdate = true;
 
             if (keyBoard.Up()) {
-                --selectedButton;
-                if (selectedButton < 0)
-                    selectedButton = listButton.size() - 1;
+                selectedButton = (selectedButton - 1 + (int)listButton.size()) % (int)listButton.size();
             }
             else {
-                ++selectedButton;
-                if (selectedButton == listButton.size())
-                    selectedButton = 0;
+                selectedButton = (selectedButton + 1) % (int)listButton.size();
             }
 
             listButton[selectedButton].selected = true;
             listButton[selectedButton].needUpdate = true;
-            PlaySoundClick(); // Play click sound when navigating menu
+            PlaySoundClick();
         }
+        // Khi nhấn chọn một mục từ Menu chính
         else if (keyBoard.Enter()) {
+            lastState = 0; // Ghi nhớ trạng thái trước đó là Menu chính
             stateMenu = listButton[selectedButton].ID;
-            if (stateMenu == listButton[newGameID].ID) {
+
+            if (stateMenu == listButton[newGameID].ID) { // Vào chơi mới
                 awaitingModeSelection = true;
                 selectedModeButton = 0;
                 boardGame.setUp();
                 boardGame.setMode(BoardGame::GameMode::None);
             }
-            else if (stateMenu == listButton[loadGameID].ID) {
-                // Load game functionality can be added here
+            else if (stateMenu == listButton[loadGameID].ID) { // Vào Load Game
                 LoadGameFetch();
                 LoadGameLogic();
             }
-            else if (stateMenu == listButton[settingID].ID) {
+            else if (stateMenu == listButton[settingID].ID) { // Vào Settings
                 setting.SettingsLogic(window);
-			}
-            else if (stateMenu == listButton[howToPlayID].ID) {
-                // How to Play's screen will be handled in handleHowToPlay
             }
         }
         else if (keyBoard.Esc()) {
             window.close();
         }
     }
+
+    // 3. Trạng thái trong trận đấu (State 1)
     else if (stateMenu == listButton[newGameID].ID) {
         if (awaitingModeSelection)
             handleModeSelection(window);
         else
             boardGame.setMove(window);
     }
+
+    // 4. Trạng thái màn hình Load Game (State 2)
     else if (stateMenu == listButton[loadGameID].ID) {
         LoadGameLogic();
+
+        // Nhấn ESC để quay lại
+        if (keyBoard.Esc()) {
+            stateMenu = lastState; // Quay về Menu chính (0) hoặc Game (1)
+            if (lastState == 1) {
+                boardGame.showExitDialog = true; // Hiện lại bảng Pause nếu đang trong game
+            }
+            PlaySoundClick();
+        }
     }
+
+    // 5. Trạng thái màn hình Cài đặt (State 3)
     else if (stateMenu == listButton[settingID].ID) {
         setting.SettingsLogic(window);
-	}
+
+        // Nhấn ESC để quay lại
+        if (keyBoard.Esc()) {
+            stateMenu = lastState; // Quay về Menu chính (0) hoặc Game (1)
+            if (lastState == 1) {
+                boardGame.showExitDialog = true; // Hiện lại bảng Pause nếu đang trong game
+            }
+            PlaySoundClick();
+        }
+    }
+
+    //else if (stateMenu == listButton[settingID].ID) { // State 3: Màn hình Setting
+    //    setting.SettingsLogic(window);
+
+    //    if (keyBoard.Esc()) {
+    //        stateMenu = lastState; // Quay về Menu chính (0) hoặc Game (1)
+
+    //        if (lastState == 1) {
+    //            // NẾU QUAY VỀ GAME: Cập nhật lại Avatar ngay lập tức
+    //            boardGame.ensurePlayerAssets();
+    //            boardGame.showExitDialog = true;
+    //        }
+
+    //        PlaySoundClick();
+    //    }
+    //}
+    // 6. Trạng thái Hướng dẫn (State 4)
     else if (stateMenu == listButton[howToPlayID].ID) {
         howToPlay.HowToPlayLogic(window);
+        if (keyBoard.Esc()) {
+            stateMenu = 0; // Thường How to Play chỉ mở từ Menu chính
+            PlaySoundClick();
+        }
     }
+
+    // 7. Trạng thái Thông tin Credits (State 5)
     else if (stateMenu == listButton[creditsID].ID) {
         credit.CreditLogic(window);
+        if (keyBoard.Esc()) {
+            stateMenu = 0;
+            PlaySoundClick();
+        }
     }
 }
 void Menu::handleNewGame(RenderWindow& window) {
-    if (awaitingModeSelection)
-    {
-        if (fromLoadGame)
-        {
+    if (awaitingModeSelection) {
+        if (fromLoadGame) { // Nếu biến này bằng true
             fromLoadGame = false;
-            awaitingModeSelection = false;
+            awaitingModeSelection = false; // Nó sẽ bỏ qua bước chọn PVP/PVC
             boardGame.showPlayerPanel = true;
-            boardGame.drawTable(window);
+            boardGame.drawTable(window); // Và vẽ thẳng bàn cờ đã load
         }
         else drawModeSelection(window);
-
     }
     else boardGame.drawTable(window);
 }
@@ -248,7 +299,7 @@ void Menu::drawModeButtons(RenderWindow& window, float panelWidth, float panelHe
     const float positionY1 = winHeight / 2 - panelHeight / 2 + panelHeight * 0.37f;
     const float positionY2 = winHeight / 2 - panelHeight / 2 + panelHeight * 0.58f;
     const float buffYShadow = buttonHeight * 0.12f;
-    
+
     // button PVP
     RectangleShape buttonPVP(Vector2f(buttonWidth, buttonHeight));
     buttonPVP.setPosition(winWidth / 2 - buttonWidth / 2, positionY1);
@@ -312,7 +363,7 @@ void Menu::drawModeButtons(RenderWindow& window, float panelWidth, float panelHe
         spriteFinger.setPosition(winWidth / 2 - buttonWidth / 2 - fingerSizeWidth * 1.5,
             positionY1 + buttonHeight / 2);
     else spriteFinger.setPosition(winWidth / 2 - buttonWidth / 2 - fingerSizeWidth * 1.5,
-            positionY2 + buttonHeight / 2);
+        positionY2 + buttonHeight / 2);
 
     // draw onto screen
     window.draw(buttonPVPShadow);
