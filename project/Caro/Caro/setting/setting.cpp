@@ -1,4 +1,4 @@
-#include "../global.h"
+﻿#include "../global.h"
 
 // for expanding settings in the future (please add ID buttons down below AND a
 // section for specific buttons' variables if needed)
@@ -132,30 +132,28 @@ void Settings::sfx() {
 
 void Settings::SettingsLogic(RenderWindow& window) {
     if (!initialized) {
-        // music part
         MusicVolumeLevel = (int)(GetMusicVolume() / 5.0f);
         EffectVolumeLevel = (int)(GetEffectVolume() / 5.0f);
         initialized = true;
     }
 
-    if (!inSettings) { // avoid first enter key issue
-        // initialize settings part
-        SelectSettings = IDSFX; // Reset to Sound button - first Button
+    if (!inSettings) {
+        SelectSettings = IDSFX;
         SelectPage = 0;
         numSettingsCurPage = min(3, totalSetButtons - SelectPage * 3);
         inSettings = true;
-        inGeneralSettings = true;
+        inGeneralSettings = true; // Bắt đầu tại màn hình danh sách chính
     }
     else if (inGeneralSettings) {
+        // --- LOGIC TẠI MÀN HÌNH DANH SÁCH CHÍNH ---
 
-        // Action in settings board
-        // SelectSettings: 0 = Sound, 1 = Back to Menu, 2 = Exit Game
+        // 1. Điều hướng lên xuống
         if (keyBoard.Up() ^ keyBoard.Down()) {
             int preSelectSettings = SelectSettings;
             if (keyBoard.Up()) {
                 --SelectSettings;
                 if (SelectSettings < SelectPage * 3)
-                    SelectSettings += numSettingsCurPage;
+                    SelectSettings = SelectPage * 3 + numSettingsCurPage - 1;
             }
             else {
                 ++SelectSettings;
@@ -163,188 +161,127 @@ void Settings::SettingsLogic(RenderWindow& window) {
                     SelectSettings = SelectPage * 3;
             }
             if (preSelectSettings != SelectSettings) {
-                hoverSetButtons[preSelectSettings] = false;
-                hoverSetButtons[SelectSettings] = true;
                 PlaySoundClick();
             }
         }
 
-        // page change
+        // 2. Chuyển trang trái phải
         if (keyBoard.Left() ^ keyBoard.Right()) {
             int preSelectPage = SelectPage;
-            if (keyBoard.Left()) {
-                SelectPage = max(SelectPage - 1, 0);
-            }
-            else {
-                SelectPage = min(SelectPage + 1, totalPage - 1);
-            }
+            if (keyBoard.Left()) SelectPage = max(SelectPage - 1, 0);
+            else SelectPage = min(SelectPage + 1, totalPage - 1);
+
             if (preSelectPage != SelectPage) {
                 PlaySoundClick();
-                SelectSettings = SelectPage * 3; // reset to first button of the page
+                SelectSettings = SelectPage * 3;
                 numSettingsCurPage = min(3, totalSetButtons - SelectPage * 3);
             }
         }
 
-        // enter action in settings board
-        if (keyBoard.Enter() || keyBoard.Esc()) {
-            inGeneralSettings = false;
-            if (SelectSettings == IDBACKTOMENU || keyBoard.Esc()) { // back to menu
-                SelectSettings = 0;
-                numSettingsCurPage = min(3, totalSetButtons - SelectPage * 3);
-                SelectPage = 0;
-                inSettings = false; // Reset flag when leaving
-                stateMenu = 0;      // return to main menu
+        // 3. Thoát Settings về Game/Menu chính (Phím ESC)
+        if (keyBoard.Esc()) {
+            PlaySoundClick();
+            inSettings = false;
+            stateMenu = lastState; // Quay về trạng thái trước đó (0 hoặc 1)
+            return;
+        }
+
+        // 4. Vào mục con (Phím ENTER)
+        if (keyBoard.Enter()) {
+            PlaySoundClick();
+
+            if (SelectSettings == IDBACKTOMENU) {
+                inSettings = false;
+                stateMenu = lastState;
                 return;
             }
-
-            // other buttons
-            inSetButtons[SelectSettings] = true;
-            if (SelectSettings == IDSFX) { // sound settings submenu
-                IDSoundButtons = 0;
-            }
-            else if (SelectSettings == IDEXITGAME) { // exit game
+            else if (SelectSettings == IDEXITGAME) {
                 window.close();
             }
-            else if (SelectSettings == IDCHANGERESOLUTION) { // change resolutionm
-                tmp_idWindowSize = idWindowSize;
-            }
-        }
-        else if (SelectSettings == IDCHANGENAME) { // change name submenu
-            IDNameButtons = 0;
-            isTypingName = false;
-            tmp_name = "";
-        }
-        else if (SelectSettings == IDCHANGEAVATAR) { // change avatar submenu
-            IDAvatarButtons = 0;
-            inAvatarSubmenu = true;
-            inAvatarBrowsingMode = false; // Start in player selection mode
-            // Load avatars if not already loaded
-            if (avatarTextures.empty()) {
-                loadAllAvatars();
-            }
-            // Set initial selection to current player's avatar
-            if (numberAvatar > 0) {
-                std::string currentPath = player1AvatarPath;
-                selectedAvatarIndex = 0; // Default to first if not found
-                for (int i = 0; i < avatarPaths.size(); ++i) {
-                    if (avatarPaths[i] == currentPath) {
-                        selectedAvatarIndex = i;
-                        break;
-                    }
+            else {
+                // CHỈ khi vào các mục khác mới đặt inGeneralSettings = false
+                inGeneralSettings = false;
+                inSetButtons[SelectSettings] = true;
+
+                // Khởi tạo trạng thái cho từng mục con
+                if (SelectSettings == IDSFX) IDSoundButtons = 0;
+                else if (SelectSettings == IDCHANGERESOLUTION) tmp_idWindowSize = idWindowSize;
+                else if (SelectSettings == IDCHANGENAME) {
+                    IDNameButtons = 0; isTypingName = false; tmp_name = "";
+                }
+                else if (SelectSettings == IDCHANGEAVATAR) {
+                    IDAvatarButtons = 0; inAvatarSubmenu = true; inAvatarBrowsingMode = false;
+                    if (avatarTextures.empty()) loadAllAvatars();
                 }
             }
-            else {
-                selectedAvatarIndex = -1;
-            }
-            PlaySoundClick();
         }
     }
-    else // for specific submenu handling
-        if (inSetButtons[IDSFX]) { // Handle sound submenu navigation
+    else {
+        // --- LOGIC TRONG CÁC MỤC CON (SUB-MENU) ---
+
+        if (inSetButtons[IDSFX]) {
             sfx();
-            // Exit sound submenu on Esc
-            if (keyBoard.Esc()) {
+            if (keyBoard.Esc()) { // Nhấn ESC trong mục Sound -> Quay về màn hình Settings chính
                 PlaySoundClick();
                 inSetButtons[IDSFX] = false;
-                IDSoundButtons = 0;       // reset to mute/unmute
-                inGeneralSettings = true; // back to general settings
+                inGeneralSettings = true;
             }
         }
-        else if (inSetButtons[IDCHANGENAME]) { // change name
+        else if (inSetButtons[IDCHANGENAME]) {
+            // Logic đổi tên
             if (!isTypingName) {
                 if (keyBoard.Esc()) {
                     PlaySoundClick();
                     inSetButtons[IDCHANGENAME] = false;
-                    inGeneralSettings = true; // back to general settings
+                    inGeneralSettings = true;
                 }
-                else if (keyBoard.Up() ^ keyBoard.Down()) {
-                    IDNameButtons ^= 1;
-                    PlaySoundClick();
-                }
-                else if (keyBoard.Enter()) {
-                    PlaySoundClick();
-                    isTypingName = true;
-                    tmp_name = "";
-                }
+                else if (keyBoard.Up() ^ keyBoard.Down()) { IDNameButtons ^= 1; PlaySoundClick(); }
+                else if (keyBoard.Enter()) { isTypingName = true; tmp_name = ""; PlaySoundClick(); }
             }
             else {
-                if (keyBoard.Backspace()) {
-                    if (!tmp_name.empty()) {
-                        PlaySoundClick();
-                        tmp_name.pop_back();
-                    }
-                }
-                else if (keyBoard.Enter()) {
-                    PlaySoundClick();
+                if (keyBoard.Enter()) {
                     playerName[IDNameButtons] = tmp_name;
                     isTypingName = false;
-                    tmp_name = "";
-                    SaveSettings(); // save settings when name changes
-
-                }
-                else if (keyBoard.Esc()) {
-                    PlaySoundClick();
-                    isTypingName = false;
-                    tmp_name = "";
-                }
-                else {
-                    bool addedChar = false;
-                    if (keyBoard.Shift()) {
-                        for (char c = 'A'; c <= 'Z'; c++)
-                            if (tmp_name.length() < MAX_LENGTH_NAME &&
-                                keyBoard.combineAlphabetCheck(c, true)) {
-                                tmp_name += c;
-                                addedChar = true;
-                            }
-                    }
-                    else {
-                        for (char c = 'A'; c <= 'Z'; c++)
-                            if (tmp_name.length() < MAX_LENGTH_NAME &&
-                                keyBoard.combineAlphabetCheck(c)) {
-                                tmp_name += (char)(c - 'A' + 'a');
-                                addedChar = true;
-                            }
-                    }
-                    if (addedChar)
-                        PlaySoundClick();
-                }
-            }
-        }
-        else if (inSetButtons[IDCHANGERESOLUTION]) { // change resolution
-            if (keyBoard.Up() ^ keyBoard.Down()) {
-                int preIDWindowSize = tmp_idWindowSize;
-                static int nWindowList = listWindowSize.size();
-                if (keyBoard.Up())
-                    tmp_idWindowSize = min(tmp_idWindowSize + 1, nWindowList - 1);
-                else if (keyBoard.Down())
-                    tmp_idWindowSize = max(tmp_idWindowSize - 1, 0);
-                // neu co thay doi
-                if (preIDWindowSize != tmp_idWindowSize) {
-                    PlaySoundClick();
-                }
-            }
-            else if (keyBoard.Esc()) {
-                tmp_idWindowSize = idWindowSize;
-                PlaySoundClick();
-                inSetButtons[IDCHANGERESOLUTION] = false;
-                inGeneralSettings = true; // back to general settings
-            }
-            else if (keyBoard.Enter()) {
-                // kiem tra neu co thay doi
-                if (tmp_idWindowSize != idWindowSize) {
-                    idWindowSize = tmp_idWindowSize;
-                    // change resolution
-                    window.create(VideoMode(listWindowSize[idWindowSize].first, listWindowSize[idWindowSize].second),
-                        "Caro Game!",
-                        Style::Close);
                     SaveSettings();
                     PlaySoundClick();
                 }
+                else if (keyBoard.Esc()) {
+                    isTypingName = false;
+                    PlaySoundClick();
+                }
+                else if (keyBoard.Backspace()) {
+                    if (!tmp_name.empty()) tmp_name.pop_back();
+                }
+                else {
+                    for (char c = 'A'; c <= 'Z'; c++) {
+                        if (tmp_name.length() < MAX_LENGTH_NAME && keyBoard.combineAlphabetCheck(c, keyBoard.Shift())) {
+                            tmp_name += (keyBoard.Shift() ? c : (char)(c - 'A' + 'a'));
+                            PlaySoundClick();
+                        }
+                    }
+                }
             }
         }
-        else if (inSetButtons[IDCHANGEAVATAR]) { // change avatar submenu
-            changeAvatar();
+        else if (inSetButtons[IDCHANGERESOLUTION]) {
+            if (keyBoard.Up()) tmp_idWindowSize = min(tmp_idWindowSize + 1, (int)listWindowSize.size() - 1);
+            else if (keyBoard.Down()) tmp_idWindowSize = max(tmp_idWindowSize - 1, 0);
+
+            if (keyBoard.Enter()) {
+                idWindowSize = tmp_idWindowSize;
+                window.create(VideoMode(listWindowSize[idWindowSize].first, listWindowSize[idWindowSize].second), "Caro Game!", Style::Close);
+                SaveSettings();
+                PlaySoundClick();
+            }
+            if (keyBoard.Esc()) {
+                PlaySoundClick();
+                inSetButtons[IDCHANGERESOLUTION] = false;
+                inGeneralSettings = true;
+            }
         }
+        else if (inSetButtons[IDCHANGEAVATAR]) {
+            changeAvatar(); // Hàm này của bạn đã có logic ESC -> inGeneralSettings = true
+        }
+    }
 }
 
 void Settings::draw(RenderWindow& window) {

@@ -384,3 +384,32 @@ P1_AVT assets/image/Avatar/avatar_5.png
 P2_AVT assets/image/Avatar/avatar_4.png
 END
 
+BEGIN
+2025-12-19-21-54-33
+12
+TIME 2025-12-19-21-54-33
+MODE PVP
+P1_NAME bach
+P2_NAME Computer
+P1_SCORE 0
+P2_SCORE 0
+TURN 2
+BOARD_SIZE 12
+BOARDGAME 
+0 0 0 0 0 0 0 0 0 0 0 0 
+0 0 0 1 0 0 0 0 0 0 0 0 
+0 0 0 0 2 1 0 0 0 0 0 0 
+0 0 0 0 0 2 1 0 0 0 0 0 
+0 0 0 0 0 0 0 0 0 0 0 0 
+0 0 0 0 0 0 0 0 0 0 0 0 
+0 0 0 0 0 0 0 0 0 0 0 0 
+0 0 0 0 0 0 0 0 0 0 0 0 
+0 0 0 0 0 0 0 0 0 0 0 0 
+0 0 0 0 0 0 0 0 0 0 0 0 
+0 0 0 0 0 0 0 0 0 0 0 0 
+0 0 0 0 0 0 0 0 0 0 0 0 
+RESULT 0
+P1_AVT assets/image/Avatar/avatar_5.png
+P2_AVT assets/image/Avatar/avatar_4.png
+END
+
