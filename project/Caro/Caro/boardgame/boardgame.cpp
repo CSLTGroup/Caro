@@ -274,7 +274,7 @@ void BoardGame::drawWinnerMessage(RenderWindow& window) {
     }
     else if (resultGame == 3) {
         message = "It's a Draw!";
-        textColor = Color::Yellow;
+        textColor = Color(255, 165, 0); // orange
     }
     else {
         // ko ve
