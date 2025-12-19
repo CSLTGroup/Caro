@@ -1,4 +1,4 @@
-#include "../global.h"
+﻿#include "../global.h"
 #include "../bot_ai/bot_ai.h"
 
 void BoardGame::setUp() {
@@ -10,6 +10,8 @@ void BoardGame::reset() {
     curX = curY = 0;
     curPlayer = 1;
     resultGame = 0;
+    showExitDialog = false;
+    selectedExitOption = 0;
 }
 void BoardGame::drawTable(RenderWindow& window) {
 
@@ -71,6 +73,11 @@ void BoardGame::drawTable(RenderWindow& window) {
     }
     else if (resultGame == 3) {
         drawWinnerMessage(window);
+    }
+
+    // Draw exit confirmation dialog if active
+    if (showExitDialog) {
+        drawExitConfirmationDialog(window);
     }
 }
 void BoardGame::drawPosition(int x, int y, RenderWindow& window) {
@@ -139,6 +146,12 @@ void BoardGame::setChoice(RenderWindow& window) {
     }
 }
 void BoardGame::setMove(RenderWindow& window) {
+    // Handle exit confirmation dialog first (works for both active game and game over)
+    if (showExitDialog) {
+        handleExitConfirmationDialog(window);
+        return;
+    }
+
     if (resultGame) {
         if (keyBoard.Enter()) {
             reset();
@@ -147,8 +160,9 @@ void BoardGame::setMove(RenderWindow& window) {
             return;
         }
         else if (keyBoard.Esc()) {
-            reset();
-            stateMenu = 0;
+            showExitDialog = true;
+            selectedExitOption = 0;
+            PlaySoundClick();
         }
         return;
     }
@@ -176,11 +190,13 @@ void BoardGame::setMove(RenderWindow& window) {
     }
     if (keyBoard.combineAlphabetCheck('L')) // save game
         SaveGame(window);
+    
     if (keyBoard.Enter())
         setChoice(window);
     else if (keyBoard.Esc()) {
-        reset();
-        stateMenu = 0;
+        showExitDialog = true;
+        selectedExitOption = 0;
+        PlaySoundClick();
     }
 }
 bool BoardGame::checkTheSame(vector<int> listCheck) {
@@ -470,4 +486,135 @@ void BoardGame::drawPlayerInfoPanel(RenderWindow& window) {
 	window.draw(text);
     
     initialized = true;
+}
+
+void BoardGame::drawExitConfirmationDialog(RenderWindow& window) {
+    float winWidth = (float)window.getSize().x;
+    float winHeight = (float)window.getSize().y;
+
+    // Vẽ lớp phủ mờ
+    RectangleShape overlay(Vector2f(winWidth, winHeight));
+    overlay.setFillColor(Color(0, 0, 0, 180));
+    window.draw(overlay);
+
+    // Tăng kích thước Box (từ 0.35f lên 0.55f để đủ chỗ cho 4 nút)
+    float boxWidth = winWidth * 0.5f;
+    float boxHeight = winHeight * 0.55f;
+    float boxX = (winWidth - boxWidth) / 2.0f;
+    float boxY = (winHeight - boxHeight) / 2.0f;
+
+    RectangleShape dialogBox(Vector2f(boxWidth, boxHeight));
+    dialogBox.setFillColor(Color(40, 40, 40, 250));
+    dialogBox.setOutlineColor(Color::White);
+    dialogBox.setOutlineThickness(winHeight * 0.005f);
+    dialogBox.setPosition(boxX, boxY);
+    window.draw(dialogBox);
+
+    // Tiêu đề
+    Text title;
+    title.setFont(font);
+    title.setString("PAUSE MENU"); // Đổi tên thành Pause Menu cho hợp lý
+    title.setCharacterSize((int)(winHeight * 0.06f));
+    title.setFillColor(Color::Yellow);
+    title.setStyle(Text::Bold);
+    FloatRect titleBounds = title.getLocalBounds();
+    title.setPosition(boxX + (boxWidth - titleBounds.width) / 2.0f, boxY + winHeight * 0.03f);
+    window.draw(title);
+
+    // Danh sách 4 lựa chọn
+    vector<string> options = { "SAVE & EXIT", "LOAD GAME", "SETTING", "EXIT TO MENU" };
+
+    float optionStartY = boxY + winHeight * 0.12f;
+    float optionSpacing = winHeight * 0.085f; // Khoảng cách giữa các nút
+    float optionHeight = winHeight * 0.065f;
+    float optionWidth = boxWidth * 0.75f;
+    float optionX = boxX + (boxWidth - optionWidth) / 2.0f;
+
+    for (int i = 0; i < (int)options.size(); i++) {
+        float optionY = optionStartY + i * optionSpacing;
+
+        // Hộp cho từng option
+        RectangleShape optionBox(Vector2f(optionWidth, optionHeight));
+        if (selectedExitOption == i) {
+            optionBox.setFillColor(Color(100, 150, 200));
+            optionBox.setOutlineColor(Color::Yellow);
+            optionBox.setOutlineThickness(winHeight * 0.004f);
+        }
+        else {
+            optionBox.setFillColor(Color(60, 60, 60));
+            optionBox.setOutlineColor(Color::White);
+            optionBox.setOutlineThickness(winHeight * 0.002f);
+        }
+        optionBox.setPosition(optionX, optionY);
+        window.draw(optionBox);
+
+        // Chữ cho option
+        Text optionText;
+        optionText.setFont(font);
+        optionText.setString(options[i]);
+        optionText.setCharacterSize((int)(winHeight * 0.04f));
+        optionText.setFillColor(selectedExitOption == i ? Color::Yellow : Color::White);
+        if (selectedExitOption == i) optionText.setStyle(Text::Bold);
+        FloatRect optionBounds = optionText.getLocalBounds();
+        optionText.setOrigin(optionBounds.left + optionBounds.width / 2.0f,
+            optionBounds.top + optionBounds.height / 2.0f);
+        optionText.setPosition(optionX + optionWidth / 2.0f, optionY + optionHeight / 2.0f);
+        window.draw(optionText);
+    }
+
+    // Hint text
+    Text hint;
+    hint.setFont(font);
+    hint.setString("Use [W]/[S] to navigate, [ENTER] to confirm, [ESC] to resume");
+    hint.setCharacterSize((int)(winHeight * 0.025f));
+    hint.setFillColor(Color(180, 180, 180));
+    hint.setStyle(Text::Italic);
+    FloatRect hintBounds = hint.getLocalBounds();
+    hint.setPosition(boxX + (boxWidth - hintBounds.width) / 2.0f,
+        boxY + boxHeight - winHeight * 0.04f);
+    window.draw(hint);
+}
+
+void BoardGame::handleExitConfirmationDialog(RenderWindow& window) {
+    int numOptions = 4;
+
+    if (keyBoard.Up()) {
+        selectedExitOption = (selectedExitOption - 1 + numOptions) % numOptions;
+        PlaySoundClick();
+    }
+    if (keyBoard.Down()) {
+        selectedExitOption = (selectedExitOption + 1) % numOptions;
+        PlaySoundClick();
+    }
+
+    if (keyBoard.Enter()) {
+        PlaySoundClick();
+
+        if (selectedExitOption == 0) { // SAVE & EXIT
+            SaveGame(window);
+            reset();
+            stateMenu = 0;
+            showExitDialog = false;
+        }
+        else if (selectedExitOption == 1) { // LOAD GAME
+            LoadGameFetch();
+            lastState = 1;      // Ghi nhớ là đang ở trong Game (State 1)
+            stateMenu = 2;      // Chuyển sang màn hình Load Game
+            // Lưu ý: KHÔNG tắt showExitDialog ở đây để khi quay lại bảng này vẫn hiện
+        }
+        else if (selectedExitOption == 2) { // SETTING
+            lastState = 1;      // Ghi nhớ là đang ở trong Game (State 1)
+            stateMenu = 3;      // Chuyển sang màn hình Setting
+        }
+        else if (selectedExitOption == 3) { // EXIT TO MENU
+            reset();
+            stateMenu = 0;
+            showExitDialog = false;
+        }
+    }
+
+    if (keyBoard.Esc()) {
+        PlaySoundClick();
+        showExitDialog = false; // Quay lại chơi tiếp
+    }
 }

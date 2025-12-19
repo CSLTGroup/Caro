@@ -1,4 +1,4 @@
-#include "../global.h"
+﻿#include "../global.h"
 
 
 void Menu::drawBackGround(RenderWindow& window) {
@@ -127,6 +127,7 @@ void Menu::drawMenu(RenderWindow& window) {
     drawTitle(window);
 
 }
+int lastState = 0;
 void Menu::handleUI(RenderWindow& window) {
     if (stateMenu == -1)
         drawMenuName_for_firstTime(window);
@@ -143,88 +144,223 @@ void Menu::handleUI(RenderWindow& window) {
     else if (stateMenu == listButton[creditsID].ID)
         drawBackGround(window), drawTitle(window), handleCreditScreen(window);
 }
+
+
 void Menu::updateState(RenderWindow& window) {
-    if (stateMenu == -1) { // first time playing
+    // 1. Trạng thái nhập tên lần đầu
+    if (stateMenu == -1) {
         menuName_for_firstTimeLogic(window);
     }
+
+    // 2. Trạng thái Menu chính (ID = 0)
     else if (stateMenu == ID) {
         awaitingModeSelection = true;
         initMenuButtons();
 
+        // Di chuyển giữa các nút Menu
         if (keyBoard.Up() ^ keyBoard.Down()) {
             listButton[selectedButton].selected = false;
             listButton[selectedButton].needUpdate = true;
 
             if (keyBoard.Up()) {
-                --selectedButton;
-                if (selectedButton < 0)
-                    selectedButton = listButton.size() - 1;
+                selectedButton = (selectedButton - 1 + (int)listButton.size()) % (int)listButton.size();
             }
             else {
-                ++selectedButton;
-                if (selectedButton == listButton.size())
-                    selectedButton = 0;
+                selectedButton = (selectedButton + 1) % (int)listButton.size();
             }
 
             listButton[selectedButton].selected = true;
             listButton[selectedButton].needUpdate = true;
-            PlaySoundClick(); // Play click sound when navigating menu
+            PlaySoundClick();
         }
+        // Khi nhấn chọn một mục từ Menu chính
         else if (keyBoard.Enter()) {
+            lastState = 0; // Ghi nhớ trạng thái trước đó là Menu chính
             stateMenu = listButton[selectedButton].ID;
-            if (stateMenu == listButton[newGameID].ID) {
+
+            if (stateMenu == listButton[newGameID].ID) { // Vào chơi mới
                 awaitingModeSelection = true;
                 selectedModeButton = 0;
                 boardGame.setUp();
                 boardGame.setMode(BoardGame::GameMode::None);
             }
-            else if (stateMenu == listButton[loadGameID].ID) {
-                // Load game functionality can be added here
+            else if (stateMenu == listButton[loadGameID].ID) { // Vào Load Game
                 LoadGameFetch();
                 LoadGameLogic();
             }
-            else if (stateMenu == listButton[settingID].ID) {
+            else if (stateMenu == listButton[settingID].ID) { // Vào Settings
                 setting.SettingsLogic(window);
-			}
-            else if (stateMenu == listButton[howToPlayID].ID) {
-                // How to Play's screen will be handled in handleHowToPlay
             }
         }
         else if (keyBoard.Esc()) {
             window.close();
         }
     }
+
+    // 3. Trạng thái trong trận đấu (State 1)
     else if (stateMenu == listButton[newGameID].ID) {
         if (awaitingModeSelection)
             handleModeSelection(window);
         else
             boardGame.setMove(window);
     }
+
+    // 4. Trạng thái màn hình Load Game (State 2)
     else if (stateMenu == listButton[loadGameID].ID) {
         LoadGameLogic();
+
+        // Nhấn ESC để quay lại
+        if (keyBoard.Esc()) {
+            stateMenu = lastState; // Quay về Menu chính (0) hoặc Game (1)
+            if (lastState == 1) {
+                boardGame.showExitDialog = true; // Hiện lại bảng Pause nếu đang trong game
+            }
+            PlaySoundClick();
+        }
     }
+
+    // 5. Trạng thái màn hình Cài đặt (State 3)
     else if (stateMenu == listButton[settingID].ID) {
         setting.SettingsLogic(window);
-	}
+
+        // Nhấn ESC để quay lại
+        if (keyBoard.Esc()) {
+            stateMenu = lastState; // Quay về Menu chính (0) hoặc Game (1)
+            if (lastState == 1) {
+                boardGame.showExitDialog = true; // Hiện lại bảng Pause nếu đang trong game
+            }
+            PlaySoundClick();
+        }
+    }
+
+    //else if (stateMenu == listButton[settingID].ID) { // State 3: Màn hình Setting
+    //    setting.SettingsLogic(window);
+
+    //    if (keyBoard.Esc()) {
+    //        stateMenu = lastState; // Quay về Menu chính (0) hoặc Game (1)
+
+    //        if (lastState == 1) {
+    //            // NẾU QUAY VỀ GAME: Cập nhật lại Avatar ngay lập tức
+    //            boardGame.ensurePlayerAssets();
+    //            boardGame.showExitDialog = true;
+    //        }
+
+    //        PlaySoundClick();
+    //    }
+    //}
+    // 6. Trạng thái Hướng dẫn (State 4)
     else if (stateMenu == listButton[howToPlayID].ID) {
         howToPlay.HowToPlayLogic(window);
+        if (keyBoard.Esc()) {
+            stateMenu = 0; // Thường How to Play chỉ mở từ Menu chính
+            PlaySoundClick();
+        }
     }
+
+    // 7. Trạng thái Thông tin Credits (State 5)
     else if (stateMenu == listButton[creditsID].ID) {
         credit.CreditLogic(window);
+        if (keyBoard.Esc()) {
+            stateMenu = 0;
+            PlaySoundClick();
+        }
     }
 }
+//void Menu::updateState(RenderWindow& window) {
+//    if (stateMenu == -1) { // first time playing
+//        menuName_for_firstTimeLogic(window);
+//    }
+//    else if (stateMenu == ID) {
+//        awaitingModeSelection = true;
+//        initMenuButtons();
+//
+//        if (keyBoard.Up() ^ keyBoard.Down()) {
+//            listButton[selectedButton].selected = false;
+//            listButton[selectedButton].needUpdate = true;
+//
+//            if (keyBoard.Up()) {
+//                --selectedButton;
+//                if (selectedButton < 0)
+//                    selectedButton = listButton.size() - 1;
+//            }
+//            else {
+//                ++selectedButton;
+//                if (selectedButton == listButton.size())
+//                    selectedButton = 0;
+//            }
+//
+//            listButton[selectedButton].selected = true;
+//            listButton[selectedButton].needUpdate = true;
+//            PlaySoundClick(); // Play click sound when navigating menu
+//        }
+//        else if (keyBoard.Enter()) {
+//            stateMenu = listButton[selectedButton].ID;
+//            if (stateMenu == listButton[newGameID].ID) {
+//                awaitingModeSelection = true;
+//                selectedModeButton = 0;
+//                boardGame.setUp();
+//                boardGame.setMode(BoardGame::GameMode::None);
+//            }
+//            else if (stateMenu == listButton[loadGameID].ID) {
+//                // Load game functionality can be added here
+//                LoadGameFetch();
+//                LoadGameLogic();
+//            }
+//            else if (stateMenu == listButton[settingID].ID) {
+//                setting.SettingsLogic(window);
+//			}
+//            else if (stateMenu == listButton[howToPlayID].ID) {
+//                // How to Play's screen will be handled in handleHowToPlay
+//            }
+//        }
+//        else if (keyBoard.Esc()) {
+//            window.close();
+//        }
+//    }
+//    else if (stateMenu == listButton[newGameID].ID) {
+//        if (awaitingModeSelection)
+//            handleModeSelection(window);
+//        else
+//            boardGame.setMove(window);
+//    }
+//    else if (stateMenu == listButton[loadGameID].ID) {
+//        LoadGameLogic();
+//    }
+//    else if (stateMenu == listButton[settingID].ID) {
+//        setting.SettingsLogic(window);
+//	}
+//    else if (stateMenu == listButton[howToPlayID].ID) {
+//        howToPlay.HowToPlayLogic(window);
+//    }
+//    else if (stateMenu == listButton[creditsID].ID) {
+//        credit.CreditLogic(window);
+//    }
+//}
+
+//void Menu::handleNewGame(RenderWindow& window) {
+//    if (awaitingModeSelection)
+//    {
+//        if (fromLoadGame)
+//        {
+//            fromLoadGame = false;
+//            awaitingModeSelection = false;
+//            boardGame.showPlayerPanel = true;
+//            boardGame.drawTable(window);
+//        }
+//        else drawModeSelection(window);
+//
+//    }
+//    else boardGame.drawTable(window);
+//}
 void Menu::handleNewGame(RenderWindow& window) {
-    if (awaitingModeSelection)
-    {
-        if (fromLoadGame)
-        {
+    if (awaitingModeSelection) {
+        if (fromLoadGame) { // Nếu biến này bằng true
             fromLoadGame = false;
-            awaitingModeSelection = false;
+            awaitingModeSelection = false; // Nó sẽ bỏ qua bước chọn PVP/PVC
             boardGame.showPlayerPanel = true;
-            boardGame.drawTable(window);
+            boardGame.drawTable(window); // Và vẽ thẳng bàn cờ đã load
         }
         else drawModeSelection(window);
-
     }
     else boardGame.drawTable(window);
 }

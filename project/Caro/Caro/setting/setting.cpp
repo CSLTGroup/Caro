@@ -974,6 +974,7 @@ void Settings::SaveSettings() {
     file << "Player2Avatar=" << player2AvatarPath << std::endl;
 
     file.close();
+    boardGame.ensurePlayerAssets();
 }
 
 void Settings::LoadSettings(RenderWindow& window) {

@@ -28,6 +28,10 @@ struct BoardGame {
     bool player2PhotoLoaded = false;
     bool showPlayerPanel = false;
 
+    // Exit confirmation dialog
+    bool showExitDialog = false;
+    int selectedExitOption = 0; // 0: Save & Exit, 1: Reset & Exit
+
     // UI
     float spacingLeft;
     float spacingTop;
@@ -56,4 +60,6 @@ struct BoardGame {
     void makeBotMove();
     void ensurePlayerAssets();
     void drawPlayerInfoPanel(RenderWindow& window);
+    void drawExitConfirmationDialog(RenderWindow& window);
+    void handleExitConfirmationDialog(RenderWindow& window);
 };
