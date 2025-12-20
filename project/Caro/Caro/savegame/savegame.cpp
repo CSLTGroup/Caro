@@ -14,15 +14,17 @@ void SaveGameUI(RenderWindow& window, bool success)
 		saveannouncement.setString("Saved successfully!");
 	else
 		saveannouncement.setString("Fail to save the game");
-	saveannouncement.setCharacterSize((int)(winHeight * 0.05f));
+	saveannouncement.setCharacterSize((int)(winHeight * 0.075f));
 	saveannouncement.setFillColor(Color::Yellow);
 	saveannouncement.setPosition(winWidth * 0.05, winHeight * 0.1);
+	saveannouncement.setOutlineColor(Color(0, 0, 0, 200));
+	saveannouncement.setOutlineThickness(2);
 
 	Clock timer;
 	timer.restart();
 	while (timer.getElapsedTime().asSeconds() < 1.f)
 	{
-		window.clear();
+		//window.clear();
 		window.draw(saveannouncement);
 		window.display();
 	}
