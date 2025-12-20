@@ -269,7 +269,7 @@ void BoardGame::drawWinnerMessage(RenderWindow& window) {
         textColor = Color::Blue;
     }
     else if (resultGame == 2) {
-        message = ((mode == GameMode::PVC) ? player2Name : "Computer") + " Wins!";
+        message = ((mode == GameMode::PVP) ? player2Name : "Computer") + " Wins!";
         textColor = Color::Red;
     }
     else if (resultGame == 3) {
