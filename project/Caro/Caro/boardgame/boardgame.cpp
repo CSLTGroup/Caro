@@ -138,16 +138,18 @@ void BoardGame::drawPosition(int x, int y, RenderWindow& window) {
         );
         // effect color
         static Clock clock;
-        static float dt = 0.f;
-		dt += clock.restart().asMilliseconds();
-        if (dt < 500) {
-            highlightRect.setFillColor(Color(0, 0, 0)); // another layer for better effect
+
+        float t = clock.getElapsedTime().asSeconds();
+
+        if (t < 0.5f) {
+            highlightRect.setFillColor(Color::Black);
             window.draw(highlightRect);
-            highlightRect.setFillColor(Color(255, 215, 0, 150)); // gold color with varying alpha
+            highlightRect.setFillColor(Color(255, 215, 0, 150));
             window.draw(highlightRect);
         }
-        if (dt > 1000)
-			dt = 0.f;
+        else if (t >= 1.f) {
+            clock.restart();
+        }
 	}
 }
 void BoardGame::setChoice(RenderWindow& window) {
