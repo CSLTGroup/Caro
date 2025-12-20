@@ -12,6 +12,7 @@ void BoardGame::reset() {
     resultGame = 0;
     showExitDialog = false;
     selectedExitOption = 0;
+	winningPositions.clear();
 }
 void BoardGame::drawTable(RenderWindow& window) {
 
@@ -88,7 +89,7 @@ void BoardGame::drawPosition(int x, int y, RenderWindow& window) {
         spacingLeft + spacingCellX + x * (cellLenX + spacingCellX),
         spacingTop + spacingCellY + y * (cellLenY + spacingCellY)
     );
-    if (x == curX && y == curY) {
+    if (x == curX && y == curY && !resultGame) {
         if (curPlayer == 1) {
             cell.setFillColor(Color(0, 255, 0, 0.8 * 255)); // green
         }
@@ -127,6 +128,27 @@ void BoardGame::drawPosition(int x, int y, RenderWindow& window) {
     text.setOutlineThickness(2.0f);
     text.setOutlineColor(Color(20, 20, 20));
     window.draw(text);
+
+	// highlight winning positions
+    if (resultGame && find(winningPositions.begin(),winningPositions.end(), make_pair(x, y)) != winningPositions.end()) {
+        RectangleShape highlightRect(Vector2f(cellLenX, cellLenY));
+        highlightRect.setPosition(
+            spacingLeft + spacingCellX + x * (cellLenX + spacingCellX),
+            spacingTop + spacingCellY + y * (cellLenY + spacingCellY)
+        );
+        // effect color
+        static Clock clock;
+        static float dt = 0.f;
+		dt += clock.restart().asMilliseconds();
+        if (dt < 500) {
+            highlightRect.setFillColor(Color(0, 0, 0)); // another layer for better effect
+            window.draw(highlightRect);
+            highlightRect.setFillColor(Color(255, 215, 0, 150)); // gold color with varying alpha
+            window.draw(highlightRect);
+        }
+        if (dt > 1000)
+			dt = 0.f;
+	}
 }
 void BoardGame::setChoice(RenderWindow& window) {
     if (board[curX][curY] >= 1 || resultGame)
@@ -216,6 +238,7 @@ int BoardGame::checkResult() {
     for (int i = 0; i < size - 5 + 1; i++)
         for (int j = 0; j < size; j++)
             if (checkTheSame({ board[i][j], board[i + 1][j], board[i + 2][j], board[i + 3][j], board[i + 4][j] })) {
+				winningPositions = { {i, j}, {i + 1, j}, {i + 2, j}, {i + 3, j}, {i + 4, j} };
                 return resultGame = board[i][j];
             }
 
@@ -223,6 +246,7 @@ int BoardGame::checkResult() {
     for (int j = 0; j < size - 5 + 1; j++)
         for (int i = 0; i < size; i++)
             if (checkTheSame({ board[i][j], board[i][j + 1], board[i][j + 2], board[i][j + 3], board[i][j + 4] })) {
+				winningPositions = { {i, j}, {i, j + 1}, {i, j + 2}, {i, j + 3}, {i, j + 4} };
                 return resultGame = board[i][j];
             }
 
@@ -230,6 +254,7 @@ int BoardGame::checkResult() {
     for (int j = 0; j < size - 5 + 1; j++)
         for (int i = 0; i < size - 5 + 1; i++)
             if (checkTheSame({ board[i][j], board[i + 1][j + 1], board[i + 2][j + 2], board[i + 3][j + 3], board[i + 4][j + 4] })) {
+				winningPositions = { {i, j}, {i + 1, j + 1}, {i + 2, j + 2}, {i + 3, j + 3}, {i + 4, j + 4} };
                 return resultGame = board[i][j];
             }
 
@@ -237,6 +262,7 @@ int BoardGame::checkResult() {
     for (int j = 0; j < size - 5 + 1; j++)
         for (int i = size - 1; i >= 4; i--)
             if (checkTheSame({ board[i][j], board[i - 1][j + 1], board[i - 2][j + 2], board[i - 3][j + 3], board[i - 4][j + 4] })) {
+				winningPositions = { {i, j}, {i - 1, j + 1}, {i - 2, j + 2}, {i - 3, j + 3}, {i - 4, j + 4} };
                 return resultGame = board[i][j];
             }
 
@@ -252,7 +278,7 @@ int BoardGame::checkResult() {
 void BoardGame::drawWinnerMessage(RenderWindow& window) {
 
     RectangleShape overlay(Vector2f(window.getSize().x, window.getSize().y));
-    overlay.setFillColor(Color(0, 0, 0, 180));
+    overlay.setFillColor(Color(0, 0, 0, 75));
     window.draw(overlay);
 
     // tao chu

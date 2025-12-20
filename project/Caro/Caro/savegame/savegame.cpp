@@ -22,11 +22,11 @@ void SaveGameUI(RenderWindow& window, bool success)
 
 	Clock timer;
 	timer.restart();
+	window.draw(saveannouncement);
+	window.display();
 	while (timer.getElapsedTime().asSeconds() < 1.f)
 	{
-		//window.clear();
-		window.draw(saveannouncement);
-		window.display();
+		// wait for 1 second
 	}
 }
 
@@ -304,6 +304,7 @@ void LoadGameLogic()
 		}
 		menuGUI.fromLoadGame = true;
 		stateMenu = 1;
+		boardGame.checkResult();
 		PlaySoundClick();
 	}
 }

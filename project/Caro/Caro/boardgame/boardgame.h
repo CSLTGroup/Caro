@@ -16,6 +16,7 @@ struct BoardGame {
     int curPlayer = 1;
     GameMode mode = GameMode::None;
     int aiPlayer = 2;
+	vector<pair<int, int> > winningPositions; // store winning positions for highlighting
 
     // Player info panel (shared by PVP / PVC)
     string player1Name = "Player 1";
